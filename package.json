@@ -1,0 +1,51 @@
+{
+  "name": "druid-console",
+  "version": "0.0.1",
+  "author": "Tarek Rached <tarek@metamarkets.com>",
+  "description": "Druid Console",
+  "contributors": [
+    {
+      "name": "Tarek Rached",
+      "email": "tarek@metamarkets.com"
+    }
+  ],
+  "engines": {
+    "node": "v0.10.26"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metamx/druid-console.git"
+  },
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "bower": "~1.3.2",
+    "express": "~3.5.1",
+    "coffee-script": "~1.7.1",
+    "http-proxy": "~1.0.3",
+    "nodemon": "~1.0.17",
+    "request": "~2.34.0",
+    "node-zookeeper-client": "~0.2.1",
+    "coffeeify": "~0.6.0",
+    "browserify": "~4.1.9",
+    "watchify": "~0.10.2"
+  },
+  "devDependencies": {
+    "karma": "~0.12.5",
+    "karma-jasmine": "~0.1.5",
+    "karma-coffee-preprocessor": "~0.2.1",
+    "karma-chrome-launcher": "~0.1.3",
+    "requirejs": "~2.1.11",
+    "karma-requirejs": "~0.2.1",
+    "deep-diff": "~0.1.7",
+    "browserify-shim": "~3.5.0"
+  },
+  "browserify": {
+    "transform": [ "browserify-shim" ]
+  },
+  "browser": {
+    "jquery": "./bower_components/jQuery/dist/jquery.min.js"
+  },
+  "browserify-shim": {
+    "jquery": "$"
+  }
+}

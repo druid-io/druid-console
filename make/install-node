@@ -1,0 +1,46 @@
+#!/bin/bash -e
+
+NODE_VERSION=`cat package.json | python -c 'import sys, json; print json.load(sys.stdin)["engines"]["node"]'`
+SYSTEM=`uname | tr [:upper:] [:lower:]`
+NODE_TAR="node-$NODE_VERSION-$SYSTEM-x64.tar.gz"
+NODE_URL="http://nodejs.org/dist/$NODE_VERSION/$NODE_TAR"
+BASE_NODE_DIR="`pwd`/node"
+NODE_DIR="$BASE_NODE_DIR/node-$NODE_VERSION-$SYSTEM-x64"
+NODE_BIN_DIR="$NODE_DIR/bin"
+
+# clean up node dir by removing base info
+CUR_DIR=`pwd`
+mkdir -p "$BASE_NODE_DIR"
+while read folder; do
+  cd "$BASE_NODE_DIR"
+  if [ -d "$folder" ]; then
+    rm -r "$folder"
+  fi
+done <<EOF
+
+  bin
+  include
+  lib
+  share
+
+EOF
+
+cd "$CUR_DIR"
+
+# Make sure the local version of node exists and not another version globally installed
+if [ -d "$NODE_BIN_DIR" ]; then
+  if [ `$NODE_BIN_DIR/node --version` == "$NODE_VERSION" ]; then
+    echo "node version '$NODE_VERSION' already installed in dir: $NODE_DIR"
+    exit 0
+  fi
+fi
+
+# install node
+(
+  set -e
+  curl -O "$NODE_URL"
+  tar xzvf $NODE_TAR -C $BASE_NODE_DIR
+  ln -s $NODE_DIR $BASE_NODE_DIR/current
+  rm -f $NODE_TAR
+  cd "$NODE_DIR"
+)

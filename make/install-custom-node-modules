@@ -1,0 +1,87 @@
+#!/bin/bash -e
+
+echo "starting node module install"
+
+SYSTEM="${SYSTEM:-`uname -sm | tr ' ' -`}"
+NPM_INSTALL='npm install'
+CUR_DIR=`pwd`
+NPM_OUTPUT=`npm ls -lp || true`
+
+installed() {
+  name="$1"
+  version="$2"
+  echo "$NPM_OUTPUT" | grep "$CUR_DIR/node_modules/$name:$name@$version:" >/dev/null
+}
+
+module_tarball_name() {
+  name="$1"
+  version="$2"
+  echo "node_modules-$name-$version-$SYSTEM.tar.gz"
+}
+
+found_on_bucket() {
+  name="$1"
+  version="$2"
+  local MODULE_TAR=$(module_tarball_name $name $version)
+  local MODULE_FOUND=`s3cmd ls s3://metamx-galaxy-bin/binaries/$MODULE_TAR`
+  if [ -n "$MODULE_FOUND" ]; then
+    echo "$MODULE_TAR"
+  else
+    echo ""
+  fi
+}
+
+download_tarball() {
+  tarball="$1"
+  if [ -r "tmp/$tarball" ]; then
+    echo "Found local copy of $tarball"
+  else
+    echo "Fetching tarball $tarball"
+    s3cmd --force get s3://metamx-galaxy-bin/binaries/$tarball tmp/$tarball
+  fi
+  tar -zxf tmp/$tarball -C $CUR_DIR
+}
+
+mkdir -p tmp
+
+#In case you have node_modules directory in the parent directories.
+mkdir -p node_modules
+mkdir -p node_modules/.bin
+
+while read account project tag dest other; do
+  if [ -n "$account" ]; then
+
+    INFO_FILE="./node_modules/$dest/_module_info.txt"
+    INFO_CONTENT="$account $project $tag $dest"
+    DESTINATION="./node_modules/$dest"
+
+    if [ -n "$other" ]; then
+      echo "trailing arguments: '$other', after: '$INFO_CONTENT'"
+      exit 1
+    fi
+
+    echo
+    echo "Processing $account/$dest@$tag"
+    if [ -r "$INFO_FILE" ] && [ "`cat "$INFO_FILE"`" = "$INFO_CONTENT" ]; then
+      echo "Skipping $dest@$tag, already installed"
+    else
+      if [ -d "$DESTINATION" ]; then
+        echo "cleaning up $DESTINATION"
+        rm -r "$DESTINATION"
+      fi
+      MODULE_TAR=$(module_tarball_name $account-$project $tag)
+      MODULE_FOUND=$(found_on_bucket $account-$project $tag)
+      if [ -n "$MODULE_FOUND" ]; then
+        echo "$MODULE_TAR exists at s3 bucket"
+        download_tarball $MODULE_TAR
+      else
+        cmd="$NPM_INSTALL -f git+ssh://git@github.com/$account/$project.git#$tag"
+        echo "$MODULE_TAR doesn't exist at s3 bucket"
+        echo "$cmd"
+        $cmd
+      fi
+      echo "$INFO_CONTENT" > "$INFO_FILE"
+      for f in $(ls -d ./node_modules/$dest/bin/*); do ln -sf $f ./node_modules/.bin/; done
+    fi
+  fi
+done < "./project/custom_node_modules"

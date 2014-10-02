@@ -1,0 +1,30 @@
+#!/bin/bash
+ROOT_DIR=`pwd`
+export PATH="$ROOT_DIR/node/current/bin:$ROOT_DIR/node_modules/.bin:$PATH"
+
+# kill all the compass files
+COMPASS_PIDS=`ps -eo pid,args | grep "compass" | grep -v grep | cut -c1-6`
+if [ -n "$COMPASS_PIDS" ]; then
+  kill $COMPASS_PIDS
+fi
+
+# kill all the coffee files
+COFFEE_PIDS=`ps -eo pid,args | grep "coffee" | grep -v grep | cut -c1-6`
+if [ -n "$COFFEE_PIDS" ]; then
+  kill $COFFEE_PIDS
+fi
+
+echo $1;
+
+if [ "$1" != "stop" ]; then
+
+  if [ ! -d build ]; then
+    mkdir -p build
+  fi
+
+  compass watch --sass-dir src/client --css-dir build &
+
+  watchify -t coffeeify --extension=".coffee" src/client/druid.coffee -o build/druid.js -v &
+  # browserify -t coffeeify --extension=".coffee" src/client/druid.coffee  > bundle.js
+  # coffee --compile --watch --bare --output build src/client* &
+fi
