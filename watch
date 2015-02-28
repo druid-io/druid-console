@@ -22,9 +22,7 @@ if [ "$1" != "stop" ]; then
     mkdir -p build
   fi
 
-  compass watch --sass-dir src/client --css-dir build &
+  compass watch --sass-dir src --css-dir build &
 
-  watchify -t coffeeify --extension=".coffee" src/client/druid.coffee -o build/druid.js -v &
-  # browserify -t coffeeify --extension=".coffee" src/client/druid.coffee  > bundle.js
-  # coffee --compile --watch --bare --output build src/client* &
+  watchify -t coffeeify --extension=".coffee" src/druid.coffee -o build/druid.js -v &
 fi

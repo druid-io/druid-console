@@ -6,9 +6,9 @@ if [ ! -d build ]; then
   mkdir -p build
 fi
 
-compass compile --sass-dir src/client --css-dir build
+compass compile --sass-dir src --css-dir build
 
-browserify -t coffeeify --extension=".coffee" src/client/druid.coffee -o build/druid.js
+browserify -t coffeeify --extension=".coffee" src/druid.coffee -o build/druid.js
 
 cp -R static/css static/fonts static/pages static/favicon.ico build/* $DEST
 cp -R static/console.html $DEST/index.html

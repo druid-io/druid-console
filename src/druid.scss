@@ -31,7 +31,7 @@ $brightYellow: #ebeb3a;
 $baseColor: #858597;
 $backgroundBlack: #22222A;
 $borderColor: #1B1A20;
-
+$headerBackground: #2E2E38;
 
 
 html {
@@ -172,7 +172,7 @@ body {
 
     h1, h2 {
       color: $baseColor;
-      background: #2E2E38;
+      background: $headerBackground;
       line-height: 1.5;
       border-bottom: 1px solid $borderColor;
       padding: 0px 8px;
@@ -325,7 +325,7 @@ body {
         -webkit-flex: 1;
         font-size: 14px;
         .segment, .loading, .info {
-          background: #2E2E38;
+          background: $headerBackground;
           border: 1px solid $borderColor;
           border-radius: 15px;
           padding: 8px;
@@ -451,6 +451,12 @@ body {
             color: $red;
           }
         }
+        td.name {
+          i.realtime {
+            padding-left: 0.5em;
+            color: $yellow;
+          }
+        }
       }
       tr.key {
         td {
@@ -463,11 +469,64 @@ body {
   .cluster-view {
     #data-sources {
       width: 240px;
+      min-width: 240px;
       border-right: 1px solid $borderColor;
     }
+    #cluster {
 
+    }
+    #indexing {
+      vertical-align: top;
 
-    #tiers {
+      h2 {
+        font-size: 24px;
+        padding-top: 0.5em;
+        padding-bottom: 0.25em;
+      }
+      h3 {
+        font-size: 18px;
+        padding: 0.25em 8px 0.5em;
+      }
+      svg.running-tasks, svg.scaling-activity {
+        circle.task {
+          fill-opacity: 0.5;
+        }
+        .axis {
+          path.domain {
+            fill: none;
+            stroke: $baseColor;
+          }
+          .tick {
+            line {
+              stroke: $baseColor;
+            }
+            text {
+              fill: $baseColor;
+            }
+          }
+        }
+      }
+      svg.scaling-activity {
+        path.history {
+          fill: $headerBackground;
+        }
+        line.event {
+          stroke-width: 3px;
+          stroke-linecap: round;
+          &:hover {
+            stroke-width: 6px;
+          }
+          &.PROVISION {
+            stroke: $blue;
+          }
+          &.TERMINATE {
+            stroke: $red;
+          }
+        }
+      }
+    }
+
+    #historical {
       vertical-align: top;
 
       .tier {
@@ -481,7 +540,9 @@ body {
           .queue {
             font-size: 12px;
             &.load {
-              color: #EEE;
+              .unloaded {
+                color: #EEE;
+              }
               .bytes {
                 color: $red;
                 font-weight: bold;
@@ -525,6 +586,7 @@ body {
               & > * {
                 margin-bottom: 4px;
               }
+              line-height: 1.25;
             }
 
             .bottom-labels {
@@ -548,6 +610,9 @@ body {
                 color: $white;
               }
             }
+            .size-label {
+              font-size: 75%;
+            }
             .maxSize {
               font-size: 18px;
               // font-weight: bold;
@@ -555,6 +620,9 @@ body {
             }
             .currSize {
               font-size: 16px;
+              .percent {
+                color: $white;
+              }
               // font-weight: bold;
               // color: $white;
             }
@@ -618,6 +686,12 @@ body {
           }
         }
 
+        .node-toggle {
+          padding-bottom: 0.5em;
+          &:hover {
+            color: $white;
+          }
+        }
         tier-nodes table {
           margin-left: 4px;
           tr.node {
@@ -651,7 +725,7 @@ body {
         }
 
         tbody tr:hover {
-          background: #2E2E38;
+          background: $headerBackground;
         }
 
         td.footprint {
@@ -859,7 +933,7 @@ transform:scale(0.6);
 
 .f_circleG{
 position:absolute;
-background-color:#2E2E38;
+background-color:$headerBackground;
 height:23px;
 width:23px;
 -webkit-border-radius:12px;
@@ -935,7 +1009,7 @@ animation-delay:1.3s;
 background-color:$baseColor}
 
 100%{
-background-color:#2E2E38}
+background-color:$headerBackground}
 
 }
 
@@ -944,6 +1018,6 @@ background-color:#2E2E38}
 background-color:$baseColor}
 
 100%{
-background-color:#2E2E38}
+background-color:$headerBackground}
 
 }

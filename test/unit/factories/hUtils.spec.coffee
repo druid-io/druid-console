@@ -1,15 +1,13 @@
-'use strict'
+hUtilsFactory = require '../../../src/client/factories/hUtils.coffee'
 
-beforeEach module 'druid'
+describe '$hUtils', () ->
+  $hUtils = undefined
 
-describe '$utils', () ->
-  $utils = undefined
+  beforeEach ->
+    $hUtils = hUtilsFactory()
 
-  beforeEach inject (_$utils_) ->
-    $utils = _$utils_
-
-  it 'should have a defined $utils', () ->
-    expect($utils?).toBeTruthy()
+  it 'should have a defined $hUtils', () ->
+    expect($hUtils?).toBeTruthy()
 
   describe 'processServers', () ->
     it 'should break the list of servers into tiers and calculate tier summaries', () ->
@@ -112,7 +110,7 @@ describe '$utils', () ->
           }
         ]
       }
-      computed = $utils.processServers(fakeServersSimple)
+      computed = $hUtils.processServers(fakeServersSimple)
       expect(computed).toEqual(expected)
 
       diff = DeepDiff(computed, expected)
@@ -153,7 +151,7 @@ describe '$utils', () ->
         }
 
       }
-      computed = $utils.processServerTiers(fakeServersSimple)
+      computed = $hUtils.processServerTiers(fakeServersSimple)
       expect(computed).toEqual(expected)
 
       diff = DeepDiff(computed, expected)
@@ -163,7 +161,7 @@ describe '$utils', () ->
     it 'should turn the array of datasources into an array of objects', () ->
       fakeDatasources = ["mmx_metrics","oculus"]
       expected = [{id: "mmx_metrics"}, {id: "oculus"}]
-      computed = $utils.processDataSources(fakeDatasources)
+      computed = $hUtils.processDataSources(fakeDatasources)
       expect(computed).toEqual(expected)
 
   describe 'processLoadStatus', () ->
@@ -174,7 +172,7 @@ describe '$utils', () ->
         {id: "mmx_metrics", loadStatus: 100.0}
         {id: "oculus", loadStatus: 88.0}
       ]
-      computed = $utils.processLoadStatus(fakeLoadStatuses, dataSources)
+      computed = $hUtils.processLoadStatus(fakeLoadStatuses, dataSources)
       expect(computed).toEqual(expected)
 
       diff = DeepDiff(computed, expected)
@@ -214,6 +212,7 @@ describe '$utils', () ->
         segmentsToDrop: 5
         segmentsToLoadSize: 5
         segmentsToDropSize: 5
+        loadQueueLoaded: true
         nodes: [
           host: "1.2.3.4:5678"
           segmentsToLoad: 1
@@ -232,6 +231,7 @@ describe '$utils', () ->
         segmentsToDrop: 7
         segmentsToLoadSize: 6
         segmentsToDropSize: 5
+        loadQueueLoaded: true
         nodes: [
           host: "8.7.6.5:4321"
           segmentsToLoad: 8
@@ -241,13 +241,13 @@ describe '$utils', () ->
         ]
       ]
 
-      computed = $utils.processLoadQueue(fakeLoadQueue, tiers)
+      computed = $hUtils.processLoadQueue(fakeLoadQueue, tiers)
       expect(computed).toEqual(expected)
 
       diff = DeepDiff(computed, expected)
       console.log JSON.stringify(diff) if diff?
 
-  describe 'processRulesAll', () ->
+  describe 'processAllRules', () ->
     it 'should assign explicit and default rules to the correct datasources', () ->
       fakeRules =
         _default: [
@@ -263,31 +263,44 @@ describe '$utils', () ->
           type: "loadByPeriod"
         ]
       dataSources = [{id: "mmx_metrics"}, {id: "oculus"}]
-      expected = [
-        id: "mmx_metrics"
-        rules: [
-          period: "P1M"
-          tieredReplicants:
-            hot: 1
-            _default_tier: 1
-          type: "loadByPeriod"
-          timeType: "ByPeriod"
-          default: false
-          direction: 'load'
-          # momentInterval: moment.interval(fakeRules.mmx_metrics[0].period + '/')
+      expected = {
+        dataSources: [
+          id: "mmx_metrics"
+          rules: [
+            period: "P1M"
+            tieredReplicants:
+              hot: 1
+              _default_tier: 1
+            type: "loadByPeriod"
+            timeType: "ByPeriod"
+            default: false
+            direction: 'load'
+            # momentInterval: moment.interval(fakeRules.mmx_metrics[0].period + '/')
+          ]
+        ,
+          id: "oculus"
+          rules: []
         ]
-      ,
-        id: "oculus"
-        rules: [
-        ]
-      ]
+        _default:
+          id: '_default'
+          rules: [
+            tieredReplicants:
+              _default_tier: 2
+            type: "loadForever"
+            timeType: "Forever"
+            default: true
+            direction: 'load'
+          ]
+      }
 
-      computed = $utils.processAllRules(fakeRules, dataSources)
-      computedMoment = computed[0].rules[0].momentInterval
+      computed = $hUtils.processAllRules(fakeRules, dataSources)
 
+      computedMoment = computed.dataSources[0].rules[0].momentInterval
       expect(computedMoment.period().toISOString())
         .toEqual(fakeRules.mmx_metrics[0].period)
-      delete computed[0].rules[0].momentInterval
+
+      delete computed.dataSources[0].rules[0].momentInterval
+      delete computed._default.rules[0].momentInterval
       expect(computed).toEqual(expected)
 
       diff = DeepDiff(computed, expected)
@@ -299,15 +312,15 @@ describe '$utils', () ->
         currSize: 80
         nodes: [{maxSize: 10}, 0, 0, 0, 0, 0, 0, 0, 0, 0] # 10 nodes
 
-      expect($utils.resilience(tier)).toEqual(2)
+      expect($hUtils.resilience(tier)).toEqual(2)
       tier.currSize = 80.1
-      expect($utils.resilience(tier)).toEqual(1)
+      expect($hUtils.resilience(tier)).toEqual(1)
       tier.currSize = 89.9
-      expect($utils.resilience(tier)).toEqual(1)
+      expect($hUtils.resilience(tier)).toEqual(1)
       tier.currSize = 90.1
-      expect($utils.resilience(tier)).toEqual(0)
+      expect($hUtils.resilience(tier)).toEqual(0)
       tier.currSize = 1
-      expect($utils.resilience(tier)).toEqual(9)
+      expect($hUtils.resilience(tier)).toEqual(9)
 
   describe 'processDataSourceIntervals', () ->
     it 'should turn the object of intervals into a sorted list', () ->
@@ -364,7 +377,7 @@ describe '$utils', () ->
           # interval:
       expectedInterval = "2014-01-31T22:00:00.000Z/2014-04-16T00:00:00.000Z"
 
-      computed = $utils.processDataSourceIntervals(fakeIntervals)
+      computed = $hUtils.processDataSourceIntervals(fakeIntervals)
 
       computedInterval = computed.summary.interval
       expect(computedInterval.start().toISOString() +
@@ -397,7 +410,7 @@ describe '$utils', () ->
           servers: fakeSegments.interval.cd.servers
           key: "another value"
 
-      computed = $utils.processSegmentsForInterval(fakeSegments)
+      computed = $hUtils.processSegmentsForInterval(fakeSegments)
       expect(computed).toEqual(expected)
 
       diff = DeepDiff(computed, expected)
@@ -407,210 +420,3 @@ describe '$utils', () ->
     it 'should parse the nodes and give us everything (for now)', () ->
       expect(true).toBeTruthy()
 
-describe 'DruidClusterCtrl', () ->
-  scope = undefined
-  env = undefined
-  routeParams = undefined
-  fakeCoordinator = undefined
-  fakeCluster = undefined
-  fakeDataSources = undefined
-
-  beforeEach inject ($controller, $rootScope) ->
-    fakeCoordinator = ''
-    fakeCluster =
-      tiers: []
-    fakeDataSources = []
-
-    scope = $rootScope.$new()
-
-    druid =
-      getCoordinator: ->
-        then: (cb) -> cb fakeCoordinator
-      getNodes: ->
-        then: (cb) -> cb fakeCluster
-      getDataSources: ->
-        then: (cb) -> cb fakeDataSources
-      getLoadStatus: ->
-        then: (cb) -> return
-      getLoadQueue: ->
-        then: (cb) -> return
-
-    routeParams = {env: 'test'}
-
-    ctrl = $controller('DruidClusterCtrl', {
-      $scope: scope
-      $druid: druid
-      $routeParams: routeParams
-    })
-
-  it 'should set env', () ->
-    expect(scope.env).toBe(routeParams.env)
-
-  it 'should set coordinator', () ->
-    expect(scope.coordinator).toBe(fakeCoordinator)
-
-  it 'should set tiers', () ->
-    expect(scope.tiers).toBe(fakeCluster.tiers)
-
-  it 'should set dataSources', () ->
-    expect(scope.dataSources).toBe(fakeDataSources)
-
-describe 'DruidDataSourcesCtrl', () ->
-  scope = undefined
-  env = undefined
-  routeParams = undefined
-  fakeCoordinator = undefined
-  fakeCluster = undefined
-  fakeDataSources = undefined
-
-  beforeEach inject ($controller, $rootScope, $q) ->
-    fakeCoordinator = ''
-    fakeCluster =
-      tiers: []
-      dataExtents: {}
-    fakeDataSources = []
-    fakeRules = {}
-
-    scope = $rootScope.$new()
-
-    druid =
-      getCoordinator: ->
-        then: (cb) -> cb fakeCoordinator
-      getNodes: ->
-        then: (cb) -> cb fakeCluster
-      getDataSources: ->
-        then: (cb) -> cb fakeDataSources
-      getLoadStatus: (d) =>
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      getAllRules: (d) =>
-        deferred = $q.defer()
-        deferred.resolve()
-        return deferred.promise
-      getSegmentsAll: (d) ->
-        then: (cb) -> cb fakeCluster
-
-    routeParams = {env: 'test'}
-
-    ctrl = $controller('DruidDataSourcesCtrl', {
-      $scope: scope
-      $druid: druid
-      $routeParams: routeParams
-      $q
-    })
-
-  it 'should set env', () ->
-    expect(scope.env).toBe(routeParams.env)
-
-  it 'should set coordinator', () ->
-    expect(scope.coordinator).toBe(fakeCoordinator)
-
-  it 'should set dataSources', () ->
-    expect(scope.dataSources).toBe(fakeDataSources)
-
-
-  # it 'should set dataExtents', () ->
-  #   expect(scope.dataExtents).toBe(fakeCluster.dataExtents)
-
-
-describe 'DruidDataSourceCtrl', () ->
-  $httpBackend = undefined
-  $rootScope = undefined
-  createController = undefined
-
-  scope = undefined
-  env = undefined
-  routeParams = { env: 'testEnv', dataSource: 'testDataSource'}
-  fakeCoordinator = undefined
-  fakeDataSource = undefined
-  fakeDataSources = undefined
-  fakeIntervals = undefined
-  fakeTierNames = undefined
-  fakeRules = undefined
-
-  beforeEach inject ($injector, $druid) ->
-    routeParams =
-      env: 'testEnv'
-      dataSource: 'testDataSource'
-
-    fakeCoordinator = {host:'123', port:456}
-    fakeDataSources = []
-    fakeDataSource = {tiers: {}, segments: {}}
-    fakeIntervals = {
-      intervals: {}
-      days: {}
-      dataSummary: {}
-    }
-    fakeTierNames = ['a', 'b']
-    fakeRules = []
-
-    $druid.env = routeParams.env
-
-    $httpBackend = $injector.get '$httpBackend'
-
-    $httpBackend.whenGET(/^\/coordinator/)
-      .respond(fakeCoordinator)
-
-    $httpBackend.whenGET($druid.proxy "/datasources/#{routeParams.dataSource}")
-      .respond(fakeDataSource)
-
-    $httpBackend.whenGET($druid.proxy "/datasources/#{routeParams.dataSource}/intervals?simple")
-      .respond(fakeIntervals)
-
-    $httpBackend.whenGET($druid.proxy "/rules/#{routeParams.dataSource}")
-      .respond(fakeRules)
-
-    $httpBackend.whenGET($druid.proxy "/datasources/#{routeParams.dataSource}")
-      .respond(fakeRules)
-
-    $httpBackend.whenGET($druid.proxy "/tiers")
-      .respond(fakeTierNames)
-
-    delete $druid.env
-    $controller = $injector.get '$controller'
-    $rootScope = $injector.get '$rootScope'
-
-    createController = () ->
-      $controller 'DruidDataSourceCtrl', {
-        '$scope': $rootScope
-        $druid: $injector.get '$druid'
-        $routeParams: routeParams
-        $q: $injector.get '$q'
-      }
-
-  afterEach () ->
-    $httpBackend.verifyNoOutstandingExpectation()
-    $httpBackend.verifyNoOutstandingRequest()
-
-  it 'should set env', () ->
-    controller = createController()
-    $httpBackend.flush();
-    expect($rootScope.env).toBe(routeParams.env)
-
-  it 'should set coordinator', () ->
-    controller = createController()
-    $httpBackend.flush()
-    expect($rootScope.coordinator).toBe('123:456')
-
-  it 'should set tierNames', () ->
-    controller = createController()
-    $httpBackend.flush()
-    expect($rootScope.tierNames).toEqual(fakeTierNames)
-
-  it 'should extend dataSource', () ->
-    controller = createController()
-    $httpBackend.flush()
-    expect($rootScope.dataSource.tiers).toBeDefined()
-
-  it 'should set rules', () ->
-    controller = createController()
-    $httpBackend.flush()
-    expect($rootScope.dataSource.rules).toBeDefined()
-
-  it 'should set intervals, days, and dataSummary', () ->
-    controller = createController()
-    $httpBackend.flush()
-    expect($rootScope.intervals).toBeDefined()
-    expect($rootScope.days).toBeDefined()
-    expect($rootScope.dataSummary).toBeDefined()
