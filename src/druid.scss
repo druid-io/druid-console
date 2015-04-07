@@ -221,6 +221,49 @@ body {
       }
 
     }
+
+    .history-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1001;
+      background-color: rgba(0,0,0,0.8);
+      margin: 0;
+
+      .history {
+        background-color: $backgroundBlack;
+        margin: 10rem auto;
+        padding-bottom: 0.5rem;
+        width: 60%;
+        font-size: 1rem;
+        h1 {
+          font-size: 1.6rem;
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
+        }
+        .audit-item {
+          margin-bottom: 1.5rem;
+          & > * {
+            padding: 0px 8px;
+          }
+          h2 {
+            font-size: 1.2rem;
+            width: 100%;
+            min-width: 100%;
+            max-width: 100%;
+          }
+          .author {
+            color: $white;
+          }
+          .comment {
+            padding-bottom: 0.5rem 0;
+          }
+        }
+      }
+    }
+
     .timeline {
       height: 150px;
 
@@ -237,7 +280,7 @@ body {
     .rules {
       height: 75px;
 
-      .rule {
+      .concise-rule {
         padding: 4px 8px;
         .default {
           color: $orange;
@@ -863,6 +906,15 @@ body {
     h1 {
       font-size: 18px;
     }
+    #audit-info {
+      textarea, input {
+        &.ng-invalid {
+          border-color: $red;
+          box-shadow: inset 0px 1px 60px 4px rgba(241, 96, 101, .2);
+        }
+      }
+    }
+
     .rule {
       height: 120px;
       margin-bottom: 10px;

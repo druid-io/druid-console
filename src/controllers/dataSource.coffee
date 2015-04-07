@@ -59,18 +59,19 @@ module.exports = ($scope, $historical, $stateParams, $q) ->
 
   $historical.getDataSource($scope.dataSource.id)
     .then (dataSource) ->
+      console.log {dataSource, end: dataSource.segments.interval.end()}
       angular.extend $scope.dataSource, dataSource
 
   $historical.getRules($scope.dataSource.id)
     .then (rules) ->
       $scope.dataSource.rules = rules
       $historical.getDataSourceIntervals($scope.dataSource.id)
-    .then (results) ->
-      console.log {results}
-      $scope.intervals = results.intervals
-      $scope.days = results.days
-      $scope.dataSummary = results.summary
-      $scope.unreplicatedSegmentSize = d3.sum(results.intervals, (i) -> i.size)
+        .then (results) ->
+          $scope.intervals = results.intervals
+          console.log {results}
+          $scope.days = results.days
+          $scope.dataSummary = results.summary
+          $scope.unreplicatedSegmentSize = d3.sum(results.intervals, (i) -> i.size)
 
   $historical.getRules('_default')
     .then (defaultRules) ->
@@ -81,3 +82,9 @@ module.exports = ($scope, $historical, $stateParams, $q) ->
     $historical.getTierNames().then (tierNames) ->
       $scope.tierNames = tierNames
 
+  $scope.loadAndShowRulesHistory = ->
+    $scope.showHistory = true
+    $historical.getDataSourceRulesHistory($scope.dataSource.id)
+      .then (rulesHistory) ->
+        $scope.rulesHistory = rulesHistory
+        console.log {rulesHistory: $scope.rulesHistory, showHistory: $scope.showHistory}

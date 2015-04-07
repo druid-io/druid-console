@@ -112,9 +112,25 @@
     </div>
 
     <alert type="danger" ng-show="postError">{{postError}}</alert>
+    <div id="audit-info">
+      <div class="form-group">
+        <label for="author">Who is making this change?</label>
+        <input ng-model="author" class="form-control" type="text" placeholder="please enter your name" id="author" required>
+      </div>
+
+      <textarea
+        ng-model="comment"
+        class="form-control"
+        rows="3"
+        name="comment"
+        placeholder="please enter a comment"
+        required></textarea>
+
+    </div>
   </div>
 
   <div class="modal-footer">
+
     <button class="btn btn-default" ng-click="addRule()"><span class="fa fa-plus"></span> add a rule</button>
     <button class="btn btn-info" ng-click="reset()">Reset</button>
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>

@@ -1,5 +1,5 @@
-moment = require '../../../bower_components/moment/min/moment.min.js'
-require '../../../lib/moment-interval.js'
+moment = require '../../bower_components/moment/min/moment.min.js'
+require '../../lib/moment-interval.js'
 
 module.exports = ($scope, $modal, $historical, $hUtils) ->
 
@@ -21,11 +21,13 @@ module.exports = ($scope, $modal, $historical, $hUtils) ->
     return
 
 
-RuleEditorInstanceCtrl = ($scope, $modalInstance, originalRules, dataSourceId, tierNames, $historical) ->
+RuleEditorInstanceCtrl = ($scope, $modalInstance, originalRules, dataSourceId, tierNames, $historical, localStorageService) ->
   $scope.originalRules = originalRules
   $scope.rules = angular.copy originalRules
   $scope.dataSourceId = dataSourceId
   $scope.tierNames = tierNames
+
+  localStorageService.bind($scope, 'author')
 
   $scope.updateRuleType = (i, innerScope) ->
     rule = $scope.rules[i]
@@ -89,7 +91,8 @@ RuleEditorInstanceCtrl = ($scope, $modalInstance, originalRules, dataSourceId, t
         when 'ByInterval' then rule.interval = r.interval
       rule
     console.log "saving", rulesToSave
-    $historical.saveRules($scope.dataSourceId, rulesToSave)
+
+    $historical.saveRules($scope.dataSourceId, rulesToSave, $scope.author, $scope.comment)
       .then (() ->
         $modalInstance.close(rulesToSave)
       ), ((reason) ->

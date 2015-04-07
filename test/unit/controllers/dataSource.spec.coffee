@@ -1,4 +1,4 @@
-# dataSourceController = require '../../../src/client/controllers/dataSource.coffee'
+# dataSourceController = require '../../../src/controllers/dataSource.coffee'
 
 # beforeEach angular.mock.module("druid")
 

@@ -1,16 +1,16 @@
-require '../../../bower_components/d3/d3.js'
-require '../../../bower_components/zeroclipboard/ZeroClipboard.min.js'
+require '../../bower_components/d3/d3.js'
+require '../../bower_components/zeroclipboard/ZeroClipboard.min.js'
 
-require '../../../bower_components/angular/angular.min.js'
-require '../../../bower_components/angular-ui-router/release/angular-ui-router.min.js'
-require '../../../bower_components/angular-sanitize/angular-sanitize.min.js'
-require '../../../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
-require '../../../bower_components/ng-clip/dest/ng-clip.min.js'
-require '../../../bower_components/ng-csv/build/ng-csv.min.js'
+require '../../bower_components/angular/angular.min.js'
+require '../../bower_components/angular-ui-router/release/angular-ui-router.min.js'
+require '../../bower_components/angular-sanitize/angular-sanitize.min.js'
+require '../../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js'
+require '../../bower_components/ng-clip/dest/ng-clip.min.js'
+require '../../bower_components/ng-csv/build/ng-csv.min.js'
 
-_ = require '../../../bower_components/underscore/underscore.js'
-moment = require '../../../bower_components/moment/min/moment.min.js'
-require '../../../lib/moment-interval.js'
+_ = require '../../bower_components/underscore/underscore.js'
+moment = require '../../bower_components/moment/min/moment.min.js'
+require '../../lib/moment-interval.js'
 
 module.exports = ->
 
@@ -64,7 +64,7 @@ module.exports = ->
 
   processDataSource: (dataSource) ->
     dataSource.segments.interval = moment.interval(
-      "#{dataSource.segments.minTime}/#{dataSource.segments.maxTime}}"
+      "#{dataSource.segments.minTime}/#{dataSource.segments.maxTime}"
     )
     return dataSource
 
@@ -117,6 +117,19 @@ module.exports = ->
 
   processRules: (rules) ->
     rules.map @decorateRule
+
+  processAuditItem: (auditItem) ->
+    auditItem.payloadParsed = JSON.parse auditItem.payload
+    auditItem.timeMoment = moment.utc(auditItem.auditTime)
+    return auditItem
+
+  processDataSourceRulesHistory: (ruleChanges) ->
+    ruleChanges.forEach (c) =>
+      @processAuditItem c
+      c.payloadParsed.map @decorateRule
+    ruleChanges.reverse()
+    console.log {ruleChanges}
+    return ruleChanges
 
   resilience: (tier) ->
     Math.floor(tier.nodes.length - tier.currSize / d3.max(tier.nodes, (d) -> d.maxSize))

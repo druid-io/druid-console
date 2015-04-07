@@ -88,9 +88,23 @@ module.exports = ($q, $http, $hUtils, $window) ->
     getRules: (dataSourceId) ->
       @getAndProcess "/rules/#{dataSourceId}", $hUtils.processRules
 
-    saveRules: (dataSourceId, rules) ->
+    getDataSourceRulesHistory: (dataSourceId, interval=null) ->
+      intervalQuery = if interval? then "interval=#{interval}" else ""
+      @getAndProcess "/rules/#{dataSourceId}/history?#{intervalQuery}", $hUtils.processDataSourceRulesHistory
+
+    saveRules: (dataSourceId, rules, author, comment) ->
+      req = {
+        method: 'POST'
+        url: @proxy("/rules/#{dataSourceId}")
+        headers: {
+         "X-Druid-Author": author
+         "X-Druid-Comment": comment
+        },
+        data: rules
+      }
+
       deferred = $q.defer()
-      $http.post( @proxy("/rules/#{dataSourceId}"), rules)
+      $http(req)
         .success () ->
           deferred.resolve()
         .error (data, status, headers) ->

@@ -1,4 +1,4 @@
-hUtilsFactory = require '../../../src/client/factories/hUtils.coffee'
+hUtilsFactory = require '../../../src/factories/hUtils.coffee'
 
 describe '$hUtils', () ->
   $hUtils = undefined
@@ -420,3 +420,49 @@ describe '$hUtils', () ->
     it 'should parse the nodes and give us everything (for now)', () ->
       expect(true).toBeTruthy()
 
+  describe 'processAuditItem', () ->
+    it "should parse the payload", () ->
+      rawItem = {
+        key: "dash_track"
+        type: "rules"
+        auditInfo:
+          author: "doctorow"
+          comment: "big change"
+          ip: "10.61.148.3"
+        payload: "[{\"tieredReplicants\":{\"hot\":1,\"_default_tier\":1},\"type\":\"loadForever\"},{\"period\":\"P1D\",\"tieredReplicants\":{\"_default_tier\":1,\"hot\":1,\"icy\":1},\"type\":\"loadByPeriod\"}]"
+        auditTime: "2015-04-07T16:49:31.129Z"
+      }
+      expectedPayloadParsed = [
+        tieredReplicants:
+          hot: 1
+          _default_tier: 1
+        type: "loadForever"
+      ,
+        period: "P1D"
+        tieredReplicants:
+          _default_tier: 1
+          hot: 1
+          icy: 1
+        type: "loadByPeriod"
+       ]
+
+      computed = $hUtils.processAuditItem(rawItem)
+      expect(computed.payloadParsed).toEqual(expectedPayloadParsed)
+
+      diff = DeepDiff(computed.payloadParsed, expectedPayloadParsed)
+      console.log JSON.stringify(diff) if diff?
+
+    it "should add a moment time", () ->
+      rawItem = {
+        key: "dash_track"
+        type: "rules"
+        auditInfo:
+          author: "doctorow"
+          comment: "big change"
+          ip: "10.61.148.3"
+        payload: "[{\"tieredReplicants\":{\"hot\":1,\"_default_tier\":1},\"type\":\"loadForever\"},{\"period\":\"P1D\",\"tieredReplicants\":{\"_default_tier\":1,\"hot\":1,\"icy\":1},\"type\":\"loadByPeriod\"}]"
+        auditTime: "2015-04-07T16:49:31.129Z"
+      }
+
+      computed = $hUtils.processAuditItem(rawItem)
+      expect(computed.timeMoment.toISOString()).toEqual(rawItem.auditTime)

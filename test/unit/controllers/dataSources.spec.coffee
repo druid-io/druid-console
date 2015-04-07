@@ -1,4 +1,4 @@
-dataSourcesController = require '../../../src/client/controllers/dataSources.coffee'
+dataSourcesController = require '../../../src/controllers/dataSources.coffee'
 
 describe 'dataSourcesCtrl', () ->
   scope = undefined
