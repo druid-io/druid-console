@@ -12984,7 +12984,9 @@ module.exports = function($window, $filter, $compile) {
           return y(d.size);
         }).attr('tooltip-html-unsafe', function(d) {
           return "" + d.day + "<br/>" + ($filter('bytes')(d.size)) + " in " + ($filter('number')(d.count)) + " segments";
-        }).attr("tooltip-trigger", "mouseenter").attr("tooltip-animation", false).attr("tooltip-append-to-body", true);
+        }).attr("tooltip-trigger", "mouseenter").attr("tooltip-animation", false).attr("tooltip-append-to-body", true).on('mouseover', function(d) {
+          return $scope.$parent.interval = d.day;
+        });
         xAxis = d3.svg.axis().scale(x).tickSize(-chartHeight).tickSubdivide(true);
         svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + (ruleTimeHeight + chartHeight) + ")").call(xAxis);
         $el.removeAttr("timeline");
