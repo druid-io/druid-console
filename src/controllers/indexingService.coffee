@@ -2,22 +2,24 @@ module.exports = ($scope, $historical, $indexing, $q) ->
   $scope.env = $historical.env
   $scope.indexing = {}
 
-  $historical.getNodes()
-    .then (cluster) ->
-      $scope.tiers = cluster.tiers
-      $q.all([
-        $historical.getLoadQueue($scope.tiers)
-      ])
-
-  $historical.getDataSources()
-    .then (dataSources) ->
-      $scope.dataSources = dataSources
-      $historical.getLoadStatus($scope.dataSources)
-
   $indexing.getAllTasks()
     .then (tasks) ->
       $scope.indexing.tasks = tasks
       console.log {tasks}
+
+      dataSourceMap = {}
+      for i, iTasks of tasks
+        console.log {iTasks}
+        for j, jTasks of iTasks
+          console.log {jTasks}
+          jTasks.forEach (t) ->
+            dataSourceMap[t.dataSource] ||= 1
+
+      console.log {dataSourceMap}
+      dataSources = ({id} for id, d of dataSourceMap)
+        .sort (a, b) -> a.id - b.id
+      $scope.dataSources = dataSources
+      console.log {dataSources}
 
   $indexing.getWorkers()
     .then ({workers, dataSources, slots}) ->
@@ -31,5 +33,5 @@ module.exports = ($scope, $historical, $indexing, $q) ->
       $scope.indexing.scaling = scaling
       console.log {scaling}
 
-  $scope.loadConfigHistory = ->
-    $historical.getCoordinatorConfigHistory()
+  $scope.loadWorkerConfigHistory = ->
+    $indexing.getWorkerConfigHistory()

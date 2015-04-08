@@ -38,7 +38,7 @@
 
               <audit-history
                 load-history="loadDefaultRulesHistory"
-                id="dataSource.id"
+                id="{{ dataSource.id }}"
                 button="false"
               ></audit-history>
             </td>
@@ -67,10 +67,10 @@
             </td>
             <td class="name">
               <a ui-sref="dataSource({id: dataSource.id})">{{ dataSource.id }}</a>
-              <span class="rule-or-link" ng-controller="RuleEditorCtrl" ng-show="dataSource.hasOwnProperty('rules') && tierNames" tooltip="edit {{ dataSource.id }} rules" tooltip-trigger="mouseenter"><a ng-click="open()" title="edit rules"><span class="fa fa-pencil"></span></a></span>
+              <span class="rule-editor-link" ng-controller="RuleEditorCtrl" ng-show="dataSource.hasOwnProperty('rules') && tierNames" tooltip="edit {{ dataSource.id }} rules" tooltip-trigger="mouseenter"><a ng-click="open()" title="edit rules"><span class="fa fa-pencil"></span></a></span>
               <audit-history
                 load-history="dataSource.loadRulesHistory"
-                id="dataSource.id"
+                id="{{ dataSource.id }}"
                 button="false"
               ></audit-history>
             </td>

@@ -23,3 +23,12 @@ module.exports = ->
       types[task.type].push task
       return types
     ), {realtime: [], hadoop: []})
+
+  processAuditItem: (auditItem) ->
+    auditItem.payloadParsed = JSON.parse auditItem.payload
+    auditItem.timeMoment = moment.utc(auditItem.auditTime)
+    return auditItem
+
+  processConfigHistory: (ruleChanges) ->
+    ruleChanges.reverse().forEach (c) => @processAuditItem c
+    return ruleChanges

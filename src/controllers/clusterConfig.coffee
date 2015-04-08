@@ -3,7 +3,7 @@ module.exports = ($scope, $modal, $historical, $hUtils, $location) ->
     modalInstance = $modal.open(
       # templateUrl: '/pages/disable.html'
       template: '
-        <div class="cluster-config">
+        <div class="cluster-config" ng-form="configForm">
           <div class="modal-header">
               <h1>Edit Cluster Config</h1>
           </div>
@@ -18,14 +18,33 @@ module.exports = ($scope, $modal, $historical, $hUtils, $location) ->
               </td>
             </table>
             <alert type="danger" ng-show="postError">{{postError}}</alert>
+
+            <div id="audit-info">
+              <div class="form-group">
+                <label for="author">Who is making this change?</label>
+                <input ng-model="author" class="form-control" type="text" placeholder="please enter your name" id="author" required>
+              </div>
+
+              <textarea
+                ng-model="comment"
+                class="form-control"
+                rows="3"
+                name="comment"
+                placeholder="please enter a comment"
+                required
+              ></textarea>
+            </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-danger" ng-click="cancel()" ng-disabled="loading">Cancel</button>
-            <button class="btn btn-primary" ng-click="save()" ng-disabled="loading">Save</button>
+            <button
+              class="btn btn-primary"
+              ng-click="save()"
+              ng-disabled="loading || !configForm.$valid"
+            >Save</button>
           </div>
         </div>'
       controller: ClusterConfigInstanceCtrl
-      size: 'sm'
       resolve:
         '$historical': -> $historical
     )
@@ -33,8 +52,10 @@ module.exports = ($scope, $modal, $historical, $hUtils, $location) ->
     return
 
 
-ClusterConfigInstanceCtrl = ($scope, $modalInstance, $historical) ->
+ClusterConfigInstanceCtrl = ($scope, $modalInstance, $historical, localStorageService) ->
   $scope.loading = true
+
+  localStorageService.bind($scope, 'author')
 
   $historical.getClusterConfig()
     .then (config) ->
@@ -45,8 +66,8 @@ ClusterConfigInstanceCtrl = ($scope, $modalInstance, $historical) ->
     console.log "saving config"
     if confirm("Do you really want to update the cluster configuration?")
       $scope.loading = true
-      console.log '$scope.config', $scope.config
-      $historical.saveClusterConfig($scope.config)
+      console.log 'saving $scope.config', $scope.config
+      $historical.saveClusterConfig($scope.config, $scope.author, $scope.comment)
         .then (() ->
           $modalInstance.close()
         ), ((reason) ->

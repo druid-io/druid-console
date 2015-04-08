@@ -59,9 +59,18 @@ module.exports = ($q, $http, $hUtils, $window) ->
     getClusterConfig: () ->
       @getAndProcess "/config", (config) -> config
 
-    saveClusterConfig: (config) ->
+    saveClusterConfig: (config, author, comment) ->
+      req = {
+        method: 'POST'
+        url: @proxy("/config")
+        headers: {
+         "X-Druid-Author": author
+         "X-Druid-Comment": comment
+        }
+        data: config
+      }
       deferred = $q.defer()
-      $http.post( @proxy("/config"), config)
+      $http(req)
         .success () ->
           deferred.resolve()
         .error (data, status, headers) ->
@@ -92,7 +101,7 @@ module.exports = ($q, $http, $hUtils, $window) ->
       intervalQuery = if interval? then "interval=#{interval}" else ""
       @getAndProcess "/rules/#{dataSourceId}/history?#{intervalQuery}", $hUtils.processDataSourceRulesHistory
 
-    getClusterConfigHistory: (interval=null) ->
+    getCoordinatorConfigHistory: (interval=null) ->
       intervalQuery = if interval? then "interval=#{interval}" else ""
       @getAndProcess "/config/history?#{intervalQuery}", $hUtils.processConfigHistory
 
@@ -103,7 +112,7 @@ module.exports = ($q, $http, $hUtils, $window) ->
         headers: {
          "X-Druid-Author": author
          "X-Druid-Comment": comment
-        },
+        }
         data: rules
       }
 

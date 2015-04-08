@@ -11,8 +11,8 @@
     </span>
     <audit-history
       load-history="loadConfigHistory"
-      id="'cluster'"
-      label="history"
+      id="cluster"
+      tooltip-placement="bottom"
       button="false"
     ></audit-history>
   </h1>
@@ -133,7 +133,7 @@
 
       <div id="indexing" ng-show="indexing">
         <h2>
-          Indexing Service
+          <a ui-sref="indexing-service">Indexing Service</a>
           <span ng-show="indexing.slots"> using {{ indexing.slots.used }} / {{ indexing.slots.capacity }} slots ({{ indexing.slots.used / indexing.slots.capacity | percentRound }})</span>
         </h2>
         <div id="realtime" ng-show="indexing.tasks.running">

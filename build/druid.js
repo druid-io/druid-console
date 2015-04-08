@@ -11568,7 +11568,7 @@ module.exports = function($scope, $historical, $indexing, $q) {
     });
   });
   return $scope.loadConfigHistory = function() {
-    return $historical.getClusterConfigHistory();
+    return $historical.getCoordinatorConfigHistory();
   };
 };
 
@@ -11580,9 +11580,8 @@ module.exports = function($scope, $modal, $historical, $hUtils, $location) {
   return $scope.open = function() {
     var modalInstance;
     modalInstance = $modal.open({
-      template: '<div class="cluster-config"> <div class="modal-header"> <h1>Edit Cluster Config</h1> </div> <div class="modal-body"> <span class="fa fa-cog fa-spin fa-2x" ng-show="loading"></span> <table> <tr ng-repeat="(key, val) in config"> <td class="key">{{ key }}</td> <td class="val"> <input ng-model="config[key]"> </td> </td> </table> <alert type="danger" ng-show="postError">{{postError}}</alert> </div> <div class="modal-footer"> <button class="btn btn-danger" ng-click="cancel()" ng-disabled="loading">Cancel</button> <button class="btn btn-primary" ng-click="save()" ng-disabled="loading">Save</button> </div> </div>',
+      template: '<div class="cluster-config" ng-form="configForm"> <div class="modal-header"> <h1>Edit Cluster Config</h1> </div> <div class="modal-body"> <span class="fa fa-cog fa-spin fa-2x" ng-show="loading"></span> <table> <tr ng-repeat="(key, val) in config"> <td class="key">{{ key }}</td> <td class="val"> <input ng-model="config[key]"> </td> </td> </table> <alert type="danger" ng-show="postError">{{postError}}</alert> <div id="audit-info"> <div class="form-group"> <label for="author">Who is making this change?</label> <input ng-model="author" class="form-control" type="text" placeholder="please enter your name" id="author" required> </div> <textarea ng-model="comment" class="form-control" rows="3" name="comment" placeholder="please enter a comment" required ></textarea> </div> </div> <div class="modal-footer"> <button class="btn btn-danger" ng-click="cancel()" ng-disabled="loading">Cancel</button> <button class="btn btn-primary" ng-click="save()" ng-disabled="loading || !configForm.$valid" >Save</button> </div> </div>',
       controller: ClusterConfigInstanceCtrl,
-      size: 'sm',
       resolve: {
         '$historical': function() {
           return $historical;
@@ -11592,8 +11591,9 @@ module.exports = function($scope, $modal, $historical, $hUtils, $location) {
   };
 };
 
-ClusterConfigInstanceCtrl = function($scope, $modalInstance, $historical) {
+ClusterConfigInstanceCtrl = function($scope, $modalInstance, $historical, localStorageService) {
   $scope.loading = true;
+  localStorageService.bind($scope, 'author');
   $historical.getClusterConfig().then(function(config) {
     $scope.config = config;
     return $scope.loading = false;
@@ -11602,8 +11602,8 @@ ClusterConfigInstanceCtrl = function($scope, $modalInstance, $historical) {
     console.log("saving config");
     if (confirm("Do you really want to update the cluster configuration?")) {
       $scope.loading = true;
-      console.log('$scope.config', $scope.config);
-      $historical.saveClusterConfig($scope.config).then((function() {
+      console.log('saving $scope.config', $scope.config);
+      $historical.saveClusterConfig($scope.config, $scope.author, $scope.comment).then((function() {
         return $modalInstance.close();
       }), (function(reason) {
         $scope.postError = reason;
@@ -11946,8 +11946,84 @@ app.controller('RuleEditorCtrl', require('./ruleEditor.coffee'));
 
 app.controller('ClusterConfigCtrl', require('./clusterConfig.coffee'));
 
+app.controller('IndexingServiceCtrl', require('./indexingService.coffee'));
 
-},{"./cluster.coffee":14,"./clusterConfig.coffee":15,"./dataSource.coffee":16,"./dataSourceDisable.coffee":17,"./dataSourceEnable.coffee":18,"./dataSources.coffee":19,"./historicalNode.coffee":20,"./ruleEditor.coffee":22,"./tier.coffee":23}],22:[function(require,module,exports){
+app.controller('WorkerConfigCtrl', require('./workerConfig.coffee'));
+
+
+},{"./cluster.coffee":14,"./clusterConfig.coffee":15,"./dataSource.coffee":16,"./dataSourceDisable.coffee":17,"./dataSourceEnable.coffee":18,"./dataSources.coffee":19,"./historicalNode.coffee":20,"./indexingService.coffee":22,"./ruleEditor.coffee":23,"./tier.coffee":24,"./workerConfig.coffee":25}],22:[function(require,module,exports){
+module.exports = function($scope, $historical, $indexing, $q) {
+  $scope.env = $historical.env;
+  $scope.indexing = {};
+  $indexing.getAllTasks().then(function(tasks) {
+    var d, dataSourceMap, dataSources, i, iTasks, id, j, jTasks;
+    $scope.indexing.tasks = tasks;
+    console.log({
+      tasks: tasks
+    });
+    dataSourceMap = {};
+    for (i in tasks) {
+      iTasks = tasks[i];
+      console.log({
+        iTasks: iTasks
+      });
+      for (j in iTasks) {
+        jTasks = iTasks[j];
+        console.log({
+          jTasks: jTasks
+        });
+        jTasks.forEach(function(t) {
+          var _name;
+          return dataSourceMap[_name = t.dataSource] || (dataSourceMap[_name] = 1);
+        });
+      }
+    }
+    console.log({
+      dataSourceMap: dataSourceMap
+    });
+    dataSources = ((function() {
+      var _results;
+      _results = [];
+      for (id in dataSourceMap) {
+        d = dataSourceMap[id];
+        _results.push({
+          id: id
+        });
+      }
+      return _results;
+    })()).sort(function(a, b) {
+      return a.id - b.id;
+    });
+    $scope.dataSources = dataSources;
+    return console.log({
+      dataSources: dataSources
+    });
+  });
+  $indexing.getWorkers().then(function(_arg) {
+    var dataSources, slots, workers;
+    workers = _arg.workers, dataSources = _arg.dataSources, slots = _arg.slots;
+    $scope.indexing.workers = workers;
+    $scope.indexing.dataSources = dataSources;
+    $scope.indexing.slots = slots;
+    return console.log({
+      workers: workers,
+      dataSources: dataSources,
+      slots: slots
+    });
+  });
+  $indexing.getScaling().then(function(scaling) {
+    $scope.indexing.scaling = scaling;
+    return console.log({
+      scaling: scaling
+    });
+  });
+  return $scope.loadWorkerConfigHistory = function() {
+    return $indexing.getWorkerConfigHistory();
+  };
+};
+
+
+},{}],23:[function(require,module,exports){
 var RuleEditorInstanceCtrl, moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -12076,7 +12152,7 @@ RuleEditorInstanceCtrl = function($scope, $modalInstance, originalRules, dataSou
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],23:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],24:[function(require,module,exports){
 module.exports = function($scope, $historical, $stateParams, $q) {
   $scope.env = $historical.env;
   return $scope.id = {
@@ -12085,18 +12161,62 @@ module.exports = function($scope, $historical, $stateParams, $q) {
 };
 
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
+var WorkerConfigInstanceCtrl;
+
+module.exports = function($scope, $modal, $indexing, $iUtils) {
+  return $scope.open = function() {
+    var modalInstance;
+    modalInstance = $modal.open({
+      template: '<div class="worker-config"> <div class="modal-header"> <h1>Edit Worker Config</h1> </div> <div class="modal-body"> <span class="fa fa-cog fa-spin fa-2x" ng-show="loading"></span> <pre ng-show="config">{{ config | json }}</pre> </div> <div class="modal-footer"> <button class="btn btn-danger" ng-click="cancel()" ng-disabled="loading">Cancel</button> <button disabled class="btn btn-primary" ng-click="save()">Read only right now</button> </div> </div>',
+      controller: WorkerConfigInstanceCtrl,
+      resolve: {
+        '$indexing': function() {
+          return $indexing;
+        }
+      }
+    });
+  };
+};
+
+WorkerConfigInstanceCtrl = function($scope, $modalInstance, $indexing) {
+  $scope.loading = true;
+  $indexing.getWorkerConfig().then(function(config) {
+    $scope.config = config;
+    return $scope.loading = false;
+  });
+  $scope.save = function() {
+    console.log("saving config");
+    if (confirm("Do you really want to update the worker configuration?")) {
+      $scope.loading = true;
+      console.log('$scope.config', $scope.config);
+      $indexing.saveWorkerConfig($scope.config).then((function() {
+        return $modalInstance.close();
+      }), (function(reason) {
+        $scope.postError = reason;
+        return console.log(reason);
+      }));
+    }
+  };
+  $scope.cancel = function() {
+    $modalInstance.dismiss("cancel");
+  };
+};
+
+
+},{}],26:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
     replace: true,
     scope: {
       loadHistory: '=',
-      id: '=',
+      id: '@',
       label: '@',
-      button: '='
+      button: '=',
+      tooltipPlacement: '@'
     },
-    template: "<span class=\"audit-history\">\n\n  <button\n    class=\"btn btn-default btn-xs\"\n    tooltip=\"show audit log for {{ id }}\"\n    tooltip-trigger=\"mouseenter\"\n    ng-click=\"loadAndShowHistory()\"\n    ng-show=\"button\"\n  ><span class=\"fa fa-clock-o\"></span> {{ label }}</button>\n\n  <i\n    class=\"fa fa-clock-o\"\n    tooltip=\"show audit log for {{ id }}\"\n    tooltip-trigger=\"mouseenter\"\n    ng-click=\"loadAndShowHistory()\"\n    ng-hide=\"button\"\n  ></i>\n\n  <div class=\"history-overlay\" ng-show=\"showHistory\" ng-click=\"showHistory = false\">\n    <div class=\"history\" ng-click=\"$event.stopPropagation()\">\n      <h1>Audit history changes for {{ id }}</h1>\n      <div class=\"loading\" ng-hide=\"auditItems\">\n        <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n        <div>Loading rule change history...</div>\n      </div>\n      <div class=\"no-history\" ng-show=\"auditItems.length == 0\">\n        No audit history found for {{ id }}\n      </div>\n      <div class=\"audit-item\" ng-repeat=\"item in auditItems\">\n        <h2>\n          <span class=\"time\">{{ item.timeMoment.format(\"YYYY-MM-DDTHH:mm\") }}Z</span>\n          <span class=\"relative-time\">({{ item.timeMoment.fromNow() }})</span>\n        </h2>\n        <div class=\"by\">\n          <span class=\"author\">{{ item.auditInfo.author ? item.auditInfo.author : 'no author' }}</span>\n          @\n          <span class=\"ip\">{{ item.auditInfo.ip }}</span>\n\n        </div>\n        <div class=\"comment\">\n          comment: {{ item.auditInfo.comment }}\n        </div>\n        <div class=\"payload\">\n          <ul ng-if=\"item.type == 'rule'\">\n            <li ng-repeat=\"rule in item.payloadParsed\">\n              <one-line-rule\n                rule=\"rule\"\n              ></one-line-rule>\n            </li>\n          </ul>\n          <pre ng-if=\"item.type != 'rule'\">{{ item.payloadParsed | json }}</pre>\n        </div>\n      </div>\n    </div>\n  </div>\n</span>",
+    template: "<span class=\"audit-history\">\n\n  <button\n    class=\"btn btn-default btn-xs\"\n    tooltip=\"show audit log for {{ id }}\"\n    tooltip-trigger=\"mouseenter\"\n    tooltip-placement=\"{{ tooltipPlacement }}\"\n    ng-click=\"loadAndShowHistory()\"\n    ng-show=\"button\"\n  ><span class=\"fa fa-clock-o\"></span> {{ label }}</button>\n\n  <i\n    class=\"fa fa-clock-o\"\n    tooltip=\"show audit log for {{ id }}\"\n    tooltip-trigger=\"mouseenter\"\n    tooltip-placement=\"{{ tooltipPlacement }}\"\n    ng-click=\"loadAndShowHistory()\"\n    ng-hide=\"button\"\n  ></i>\n\n  <div class=\"history-overlay\" ng-show=\"showHistory\" ng-click=\"showHistory = false\">\n    <div class=\"history\" ng-click=\"$event.stopPropagation()\">\n      <h1>Audit history changes for {{ id }}</h1>\n      <div class=\"loading\" ng-hide=\"auditItems\">\n        <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n        <div>Loading rule change history...</div>\n      </div>\n      <div class=\"no-history\" ng-show=\"auditItems.length == 0\">\n        No audit history found for {{ id }}\n      </div>\n      <div class=\"audit-item\" ng-repeat=\"item in auditItems\">\n        <h2>\n          <span class=\"time\">{{ item.timeMoment.format(\"YYYY-MM-DDTHH:mm\") }}Z</span>\n          <span class=\"relative-time\">({{ item.timeMoment.fromNow() }})</span>\n        </h2>\n        <div class=\"by\">\n          <span class=\"author\">{{ item.auditInfo.author ? item.auditInfo.author : 'no author' }}</span>\n          @\n          <span class=\"ip\">{{ item.auditInfo.ip }}</span>\n\n        </div>\n        <div class=\"comment\">\n          comment: {{ item.auditInfo.comment }}\n        </div>\n        <div class=\"payload\">\n          <ul ng-if=\"item.type == 'rule'\">\n            <li ng-repeat=\"rule in item.payloadParsed\">\n              <one-line-rule\n                rule=\"rule\"\n              ></one-line-rule>\n            </li>\n          </ul>\n          <pre ng-if=\"item.type != 'rule'\">{{ item.payloadParsed | json }}</pre>\n        </div>\n      </div>\n    </div>\n  </div>\n</span>",
     link: function(scope) {
       return scope.loadAndShowHistory = function() {
         scope.showHistory = true;
@@ -12109,7 +12229,7 @@ module.exports = function() {
 };
 
 
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12122,7 +12242,7 @@ module.exports = function() {
 };
 
 
-},{}],26:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 var app;
 
 app = angular.module('druid');
@@ -12154,7 +12274,7 @@ app.directive('oneLineRule', require('./oneLineRule.coffee'));
 app.directive('auditHistory', require('./auditHistory.coffee'));
 
 
-},{"./auditHistory.coffee":24,"./conciseRule.coffee":25,"./isoDuration.coffee":27,"./isoInterval.coffee":28,"./oneLineRule.coffee":29,"./rulesTimeline.coffee":30,"./runningTasks.coffee":31,"./scalingActivity.coffee":32,"./selectTextOnClick.coffee":33,"./siteNav.coffee":34,"./tierCapacity.coffee":35,"./tierNodes.coffee":36,"./timeline.coffee":37}],27:[function(require,module,exports){
+},{"./auditHistory.coffee":26,"./conciseRule.coffee":27,"./isoDuration.coffee":29,"./isoInterval.coffee":30,"./oneLineRule.coffee":31,"./rulesTimeline.coffee":32,"./runningTasks.coffee":33,"./scalingActivity.coffee":34,"./selectTextOnClick.coffee":35,"./siteNav.coffee":36,"./tierCapacity.coffee":37,"./tierNodes.coffee":38,"./timeline.coffee":39}],29:[function(require,module,exports){
 var moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -12189,7 +12309,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],28:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],30:[function(require,module,exports){
 var moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -12231,7 +12351,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],29:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],31:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12244,7 +12364,7 @@ module.exports = function() {
 };
 
 
-},{}],30:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var moment, _;
 
 _ = require('../../bower_components/underscore/underscore.js');
@@ -12418,7 +12538,7 @@ module.exports = function($window, $filter, $compile) {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11,"../../lib/moment-interval.js":13}],31:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11,"../../lib/moment-interval.js":13}],33:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12481,7 +12601,7 @@ module.exports = function() {
 };
 
 
-},{}],32:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12580,7 +12700,7 @@ module.exports = function() {
 };
 
 
-},{}],33:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'A',
@@ -12593,7 +12713,7 @@ module.exports = function() {
 };
 
 
-},{}],34:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12607,7 +12727,7 @@ module.exports = function() {
 };
 
 
-},{}],35:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 var moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -12696,7 +12816,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8}],36:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8}],38:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12740,7 +12860,7 @@ module.exports = function() {
 };
 
 
-},{}],37:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 var moment, _;
 
 _ = require('../../bower_components/underscore/underscore.js');
@@ -12878,7 +12998,7 @@ module.exports = function($window, $filter, $compile) {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11}],38:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11}],40:[function(require,module,exports){
 var $, app;
 
 $ = require('jquery');
@@ -12928,10 +13048,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: '/tiers/:id',
     templateUrl: '/pages/tier.html',
     controller: 'TierCtrl'
-  }).state('historical-node', {
-    url: '/historical-nodes/:id',
-    templateUrl: '/pages/historicalNode.html',
-    controller: 'HistoricalNodeCtrl'
+  }).state('indexing-service', {
+    url: '/indexing-service',
+    templateUrl: '/pages/indexing-service.html',
+    controller: 'IndexingServiceCtrl'
   });
   return $urlRouterProvider.otherwise('/');
 });
@@ -12939,7 +13059,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 module.exports = app;
 
 
-},{"../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js":1,"../bower_components/angular-local-storage/dist/angular-local-storage.min.js":2,"../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../bower_components/angular/angular.min.js":5,"../bower_components/d3/d3.js":6,"../bower_components/ng-clip/dest/ng-clip.min.js":9,"../bower_components/ng-csv/build/ng-csv.min.js":10,"../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"./controllers":21,"./directives":26,"./factories":42,"./filters":44,"jquery":7}],39:[function(require,module,exports){
+},{"../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js":1,"../bower_components/angular-local-storage/dist/angular-local-storage.min.js":2,"../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../bower_components/angular/angular.min.js":5,"../bower_components/d3/d3.js":6,"../bower_components/ng-clip/dest/ng-clip.min.js":9,"../bower_components/ng-csv/build/ng-csv.min.js":10,"../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"./controllers":21,"./directives":28,"./factories":44,"./filters":46,"jquery":7}],41:[function(require,module,exports){
 var moment, _;
 
 require('../../bower_components/d3/d3.js');
@@ -13131,13 +13251,12 @@ module.exports = function() {
       return auditItem;
     },
     processDataSourceRulesHistory: function(ruleChanges) {
-      ruleChanges.forEach((function(_this) {
+      ruleChanges.reverse().forEach((function(_this) {
         return function(c) {
           _this.processAuditItem(c);
           return c.payloadParsed.map(_this.decorateRule);
         };
       })(this));
-      ruleChanges.reverse();
       return ruleChanges;
     },
     processConfigHistory: function(ruleChanges) {
@@ -13338,7 +13457,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../../bower_components/angular/angular.min.js":5,"../../bower_components/d3/d3.js":6,"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/ng-clip/dest/ng-clip.min.js":9,"../../bower_components/ng-csv/build/ng-csv.min.js":10,"../../bower_components/underscore/underscore.js":11,"../../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"../../lib/moment-interval.js":13}],40:[function(require,module,exports){
+},{"../../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../../bower_components/angular/angular.min.js":5,"../../bower_components/d3/d3.js":6,"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/ng-clip/dest/ng-clip.min.js":9,"../../bower_components/ng-csv/build/ng-csv.min.js":10,"../../bower_components/underscore/underscore.js":11,"../../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"../../lib/moment-interval.js":13}],42:[function(require,module,exports){
 var __slice = [].slice;
 
 module.exports = function($q, $http, $hUtils, $window) {
@@ -13414,10 +13533,19 @@ module.exports = function($q, $http, $hUtils, $window) {
         return config;
       });
     },
-    saveClusterConfig: function(config) {
-      var deferred;
+    saveClusterConfig: function(config, author, comment) {
+      var deferred, req;
+      req = {
+        method: 'POST',
+        url: this.proxy("/config"),
+        headers: {
+          "X-Druid-Author": author,
+          "X-Druid-Comment": comment
+        },
+        data: config
+      };
       deferred = $q.defer();
-      $http.post(this.proxy("/config"), config).success(function() {
+      $http(req).success(function() {
         return deferred.resolve();
       }).error(function(data, status, headers) {
         console.error("Error saving config - data, status, headers:", data, status, headers);
@@ -13455,7 +13583,7 @@ module.exports = function($q, $http, $hUtils, $window) {
       intervalQuery = interval != null ? "interval=" + interval : "";
       return this.getAndProcess("/rules/" + dataSourceId + "/history?" + intervalQuery, $hUtils.processDataSourceRulesHistory);
     },
-    getClusterConfigHistory: function(interval) {
+    getCoordinatorConfigHistory: function(interval) {
       var intervalQuery;
       if (interval == null) {
         interval = null;
@@ -13505,7 +13633,7 @@ module.exports = function($q, $http, $hUtils, $window) {
 };
 
 
-},{}],41:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 module.exports = function() {
   return {
     parseTaskId: function(taskId) {
@@ -13547,12 +13675,25 @@ module.exports = function() {
         realtime: [],
         hadoop: []
       });
+    },
+    processAuditItem: function(auditItem) {
+      auditItem.payloadParsed = JSON.parse(auditItem.payload);
+      auditItem.timeMoment = moment.utc(auditItem.auditTime);
+      return auditItem;
+    },
+    processConfigHistory: function(ruleChanges) {
+      ruleChanges.reverse().forEach((function(_this) {
+        return function(c) {
+          return _this.processAuditItem(c);
+        };
+      })(this));
+      return ruleChanges;
     }
   };
 };
 
 
-},{}],42:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 var app;
 
 app = angular.module('druid');
@@ -13566,7 +13707,7 @@ app.factory('$indexing', require('./indexing.coffee'));
 app.factory('$iUtils', require('./iUtils.coffee'));
 
 
-},{"./hUtils.coffee":39,"./historical.coffee":40,"./iUtils.coffee":41,"./indexing.coffee":43}],43:[function(require,module,exports){
+},{"./hUtils.coffee":41,"./historical.coffee":42,"./iUtils.coffee":43,"./indexing.coffee":45}],45:[function(require,module,exports){
 var __slice = [].slice;
 
 module.exports = function($q, $http, $iUtils, $window) {
@@ -13672,12 +13813,37 @@ module.exports = function($q, $http, $iUtils, $window) {
     },
     getCompleteTasks: function() {
       return this.getAndProcess("/completeTasks", $iUtils.processTasks);
+    },
+    getWorkerConfig: function() {
+      return this.getAndProcess("/worker", function(config) {
+        return config;
+      });
+    },
+    saveWorkerConfig: function(config) {
+      var deferred;
+      return;
+      deferred = $q.defer();
+      $http.post(this.proxy("/worker"), config).success(function() {
+        return deferred.resolve();
+      }).error(function(data, status, headers) {
+        console.error("Error saving config - data, status, headers:", data, status, headers);
+        return deferred.reject("Could not save config, error " + status + ": " + data);
+      });
+      return deferred.promise;
+    },
+    getWorkerConfigHistory: function(interval) {
+      var intervalQuery;
+      if (interval == null) {
+        interval = null;
+      }
+      intervalQuery = interval != null ? "interval=" + interval : "";
+      return this.getAndProcess("/worker/history?" + intervalQuery, $iUtils.processConfigHistory);
     }
   };
 };
 
 
-},{}],44:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 var app, _;
 
 _ = require('../../bower_components/underscore/underscore.js');
@@ -13786,4 +13952,4 @@ app.filter('isoHour', function() {
 });
 
 
-},{"../../bower_components/underscore/underscore.js":11}]},{},[38])
+},{"../../bower_components/underscore/underscore.js":11}]},{},[40])

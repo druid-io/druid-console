@@ -123,10 +123,9 @@ module.exports = ->
     return auditItem
 
   processDataSourceRulesHistory: (ruleChanges) ->
-    ruleChanges.forEach (c) =>
+    ruleChanges.reverse().forEach (c) =>
       @processAuditItem c
       c.payloadParsed.map @decorateRule
-    ruleChanges.reverse()
     return ruleChanges
 
   processConfigHistory: (ruleChanges) ->

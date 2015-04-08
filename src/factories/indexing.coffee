@@ -80,4 +80,24 @@ module.exports = ($q, $http, $iUtils, $window) ->
 
     getCompleteTasks: ->
       @getAndProcess "/completeTasks", $iUtils.processTasks
+
+    getWorkerConfig: () ->
+      @getAndProcess "/worker", (config) -> config
+
+    saveWorkerConfig: (config) ->
+      # TODO: Remove the following
+      return
+      deferred = $q.defer()
+      $http.post( @proxy("/worker"), config)
+        .success () ->
+          deferred.resolve()
+        .error (data, status, headers) ->
+          console.error "Error saving config - data, status, headers:", data, status, headers
+          deferred.reject("Could not save config, error #{status}: #{data}")
+      return deferred.promise
+
+    getWorkerConfigHistory: (interval=null) ->
+      intervalQuery = if interval? then "interval=#{interval}" else ""
+      @getAndProcess "/worker/history?#{intervalQuery}", $iUtils.processConfigHistory
+
   }

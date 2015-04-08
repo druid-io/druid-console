@@ -3,9 +3,10 @@ module.exports = ->
   replace: true
   scope: {
     loadHistory: '='
-    id: '='
+    id: '@'
     label: '@'
     button: '='
+    tooltipPlacement: '@'
   }
   template: """
     <span class="audit-history">
@@ -14,6 +15,7 @@ module.exports = ->
         class="btn btn-default btn-xs"
         tooltip="show audit log for {{ id }}"
         tooltip-trigger="mouseenter"
+        tooltip-placement="{{ tooltipPlacement }}"
         ng-click="loadAndShowHistory()"
         ng-show="button"
       ><span class="fa fa-clock-o"></span> {{ label }}</button>
@@ -22,6 +24,7 @@ module.exports = ->
         class="fa fa-clock-o"
         tooltip="show audit log for {{ id }}"
         tooltip-trigger="mouseenter"
+        tooltip-placement="{{ tooltipPlacement }}"
         ng-click="loadAndShowHistory()"
         ng-hide="button"
       ></i>

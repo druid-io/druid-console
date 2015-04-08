@@ -417,16 +417,6 @@ body {
           & > a:after {
             content: "\00a0";
           }
-
-          .rule-editor-link {
-            font-size: 85%;
-            a {
-              color: $grey;
-              &:hover {
-                color: $white;
-              }
-            }
-          }
         }
         td.rules {
           width: 240px;
@@ -944,6 +934,23 @@ body {
   }
 }
 
+.rule-editor-link {
+  a {
+    color: $baseColor;
+    &:hover {
+      color: $green;
+    }
+  }
+}
+
+.audit-history {
+  i {
+    color: $baseColor;
+    &:hover {
+      color: $green;
+    }
+  }
+}
 
 .history-overlay {
   position: fixed;
