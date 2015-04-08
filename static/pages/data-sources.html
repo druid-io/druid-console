@@ -34,19 +34,23 @@
             </td>
             <td class="name">
               <a>default rules</a>
-              <span class="rule-editor-link" ng-controller="RuleEditorCtrl" ng-show="dataSource.hasOwnProperty('rules') && tierNames" tooltip="edit {{ dataSource.id }} rules" tooltip-trigger="mouseenter"><a ng-click="open()" title="edit rules">
-                <span class="fa fa-pencil"></span>
-              </a></span>
+              <span class="rule-editor-link" ng-controller="RuleEditorCtrl" ng-show="dataSource.hasOwnProperty('rules') && tierNames" tooltip="edit {{ dataSource.id }} rules" tooltip-trigger="mouseenter"><a ng-click="open()" title="edit rules"><span class="fa fa-pencil"></span></a></span>
+
+              <audit-history
+                load-history="loadDefaultRulesHistory"
+                id="dataSource.id"
+                button="false"
+              ></audit-history>
             </td>
             <td class="rules">
               <div class="no-rule" ng-if="dataSource.rules.length == 0">
                 no rules set
               </div>
 
-              <single-line-rule
+              <one-line-rule
                 rule="rule"
                 ng-repeat="rule in dataSource.rules"
-              ></single-line-rule>
+              ></one-line-rule>
 
             </td>
             <td class="footprint">
@@ -63,41 +67,22 @@
             </td>
             <td class="name">
               <a ui-sref="dataSource({id: dataSource.id})">{{ dataSource.id }}</a>
-              <span class="rule-editor-link" ng-controller="RuleEditorCtrl" ng-show="dataSource.hasOwnProperty('rules') && tierNames" tooltip="edit {{ dataSource.id }} rules" tooltip-trigger="mouseenter"><a ng-click="open()" title="edit rules">
-                <span class="fa fa-pencil"></span>
-              </a></span>
+              <span class="rule-or-link" ng-controller="RuleEditorCtrl" ng-show="dataSource.hasOwnProperty('rules') && tierNames" tooltip="edit {{ dataSource.id }} rules" tooltip-trigger="mouseenter"><a ng-click="open()" title="edit rules"><span class="fa fa-pencil"></span></a></span>
+              <audit-history
+                load-history="dataSource.loadRulesHistory"
+                id="dataSource.id"
+                button="false"
+              ></audit-history>
             </td>
             <td class="rules">
               <div class="no-rule" ng-if="dataSource.rules.length == 0">
                 no rules set
               </div>
 
-              <div class="rule" ng-repeat="rule in dataSource.rules">
-                <span ng-if="!rule.default">
-                  <span class="direction" ng-class="rule.direction">
-                    {{ rule.direction }}
-                  </span>
-
-                  <span class="forever" ng-if="rule.timeType == 'Forever'">Forever</span>
-
-                  <span class="period" ng-if="rule.period">
-                    <span class="value">{{ rule.period }}</span><span ng-if="rule.direction == 'load'">:</span>
-                  </span>
-
-                  <span class="interval" ng-if="rule.interval">
-                    <span class="value" ng-bind-html="rule.interval | simplifyInterval"></span><span ng-if="rule.direction == 'load'">:</span>
-                  </span>
-
-                  <span class="replicants">
-                    <span class="replicant" ng-repeat="(tier, n) in rule.tieredReplicants">
-                      <span class="value">{{ n }}</span>
-                      in
-                      <span class="tier" ng-class="tier">{{ tier | tierName }}</span>{{ $last ? '' : ',' }}
-                    </span>
-                  </span>
-
-                </span>
-              </div>
+              <one-line-rule
+                rule="rule"
+                ng-repeat="rule in dataSource.rules"
+              ></one-line-rule>
 
             </td>
             <td class="footprint">

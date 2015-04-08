@@ -222,47 +222,6 @@ body {
 
     }
 
-    .history-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1001;
-      background-color: rgba(0,0,0,0.8);
-      margin: 0;
-
-      .history {
-        background-color: $backgroundBlack;
-        margin: 10rem auto;
-        padding-bottom: 0.5rem;
-        width: 60%;
-        font-size: 1rem;
-        h1 {
-          font-size: 1.6rem;
-          padding-top: 0.5rem;
-          padding-bottom: 0.5rem;
-        }
-        .audit-item {
-          margin-bottom: 1.5rem;
-          & > * {
-            padding: 0px 8px;
-          }
-          h2 {
-            font-size: 1.2rem;
-            width: 100%;
-            min-width: 100%;
-            max-width: 100%;
-          }
-          .author {
-            color: $white;
-          }
-          .comment {
-            padding-bottom: 0.5rem 0;
-          }
-        }
-      }
-    }
 
     .timeline {
       height: 150px;
@@ -906,6 +865,16 @@ body {
     h1 {
       font-size: 18px;
     }
+
+    a, a:link, a:visited {
+      text-decoration:none;
+      color: black;
+    }
+    a:hover {
+      text-decoration: underline;
+      color: $baseColor;
+    }
+
     #audit-info {
       textarea, input {
         &.ng-invalid {
@@ -971,6 +940,63 @@ body {
     }
     .alert {
       padding: 10px 12px;
+    }
+  }
+}
+
+
+.history-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1001;
+  background-color: rgba(0,0,0,0.8);
+  margin: 0;
+
+  .history {
+    background-color: $backgroundBlack;
+    margin: 10rem auto;
+    padding-bottom: 0.5rem;
+    width: 60%;
+    font-size: 1rem;
+    h1 {
+      font-size: 1.6rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+    .audit-item {
+      margin-bottom: 1.5rem;
+      & > * {
+        padding: 0px 8px;
+      }
+      h2 {
+        font-size: 1.2rem;
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+      }
+      .author {
+        color: $white;
+      }
+      .comment {
+        padding-bottom: 0.5rem 0;
+      }
+    }
+    .no-history, .loading {
+      padding: 1rem 8px;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+    .no-history {
+      color: $red;
+    }
+    .loading {
+      i {
+        font-size: 10rem;
+        color: $yellow;
+      }
     }
   }
 }

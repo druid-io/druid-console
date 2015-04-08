@@ -82,9 +82,5 @@ module.exports = ($scope, $historical, $stateParams, $q) ->
     $historical.getTierNames().then (tierNames) ->
       $scope.tierNames = tierNames
 
-  $scope.loadAndShowRulesHistory = ->
-    $scope.showHistory = true
+  $scope.loadRulesHistory = ->
     $historical.getDataSourceRulesHistory($scope.dataSource.id)
-      .then (rulesHistory) ->
-        $scope.rulesHistory = rulesHistory
-        console.log {rulesHistory: $scope.rulesHistory, showHistory: $scope.showHistory}

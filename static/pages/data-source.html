@@ -25,44 +25,11 @@
         <span class="fa fa-pencil"></span> edit rules</button>
       </span>
 
-      <span ng-show="dataSource.hasOwnProperty('rules')">
-        <button class="btn btn-default btn-xs" ng-click="loadAndShowRulesHistory()">
-        <span class="fa fa-clock-o"></span> history</button>
-      </span>
-
-      <div class="history-overlay" ng-show="showHistory && rulesHistory" ng-click="showHistory = false">
-        <div class="history" ng-click="$event.stopPropagation()">
-          <h1>History of rule changes for {{ dataSource.id }}</h1>
-          <div ng-hide="rulesHistory">
-            Loading rule change history...
-            <i class="fa fa-circle-o-notch fa-spin"></i>
-          </div>
-          <div class="audit-item" ng-repeat="item in rulesHistory">
-            <h2>
-              <span class="time">{{ item.timeMoment.format("YYYY-MM-DDTHH:mm") }}Z</span>
-              <span class="relative-time">({{ item.timeMoment.fromNow() }})</span>
-            </h2>
-            <div class="by">
-              <span class="author">{{ item.auditInfo.author ? item.auditInfo.author : 'no author' }}</span>
-              @
-              <span class="ip">{{ item.auditInfo.ip }}</span>
-
-            </div>
-            <div class="comment">
-              comment: {{ item.auditInfo.comment }}
-            </div>
-            <div class="payload">
-              <ul>
-                <li ng-repeat="rule in item.payloadParsed">
-                  <one-line-rule
-                    rule="rule"
-                  ></one-line-rule>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+      <audit-history
+        load-history="loadRulesHistory"
+        id="dataSource.id"
+        label="history"
+      ></audit-history>
 
       <div class="footprint">
         <div ng-repeat="(tier, tierData) in dataSource.tiers">

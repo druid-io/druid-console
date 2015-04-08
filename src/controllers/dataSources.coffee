@@ -33,6 +33,9 @@ module.exports = ($scope, $historical, $q) ->
 
   $historical.getDataSources()
     .then (dataSources) ->
+      dataSources.forEach (ds) ->
+        ds.loadRulesHistory = ->
+          $historical.getDataSourceRulesHistory(ds.id)
       $scope.dataSources = dataSources
       $q.all(
         loadStatus: $historical.getLoadStatus($scope.dataSources)
@@ -41,6 +44,10 @@ module.exports = ($scope, $historical, $q) ->
     .then (results) ->
       $scope.defaultRules = results.rules._default
 
+
   unless $scope.tierNames
     $historical.getTierNames().then (tierNames) ->
       $scope.tierNames = tierNames
+
+  $scope.loadDefaultRulesHistory = ->
+    $historical.getDataSourceRulesHistory('_default')

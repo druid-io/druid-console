@@ -11731,15 +11731,8 @@ module.exports = function($scope, $historical, $stateParams, $q) {
       return $scope.tierNames = tierNames;
     });
   }
-  return $scope.loadAndShowRulesHistory = function() {
-    $scope.showHistory = true;
-    return $historical.getDataSourceRulesHistory($scope.dataSource.id).then(function(rulesHistory) {
-      $scope.rulesHistory = rulesHistory;
-      return console.log({
-        rulesHistory: $scope.rulesHistory,
-        showHistory: $scope.showHistory
-      });
-    });
+  return $scope.loadRulesHistory = function() {
+    return $historical.getDataSourceRulesHistory($scope.dataSource.id);
   };
 };
 
@@ -11894,6 +11887,11 @@ module.exports = function($scope, $historical, $q) {
     }
   };
   $historical.getDataSources().then(function(dataSources) {
+    dataSources.forEach(function(ds) {
+      return ds.loadRulesHistory = function() {
+        return $historical.getDataSourceRulesHistory(ds.id);
+      };
+    });
     $scope.dataSources = dataSources;
     return $q.all({
       loadStatus: $historical.getLoadStatus($scope.dataSources),
@@ -11903,10 +11901,13 @@ module.exports = function($scope, $historical, $q) {
     return $scope.defaultRules = results.rules._default;
   });
   if (!$scope.tierNames) {
-    return $historical.getTierNames().then(function(tierNames) {
+    $historical.getTierNames().then(function(tierNames) {
       return $scope.tierNames = tierNames;
     });
   }
+  return $scope.loadDefaultRulesHistory = function() {
+    return $historical.getDataSourceRulesHistory('_default');
+  };
 };
 
 
@@ -12087,6 +12088,30 @@ module.exports = function() {
     restrict: 'E',
     replace: true,
     scope: {
+      loadHistory: '=',
+      id: '=',
+      label: '@',
+      button: '='
+    },
+    template: "<span class=\"audit-history\">\n  <button class=\"btn btn-default btn-xs\" ng-click=\"loadAndShowHistory()\"\n    ng-show=\"button\">\n  <span class=\"fa fa-clock-o\"></span> {{ label }}</button>\n  <span class=\"fa fa-clock-o\"\n    ng-click=\"loadAndShowHistory()\"\n    ng-hide=\"button\"\n    ></span>\n\n  <div class=\"history-overlay\" ng-show=\"showHistory\" ng-click=\"showHistory = false\">\n    <div class=\"history\" ng-click=\"$event.stopPropagation()\">\n      <h1>Audit history changes for {{ id }}</h1>\n      <div class=\"loading\" ng-hide=\"auditItems\">\n        <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n        <div>Loading rule change history...</div>\n      </div>\n      <div class=\"no-history\" ng-show=\"auditItems.length == 0\">\n        No audit history found for {{ id }}\n      </div>\n      <div class=\"audit-item\" ng-repeat=\"item in auditItems\">\n        <h2>\n          <span class=\"time\">{{ item.timeMoment.format(\"YYYY-MM-DDTHH:mm\") }}Z</span>\n          <span class=\"relative-time\">({{ item.timeMoment.fromNow() }})</span>\n        </h2>\n        <div class=\"by\">\n          <span class=\"author\">{{ item.auditInfo.author ? item.auditInfo.author : 'no author' }}</span>\n          @\n          <span class=\"ip\">{{ item.auditInfo.ip }}</span>\n\n        </div>\n        <div class=\"comment\">\n          comment: {{ item.auditInfo.comment }}\n        </div>\n        <div class=\"payload\">\n          <ul>\n            <li ng-repeat=\"rule in item.payloadParsed\">\n              <one-line-rule\n                rule=\"rule\"\n              ></one-line-rule>\n            </li>\n          </ul>\n        </div>\n      </div>\n    </div>\n  </div>\n</span>",
+    link: function(scope) {
+      return scope.loadAndShowHistory = function() {
+        scope.showHistory = true;
+        return scope.loadHistory().then(function(auditItems) {
+          return scope.auditItems = auditItems;
+        });
+      };
+    }
+  };
+};
+
+
+},{}],25:[function(require,module,exports){
+module.exports = function() {
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: {
       rule: '=rule'
     },
     template: "<div class=\"concise-rule\">\n  <div>\n    <span class=\"type\">\n      <span ng-class=\"rule.direction\">{{ rule.direction }}</span>{{ rule.type.substr(4) }}\n    </span>\n    <span class=\"default\" ng-if=\"rule.default\">(default rule)</span>\n  </div>\n\n  <div class=\"period\" ng-if=\"rule.period\">\n    <span class=\"value\">{{ rule.period }}</span>\n    <span class=\"human\">({{ rule.momentInterval.period().humanize() }})</span>\n  </div>\n\n  <div class=\"interval\" ng-if=\"rule.interval\">\n    <span class=\"value\" ng-bind-html=\"rule.interval | simplifyInterval\"></span>\n    <span class=\"human\">({{ rule.momentInterval.period().humanize() }})</span>\n  </div>\n\n  <div class=\"replicants\">\n    <div class=\"replicant\" ng-repeat=\"(tier, n) in rule.tieredReplicants\">\n      <span class=\"value\">{{ n }}</span> in\n      <span class=\"tier\" ng-class=\"tier\">{{ tier | tierName}}</span>\n    </div>\n  </div>\n</div>"
@@ -12094,7 +12119,7 @@ module.exports = function() {
 };
 
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var app;
 
 app = angular.module('druid');
@@ -12123,8 +12148,10 @@ app.directive('conciseRule', require('./conciseRule.coffee'));
 
 app.directive('oneLineRule', require('./oneLineRule.coffee'));
 
+app.directive('auditHistory', require('./auditHistory.coffee'));
 
-},{"./conciseRule.coffee":24,"./isoDuration.coffee":26,"./isoInterval.coffee":27,"./oneLineRule.coffee":28,"./rulesTimeline.coffee":29,"./runningTasks.coffee":30,"./scalingActivity.coffee":31,"./selectTextOnClick.coffee":32,"./siteNav.coffee":33,"./tierCapacity.coffee":34,"./tierNodes.coffee":35,"./timeline.coffee":36}],26:[function(require,module,exports){
+
+},{"./auditHistory.coffee":24,"./conciseRule.coffee":25,"./isoDuration.coffee":27,"./isoInterval.coffee":28,"./oneLineRule.coffee":29,"./rulesTimeline.coffee":30,"./runningTasks.coffee":31,"./scalingActivity.coffee":32,"./selectTextOnClick.coffee":33,"./siteNav.coffee":34,"./tierCapacity.coffee":35,"./tierNodes.coffee":36,"./timeline.coffee":37}],27:[function(require,module,exports){
 var moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -12159,7 +12186,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],27:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],28:[function(require,module,exports){
 var moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -12201,7 +12228,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],28:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],29:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12214,7 +12241,7 @@ module.exports = function() {
 };
 
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 var moment, _;
 
 _ = require('../../bower_components/underscore/underscore.js');
@@ -12388,7 +12415,7 @@ module.exports = function($window, $filter, $compile) {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11,"../../lib/moment-interval.js":13}],30:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11,"../../lib/moment-interval.js":13}],31:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12451,7 +12478,7 @@ module.exports = function() {
 };
 
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12550,7 +12577,7 @@ module.exports = function() {
 };
 
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'A',
@@ -12563,7 +12590,7 @@ module.exports = function() {
 };
 
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12577,7 +12604,7 @@ module.exports = function() {
 };
 
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 var moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -12666,7 +12693,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8}],35:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8}],36:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12710,7 +12737,7 @@ module.exports = function() {
 };
 
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 var moment, _;
 
 _ = require('../../bower_components/underscore/underscore.js');
@@ -12848,7 +12875,7 @@ module.exports = function($window, $filter, $compile) {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11}],37:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11}],38:[function(require,module,exports){
 var $, app;
 
 $ = require('jquery');
@@ -12909,7 +12936,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 module.exports = app;
 
 
-},{"../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js":1,"../bower_components/angular-local-storage/dist/angular-local-storage.min.js":2,"../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../bower_components/angular/angular.min.js":5,"../bower_components/d3/d3.js":6,"../bower_components/ng-clip/dest/ng-clip.min.js":9,"../bower_components/ng-csv/build/ng-csv.min.js":10,"../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"./controllers":21,"./directives":25,"./factories":41,"./filters":43,"jquery":7}],38:[function(require,module,exports){
+},{"../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js":1,"../bower_components/angular-local-storage/dist/angular-local-storage.min.js":2,"../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../bower_components/angular/angular.min.js":5,"../bower_components/d3/d3.js":6,"../bower_components/ng-clip/dest/ng-clip.min.js":9,"../bower_components/ng-csv/build/ng-csv.min.js":10,"../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"./controllers":21,"./directives":26,"./factories":42,"./filters":44,"jquery":7}],39:[function(require,module,exports){
 var moment, _;
 
 require('../../bower_components/d3/d3.js');
@@ -13305,7 +13332,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js":1,"../../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../../bower_components/angular/angular.min.js":5,"../../bower_components/d3/d3.js":6,"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/ng-clip/dest/ng-clip.min.js":9,"../../bower_components/ng-csv/build/ng-csv.min.js":10,"../../bower_components/underscore/underscore.js":11,"../../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"../../lib/moment-interval.js":13}],39:[function(require,module,exports){
+},{"../../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js":1,"../../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../../bower_components/angular/angular.min.js":5,"../../bower_components/d3/d3.js":6,"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/ng-clip/dest/ng-clip.min.js":9,"../../bower_components/ng-csv/build/ng-csv.min.js":10,"../../bower_components/underscore/underscore.js":11,"../../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"../../lib/moment-interval.js":13}],40:[function(require,module,exports){
 var __slice = [].slice;
 
 module.exports = function($q, $http, $hUtils, $window) {
@@ -13464,7 +13491,7 @@ module.exports = function($q, $http, $hUtils, $window) {
 };
 
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 module.exports = function() {
   return {
     parseTaskId: function(taskId) {
@@ -13511,7 +13538,7 @@ module.exports = function() {
 };
 
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 var app;
 
 app = angular.module('druid');
@@ -13525,7 +13552,7 @@ app.factory('$indexing', require('./indexing.coffee'));
 app.factory('$iUtils', require('./iUtils.coffee'));
 
 
-},{"./hUtils.coffee":38,"./historical.coffee":39,"./iUtils.coffee":40,"./indexing.coffee":42}],42:[function(require,module,exports){
+},{"./hUtils.coffee":39,"./historical.coffee":40,"./iUtils.coffee":41,"./indexing.coffee":43}],43:[function(require,module,exports){
 var __slice = [].slice;
 
 module.exports = function($q, $http, $iUtils, $window) {
@@ -13636,7 +13663,7 @@ module.exports = function($q, $http, $iUtils, $window) {
 };
 
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 var app, _;
 
 _ = require('../../bower_components/underscore/underscore.js');
@@ -13745,4 +13772,4 @@ app.filter('isoHour', function() {
 });
 
 
-},{"../../bower_components/underscore/underscore.js":11}]},{},[37])
+},{"../../bower_components/underscore/underscore.js":11}]},{},[38])
