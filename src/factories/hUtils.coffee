@@ -127,7 +127,11 @@ module.exports = ->
       @processAuditItem c
       c.payloadParsed.map @decorateRule
     ruleChanges.reverse()
-    console.log {ruleChanges}
+    return ruleChanges
+
+  processConfigHistory: (ruleChanges) ->
+    ruleChanges.reverse().forEach (c) =>
+      @processAuditItem c
     return ruleChanges
 
   resilience: (tier) ->

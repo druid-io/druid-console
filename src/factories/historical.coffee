@@ -92,6 +92,10 @@ module.exports = ($q, $http, $hUtils, $window) ->
       intervalQuery = if interval? then "interval=#{interval}" else ""
       @getAndProcess "/rules/#{dataSourceId}/history?#{intervalQuery}", $hUtils.processDataSourceRulesHistory
 
+    getClusterConfigHistory: (interval=null) ->
+      intervalQuery = if interval? then "interval=#{interval}" else ""
+      @getAndProcess "/config/history?#{intervalQuery}", $hUtils.processConfigHistory
+
     saveRules: (dataSourceId, rules, author, comment) ->
       req = {
         method: 'POST'

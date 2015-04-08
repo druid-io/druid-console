@@ -51,13 +51,14 @@ module.exports = ->
               comment: {{ item.auditInfo.comment }}
             </div>
             <div class="payload">
-              <ul>
+              <ul ng-if="item.type == 'rule'">
                 <li ng-repeat="rule in item.payloadParsed">
                   <one-line-rule
                     rule="rule"
                   ></one-line-rule>
                 </li>
               </ul>
+              <pre ng-if="item.type != 'rule'">{{ item.payloadParsed | json }}</pre>
             </div>
           </div>
         </div>

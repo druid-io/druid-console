@@ -11561,12 +11561,15 @@ module.exports = function($scope, $historical, $indexing, $q) {
       slots: slots
     });
   });
-  return $indexing.getScaling().then(function(scaling) {
+  $indexing.getScaling().then(function(scaling) {
     $scope.indexing.scaling = scaling;
     return console.log({
       scaling: scaling
     });
   });
+  return $scope.loadConfigHistory = function() {
+    return $historical.getClusterConfigHistory();
+  };
 };
 
 
@@ -12093,7 +12096,7 @@ module.exports = function() {
       label: '@',
       button: '='
     },
-    template: "<span class=\"audit-history\">\n\n  <button\n    class=\"btn btn-default btn-xs\"\n    tooltip=\"show audit log for {{ id }}\"\n    tooltip-trigger=\"mouseenter\"\n    ng-click=\"loadAndShowHistory()\"\n    ng-show=\"button\"\n  ><span class=\"fa fa-clock-o\"></span> {{ label }}</button>\n\n  <i\n    class=\"fa fa-clock-o\"\n    tooltip=\"show audit log for {{ id }}\"\n    tooltip-trigger=\"mouseenter\"\n    ng-click=\"loadAndShowHistory()\"\n    ng-hide=\"button\"\n  ></i>\n\n  <div class=\"history-overlay\" ng-show=\"showHistory\" ng-click=\"showHistory = false\">\n    <div class=\"history\" ng-click=\"$event.stopPropagation()\">\n      <h1>Audit history changes for {{ id }}</h1>\n      <div class=\"loading\" ng-hide=\"auditItems\">\n        <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n        <div>Loading rule change history...</div>\n      </div>\n      <div class=\"no-history\" ng-show=\"auditItems.length == 0\">\n        No audit history found for {{ id }}\n      </div>\n      <div class=\"audit-item\" ng-repeat=\"item in auditItems\">\n        <h2>\n          <span class=\"time\">{{ item.timeMoment.format(\"YYYY-MM-DDTHH:mm\") }}Z</span>\n          <span class=\"relative-time\">({{ item.timeMoment.fromNow() }})</span>\n        </h2>\n        <div class=\"by\">\n          <span class=\"author\">{{ item.auditInfo.author ? item.auditInfo.author : 'no author' }}</span>\n          @\n          <span class=\"ip\">{{ item.auditInfo.ip }}</span>\n\n        </div>\n        <div class=\"comment\">\n          comment: {{ item.auditInfo.comment }}\n        </div>\n        <div class=\"payload\">\n          <ul>\n            <li ng-repeat=\"rule in item.payloadParsed\">\n              <one-line-rule\n                rule=\"rule\"\n              ></one-line-rule>\n            </li>\n          </ul>\n        </div>\n      </div>\n    </div>\n  </div>\n</span>",
+    template: "<span class=\"audit-history\">\n\n  <button\n    class=\"btn btn-default btn-xs\"\n    tooltip=\"show audit log for {{ id }}\"\n    tooltip-trigger=\"mouseenter\"\n    ng-click=\"loadAndShowHistory()\"\n    ng-show=\"button\"\n  ><span class=\"fa fa-clock-o\"></span> {{ label }}</button>\n\n  <i\n    class=\"fa fa-clock-o\"\n    tooltip=\"show audit log for {{ id }}\"\n    tooltip-trigger=\"mouseenter\"\n    ng-click=\"loadAndShowHistory()\"\n    ng-hide=\"button\"\n  ></i>\n\n  <div class=\"history-overlay\" ng-show=\"showHistory\" ng-click=\"showHistory = false\">\n    <div class=\"history\" ng-click=\"$event.stopPropagation()\">\n      <h1>Audit history changes for {{ id }}</h1>\n      <div class=\"loading\" ng-hide=\"auditItems\">\n        <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n        <div>Loading rule change history...</div>\n      </div>\n      <div class=\"no-history\" ng-show=\"auditItems.length == 0\">\n        No audit history found for {{ id }}\n      </div>\n      <div class=\"audit-item\" ng-repeat=\"item in auditItems\">\n        <h2>\n          <span class=\"time\">{{ item.timeMoment.format(\"YYYY-MM-DDTHH:mm\") }}Z</span>\n          <span class=\"relative-time\">({{ item.timeMoment.fromNow() }})</span>\n        </h2>\n        <div class=\"by\">\n          <span class=\"author\">{{ item.auditInfo.author ? item.auditInfo.author : 'no author' }}</span>\n          @\n          <span class=\"ip\">{{ item.auditInfo.ip }}</span>\n\n        </div>\n        <div class=\"comment\">\n          comment: {{ item.auditInfo.comment }}\n        </div>\n        <div class=\"payload\">\n          <ul ng-if=\"item.type == 'rule'\">\n            <li ng-repeat=\"rule in item.payloadParsed\">\n              <one-line-rule\n                rule=\"rule\"\n              ></one-line-rule>\n            </li>\n          </ul>\n          <pre ng-if=\"item.type != 'rule'\">{{ item.payloadParsed | json }}</pre>\n        </div>\n      </div>\n    </div>\n  </div>\n</span>",
     link: function(scope) {
       return scope.loadAndShowHistory = function() {
         scope.showHistory = true;
@@ -13135,9 +13138,14 @@ module.exports = function() {
         };
       })(this));
       ruleChanges.reverse();
-      console.log({
-        ruleChanges: ruleChanges
-      });
+      return ruleChanges;
+    },
+    processConfigHistory: function(ruleChanges) {
+      ruleChanges.reverse().forEach((function(_this) {
+        return function(c) {
+          return _this.processAuditItem(c);
+        };
+      })(this));
       return ruleChanges;
     },
     resilience: function(tier) {
@@ -13446,6 +13454,14 @@ module.exports = function($q, $http, $hUtils, $window) {
       }
       intervalQuery = interval != null ? "interval=" + interval : "";
       return this.getAndProcess("/rules/" + dataSourceId + "/history?" + intervalQuery, $hUtils.processDataSourceRulesHistory);
+    },
+    getClusterConfigHistory: function(interval) {
+      var intervalQuery;
+      if (interval == null) {
+        interval = null;
+      }
+      intervalQuery = interval != null ? "interval=" + interval : "";
+      return this.getAndProcess("/config/history?" + intervalQuery, $hUtils.processConfigHistory);
     },
     saveRules: function(dataSourceId, rules, author, comment) {
       var deferred, req;

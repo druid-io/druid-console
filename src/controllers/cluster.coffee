@@ -30,3 +30,6 @@ module.exports = ($scope, $historical, $indexing, $q) ->
     .then (scaling) ->
       $scope.indexing.scaling = scaling
       console.log {scaling}
+
+  $scope.loadConfigHistory = ->
+    $historical.getClusterConfigHistory()
