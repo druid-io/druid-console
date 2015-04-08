@@ -135,7 +135,6 @@ module.exports = ($window, $filter, $compile) ->
           .attr("tooltip-trigger", "mouseenter")
           .attr("tooltip-animation", false)
           .attr("tooltip-append-to-body", true)
-          .on('mouseover', (d) -> $scope.$parent.interval = d.day)
 
       xAxis = d3.svg.axis().scale(x).tickSize(-chartHeight).tickSubdivide(true)
 
