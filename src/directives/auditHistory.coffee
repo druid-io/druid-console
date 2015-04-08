@@ -9,13 +9,22 @@ module.exports = ->
   }
   template: """
     <span class="audit-history">
-      <button class="btn btn-default btn-xs" ng-click="loadAndShowHistory()"
-        ng-show="button">
-      <span class="fa fa-clock-o"></span> {{ label }}</button>
-      <span class="fa fa-clock-o"
+
+      <button
+        class="btn btn-default btn-xs"
+        tooltip="show audit log for {{ id }}"
+        tooltip-trigger="mouseenter"
+        ng-click="loadAndShowHistory()"
+        ng-show="button"
+      ><span class="fa fa-clock-o"></span> {{ label }}</button>
+
+      <i
+        class="fa fa-clock-o"
+        tooltip="show audit log for {{ id }}"
+        tooltip-trigger="mouseenter"
         ng-click="loadAndShowHistory()"
         ng-hide="button"
-        ></span>
+      ></i>
 
       <div class="history-overlay" ng-show="showHistory" ng-click="showHistory = false">
         <div class="history" ng-click="$event.stopPropagation()">
