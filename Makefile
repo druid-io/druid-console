@@ -12,7 +12,7 @@ install-node-modules:
 	@npm install
 
 install-bower-components:
-	@bower install
+	@node_modules/.bin/bower install
 
 copy-bower-css-and-fonts:
 	@mkdir -p static/css
@@ -33,7 +33,7 @@ compile:
 # clean
 #
 
-clean-all: clean clean-node-modules
+clean-all: clean clean-node-modules clean-bower-components
 
 clean:
 	@rm -rfv target
