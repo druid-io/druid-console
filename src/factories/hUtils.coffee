@@ -134,7 +134,7 @@ module.exports = ->
     return ruleChanges
 
   resilience: (tier) ->
-    Math.floor(tier.nodes.length - tier.currSize / d3.max(tier.nodes, (d) -> d.maxSize))
+    tier.nodes.length - tier.currSize / d3.max(tier.nodes, (d) -> d.maxSize)
 
   processDataSourceIntervals: (ints) ->
     preProcess = new Date()

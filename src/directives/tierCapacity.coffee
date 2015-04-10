@@ -8,6 +8,7 @@ module.exports = ->
       prefix = d3.formatPrefix(n, 3)
       "" + prefix.scale(d3.format('.3r')(n)) + " " + prefix.symbol + 'B'
     percentFormat = d3.format('.1%')
+    resilienceFormat = d3.format('.2r')
 
     tier = $scope.tier
     tierData =
@@ -62,7 +63,7 @@ module.exports = ->
 
     topLabels = labels.append('div').attr('class', 'top-labels')
     topLabels.append('div').attr('class', 'resilience')
-      .text((d) -> "n + #{d.resilience}")
+      .text((d) -> "n + #{resilienceFormat(d.resilience)}" )
 
     minResilience = 2
     mmx = true

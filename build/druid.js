@@ -12737,7 +12737,7 @@ module.exports = function() {
   return {
     restrict: 'E',
     link: function($scope, el) {
-      var barHeight, barWidth, bottomLabels, capDiv, capacityG, currSize, growth, labels, maxSize, minResilience, mmx, nodes, nodesG, percentFormat, siBytesFormat, svg, tier, tierData, topLabels, topMargin, _ref;
+      var barHeight, barWidth, bottomLabels, capDiv, capacityG, currSize, growth, labels, maxSize, minResilience, mmx, nodes, nodesG, percentFormat, resilienceFormat, siBytesFormat, svg, tier, tierData, topLabels, topMargin, _ref;
       siBytesFormat = function(n) {
         var prefix;
         if (n == null) {
@@ -12747,6 +12747,7 @@ module.exports = function() {
         return "" + prefix.scale(d3.format('.3r')(n)) + " " + prefix.symbol + 'B';
       };
       percentFormat = d3.format('.1%');
+      resilienceFormat = d3.format('.2r');
       tier = $scope.tier;
       tierData = {
         currSize: tier.currSize,
@@ -12775,7 +12776,7 @@ module.exports = function() {
       labels = capDiv.selectAll("div.labels").data([tierData]).enter().append('div').attr("class", 'labels');
       topLabels = labels.append('div').attr('class', 'top-labels');
       topLabels.append('div').attr('class', 'resilience').text(function(d) {
-        return "n + " + d.resilience;
+        return "n + " + (resilienceFormat(d.resilience));
       });
       minResilience = 2;
       mmx = true;
@@ -13269,9 +13270,9 @@ module.exports = function() {
       return ruleChanges;
     },
     resilience: function(tier) {
-      return Math.floor(tier.nodes.length - tier.currSize / d3.max(tier.nodes, function(d) {
+      return tier.nodes.length - tier.currSize / d3.max(tier.nodes, function(d) {
         return d.maxSize;
-      }));
+      });
     },
     processDataSourceIntervals: function(ints) {
       var day, days, i, int, intervalDays, intervals, preProcess, preProcessDays, summary;
