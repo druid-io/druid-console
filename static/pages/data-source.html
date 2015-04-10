@@ -41,15 +41,17 @@
       </div>
     </h2>
 
-    <concise-rule
-      rule="rule"
-      ng-repeat="rule in dataSource.rules"
-    ></concise-rule>
+    <div class="set-rules">
+      <concise-rule
+        rule="rule"
+        ng-repeat="rule in dataSource.rules"
+      ></concise-rule>
 
-    <concise-rule
-      rule="rule"
-      ng-repeat="rule in defaultRules"
-    ></concise-rule>
+      <concise-rule
+        rule="rule"
+        ng-repeat="rule in defaultRules"
+      ></concise-rule>
+    </div>
   </div>
 
   <div class="timeline">
@@ -58,7 +60,7 @@
       <div>
         <div ng-if="dataSource.segments.size" class="summary">
           <div>
-            {{ dataSource.segments.size | bytes }}
+            <span class="size">{{ dataSource.segments.size | bytes }}</span>
             over {{ dataSource.segments.interval.period().humanize() }}
           </div>
           <div>

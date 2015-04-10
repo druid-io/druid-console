@@ -25,6 +25,7 @@ $pink: #eb6ca9;
 $white: #fefefe;
 $brightGrey: #d8d8dd;
 $grey: #C8C8C8;
+$darkGrey: #424253;
 
 $brightYellow: #ebeb3a;
 
@@ -32,6 +33,32 @@ $baseColor: #858597;
 $backgroundBlack: #22222A;
 $borderColor: #1B1A20;
 $headerBackground: #2E2E38;
+
+
+.tier-0 {
+  color: $lime;
+}
+.tier-1 {
+  color: $turq;
+}
+.tier-2 {
+  color: $indigo;
+}
+.tier-3 {
+  color: $purple;
+}
+.tier-4 {
+  color: $fuschia;
+}
+.tier-5 {
+  color: $orange;
+}
+.tier-6 {
+  color: $blue;
+}
+.tier-7 {
+  color: $red;
+}
 
 
 html {
@@ -235,14 +262,23 @@ body {
         width: 100%;
       }
     }
-
+    .footprint .size,
+    .summary .size {
+      color: $brightGrey;
+    }
     .rules {
-      height: 75px;
-
+      min-height: 75px;
+      & > * {
+        padding-bottom: 0.5rem;
+      }
+      .set-rules {
+        display: flex;
+      }
       .concise-rule {
         padding: 4px 8px;
         .default {
           color: $orange;
+          opacity: 0.8;
         }
         .type {
           .load {
@@ -314,6 +350,12 @@ body {
               }
               td {
                 padding: 2px 4px;
+                &.interval-start {
+                  color: $brightGrey;
+                  .sep {
+                    color: $darkGrey;
+                  }
+                }
               }
               &:nth-child(3n) {
                 border-bottom: 1px solid #3c3c47;

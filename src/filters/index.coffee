@@ -22,7 +22,8 @@ app.filter 'percentRound', () ->
     d3.format('.2p')(n)
 
 app.filter 'tierName', () ->
-  (n) -> if n is '_default_tier' then 'cold' else n
+  # (n) -> if n is '_default_tier' then 'cold' else n
+  (n) -> n
 
 app.filter 'commasToSpaces', () ->
   (x) ->
