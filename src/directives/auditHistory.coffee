@@ -31,7 +31,7 @@ module.exports = ->
 
       <div class="history-overlay" ng-show="showHistory" ng-click="showHistory = false">
         <div class="history" ng-click="$event.stopPropagation()">
-          <h1>Audit history changes for {{ id }}</h1>
+          <h1>Audit history for {{ id }}</h1>
           <div class="loading" ng-hide="auditItems">
             <i class="fa fa-circle-o-notch fa-spin"></i>
             <div>Loading rule change history...</div>
