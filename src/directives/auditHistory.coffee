@@ -44,24 +44,28 @@ module.exports = ->
               <span class="time">{{ item.timeMoment.format("YYYY-MM-DDTHH:mm") }}Z</span>
               <span class="relative-time">({{ item.timeMoment.fromNow() }})</span>
             </h2>
-            <div class="by">
-              <span class="author">{{ item.auditInfo.author ? item.auditInfo.author : 'no author' }}</span>
-              @
-              <span class="ip">{{ item.auditInfo.ip }}</span>
+            <div>
+              <div class="by">
+                by
+                <span class="author">{{ item.auditInfo.author ? item.auditInfo.author : 'no author' }}</span>
+                @
+                <span class="ip">{{ item.auditInfo.ip }}</span>
 
-            </div>
-            <div class="comment">
-              comment: {{ item.auditInfo.comment }}
-            </div>
-            <div class="payload">
-              <ul ng-if="item.type == 'rule'">
-                <li ng-repeat="rule in item.payloadParsed">
-                  <one-line-rule
-                    rule="rule"
-                  ></one-line-rule>
-                </li>
-              </ul>
-              <pre ng-if="item.type != 'rule'">{{ item.payloadParsed | json }}</pre>
+              </div>
+              <div class="comment">
+                <div class="comment-label">comment</div>
+                <div class="comment-value">{{ item.auditInfo.comment }}</div>
+              </div>
+              <div class="payload">
+                <ul ng-if="item.type == 'rules'">
+                  <li ng-repeat="rule in item.payloadParsed">
+                    <one-line-rule
+                      rule="rule"
+                    ></one-line-rule>
+                  </li>
+                </ul>
+                <pre ng-if="item.type != 'rules'">{{ item.payloadParsed | json }}</pre>
+              </div>
             </div>
           </div>
         </div>

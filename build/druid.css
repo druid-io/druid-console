@@ -1005,35 +1005,51 @@ body .rules-editor .alert {
 /* line 981, ../src/druid.scss */
 .history-overlay .history .audit-item h2 {
   font-size: 1.2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.25rem;
   width: 100%;
   min-width: 100%;
   max-width: 100%;
+  color: #C8C8C8;
 }
-/* line 987, ../src/druid.scss */
+/* line 990, ../src/druid.scss */
+.history-overlay .history .audit-item .by {
+  padding-top: 0.5rem;
+}
+/* line 993, ../src/druid.scss */
 .history-overlay .history .audit-item .author {
   color: #fefefe;
 }
-/* line 990, ../src/druid.scss */
+/* line 996, ../src/druid.scss */
 .history-overlay .history .audit-item .comment {
-  padding-bottom: 0.5rem 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
-/* line 994, ../src/druid.scss */
+/* line 999, ../src/druid.scss */
+.history-overlay .history .audit-item .comment .comment-label {
+  font-size: 10px;
+}
+/* line 1002, ../src/druid.scss */
+.history-overlay .history .audit-item .comment .comment-value {
+  color: #fefefe;
+}
+/* line 1007, ../src/druid.scss */
 .history-overlay .history .no-history, .history-overlay .history .loading {
   padding: 1rem 8px;
   font-size: 1.4rem;
   text-align: center;
 }
-/* line 999, ../src/druid.scss */
+/* line 1012, ../src/druid.scss */
 .history-overlay .history .no-history {
   color: #f16065;
 }
-/* line 1003, ../src/druid.scss */
+/* line 1016, ../src/druid.scss */
 .history-overlay .history .loading i {
   font-size: 10rem;
   color: #c6c631;
 }
 
-/* line 1011, ../src/druid.scss */
+/* line 1024, ../src/druid.scss */
 #floatingCirclesG {
   position: relative;
   width: 128px;
@@ -1042,7 +1058,7 @@ body .rules-editor .alert {
   transform: scale(0.6);
 }
 
-/* line 1019, ../src/druid.scss */
+/* line 1032, ../src/druid.scss */
 .f_circleG {
   position: absolute;
   background-color: #2E2E38;
@@ -1060,7 +1076,7 @@ body .rules-editor .alert {
   animation-direction: linear;
 }
 
-/* line 1036, ../src/druid.scss */
+/* line 1049, ../src/druid.scss */
 #frotateG_01 {
   left: 0;
   top: 52px;
@@ -1068,7 +1084,7 @@ body .rules-editor .alert {
   animation-delay: 0.39s;
 }
 
-/* line 1043, ../src/druid.scss */
+/* line 1056, ../src/druid.scss */
 #frotateG_02 {
   left: 15px;
   top: 15px;
@@ -1076,7 +1092,7 @@ body .rules-editor .alert {
   animation-delay: 0.52s;
 }
 
-/* line 1050, ../src/druid.scss */
+/* line 1063, ../src/druid.scss */
 #frotateG_03 {
   left: 52px;
   top: 0;
@@ -1084,7 +1100,7 @@ body .rules-editor .alert {
   animation-delay: 0.65s;
 }
 
-/* line 1057, ../src/druid.scss */
+/* line 1070, ../src/druid.scss */
 #frotateG_04 {
   right: 15px;
   top: 15px;
@@ -1092,7 +1108,7 @@ body .rules-editor .alert {
   animation-delay: 0.78s;
 }
 
-/* line 1064, ../src/druid.scss */
+/* line 1077, ../src/druid.scss */
 #frotateG_05 {
   right: 0;
   top: 52px;
@@ -1100,7 +1116,7 @@ body .rules-editor .alert {
   animation-delay: 0.91s;
 }
 
-/* line 1071, ../src/druid.scss */
+/* line 1084, ../src/druid.scss */
 #frotateG_06 {
   right: 15px;
   bottom: 15px;
@@ -1108,7 +1124,7 @@ body .rules-editor .alert {
   animation-delay: 1.04s;
 }
 
-/* line 1078, ../src/druid.scss */
+/* line 1091, ../src/druid.scss */
 #frotateG_07 {
   left: 52px;
   bottom: 0;
@@ -1116,7 +1132,7 @@ body .rules-editor .alert {
   animation-delay: 1.17s;
 }
 
-/* line 1085, ../src/druid.scss */
+/* line 1098, ../src/druid.scss */
 #frotateG_08 {
   left: 15px;
   bottom: 15px;
