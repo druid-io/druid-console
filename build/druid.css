@@ -1,5 +1,5 @@
 @import url(//fonts.googleapis.com/css?family=Roboto:400,700,400italic,500);
-/* line 5, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 5, ../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -21,45 +21,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
@@ -936,32 +936,27 @@ body .rules-editor a:hover {
   text-decoration: underline;
   color: #858597;
 }
-/* line 912, ../src/druid.scss */
-body .rules-editor #audit-info textarea.ng-invalid, body .rules-editor #audit-info input.ng-invalid {
-  border-color: #f16065;
-  box-shadow: inset 0px 1px 60px 4px rgba(241, 96, 101, 0.2);
-}
-/* line 919, ../src/druid.scss */
+/* line 911, ../src/druid.scss */
 body .rules-editor .rule {
   height: 120px;
   margin-bottom: 10px;
 }
-/* line 923, ../src/druid.scss */
+/* line 915, ../src/druid.scss */
 body .rules-editor .rule:not(:first-child) {
   border-top: 1px solid #858597;
   padding-top: 8px;
   height: 129px;
 }
-/* line 928, ../src/druid.scss */
+/* line 920, ../src/druid.scss */
 body .rules-editor .rule .summary {
   font-size: 16px;
   margin-bottom: 10px;
 }
-/* line 931, ../src/druid.scss */
+/* line 923, ../src/druid.scss */
 body .rules-editor .rule .summary .rule {
   color: #fefefe;
 }
-/* line 935, ../src/druid.scss */
+/* line 927, ../src/druid.scss */
 body .rules-editor .rule .edit {
   display: flex;
   display: -webkit-flex;
@@ -969,69 +964,75 @@ body .rules-editor .rule .edit {
   flex-direction: row;
   justify-content: flex-start;
 }
-/* line 941, ../src/druid.scss */
+/* line 933, ../src/druid.scss */
 body .rules-editor .rule .edit > * {
   flex: initial;
   -webkit-flex: initial;
   margin-right: 1em;
 }
-/* line 945, ../src/druid.scss */
+/* line 937, ../src/druid.scss */
 body .rules-editor .rule .edit > *:last-child {
   margin-right: 0px;
 }
-/* line 949, ../src/druid.scss */
+/* line 941, ../src/druid.scss */
 body .rules-editor .rule .edit .interval-period {
   width: 200px;
 }
-/* line 951, ../src/druid.scss */
+/* line 943, ../src/druid.scss */
 body .rules-editor .rule .edit .interval-period input {
   margin-bottom: 10px;
 }
-/* line 954, ../src/druid.scss */
+/* line 946, ../src/druid.scss */
 body .rules-editor .rule .edit .interval-period .alert {
   margin-bottom: 0;
 }
-/* line 958, ../src/druid.scss */
+/* line 950, ../src/druid.scss */
 body .rules-editor .rule .edit .replicants {
   width: 160px;
 }
-/* line 960, ../src/druid.scss */
+/* line 952, ../src/druid.scss */
 body .rules-editor .rule .edit .replicants .replicant {
   white-space: nowrap;
   margin-bottom: 5px;
 }
-/* line 963, ../src/druid.scss */
+/* line 955, ../src/druid.scss */
 body .rules-editor .rule .edit .replicants .replicant input[type=number] {
   width: 2.5em;
 }
-/* line 966, ../src/druid.scss */
+/* line 958, ../src/druid.scss */
 body .rules-editor .rule .edit .replicants .replicant button {
   vertical-align: baseline;
 }
-/* line 973, ../src/druid.scss */
+/* line 965, ../src/druid.scss */
 body .rules-editor .alert {
   padding: 10px 12px;
 }
 
-/* line 980, ../src/druid.scss */
+/* line 972, ../src/druid.scss */
 .rule-editor-link a {
   color: #858597;
 }
-/* line 982, ../src/druid.scss */
+/* line 974, ../src/druid.scss */
 .rule-editor-link a:hover {
   color: #3cb349;
 }
 
-/* line 989, ../src/druid.scss */
+/* line 982, ../src/druid.scss */
+#audit-info textarea.ng-invalid, #audit-info input.ng-invalid {
+  border-color: #f16065;
+  box-shadow: inset 0px 1px 60px 4px rgba(241, 96, 101, 0.2);
+}
+
+/* line 990, ../src/druid.scss */
 .audit-history i {
   color: #858597;
 }
-/* line 991, ../src/druid.scss */
+/* line 992, ../src/druid.scss */
 .audit-history i:hover {
   color: #3cb349;
 }
 
-/* line 997, ../src/druid.scss */
+/* line 998, ../src/druid.scss */
 .history-overlay {
   position: fixed;
   top: 0;
@@ -1042,7 +1043,7 @@ body .rules-editor .alert {
   background-color: rgba(0, 0, 0, 0.8);
   margin: 0;
 }
-/* line 1007, ../src/druid.scss */
+/* line 1008, ../src/druid.scss */
 .history-overlay .history {
   background-color: #22222A;
   margin: 10rem auto;
@@ -1052,21 +1053,21 @@ body .rules-editor .alert {
   height: 100%;
   overflow-y: scroll;
 }
-/* line 1016, ../src/druid.scss */
+/* line 1017, ../src/druid.scss */
 .history-overlay .history h1 {
   font-size: 1.6rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-/* line 1021, ../src/druid.scss */
+/* line 1022, ../src/druid.scss */
 .history-overlay .history .audit-item {
   margin-bottom: 1.5rem;
 }
-/* line 1023, ../src/druid.scss */
+/* line 1024, ../src/druid.scss */
 .history-overlay .history .audit-item > * {
   padding: 0px 8px;
 }
-/* line 1026, ../src/druid.scss */
+/* line 1027, ../src/druid.scss */
 .history-overlay .history .audit-item h2 {
   font-size: 1.2rem;
   padding-top: 0.5rem;
@@ -1076,44 +1077,44 @@ body .rules-editor .alert {
   max-width: 100%;
   color: #C8C8C8;
 }
-/* line 1035, ../src/druid.scss */
+/* line 1036, ../src/druid.scss */
 .history-overlay .history .audit-item .by {
   padding-top: 0.5rem;
 }
-/* line 1038, ../src/druid.scss */
+/* line 1039, ../src/druid.scss */
 .history-overlay .history .audit-item .author {
   color: #fefefe;
 }
-/* line 1041, ../src/druid.scss */
+/* line 1042, ../src/druid.scss */
 .history-overlay .history .audit-item .comment {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-/* line 1044, ../src/druid.scss */
+/* line 1045, ../src/druid.scss */
 .history-overlay .history .audit-item .comment .comment-label {
   font-size: 10px;
 }
-/* line 1047, ../src/druid.scss */
+/* line 1048, ../src/druid.scss */
 .history-overlay .history .audit-item .comment .comment-value {
   color: #fefefe;
 }
-/* line 1052, ../src/druid.scss */
+/* line 1053, ../src/druid.scss */
 .history-overlay .history .no-history, .history-overlay .history .loading {
   padding: 1rem 8px;
   font-size: 1.4rem;
   text-align: center;
 }
-/* line 1057, ../src/druid.scss */
+/* line 1058, ../src/druid.scss */
 .history-overlay .history .no-history {
   color: #f16065;
 }
-/* line 1061, ../src/druid.scss */
+/* line 1062, ../src/druid.scss */
 .history-overlay .history .loading i {
   font-size: 10rem;
   color: #c6c631;
 }
 
-/* line 1069, ../src/druid.scss */
+/* line 1070, ../src/druid.scss */
 #floatingCirclesG {
   position: relative;
   width: 128px;
@@ -1122,7 +1123,7 @@ body .rules-editor .alert {
   transform: scale(0.6);
 }
 
-/* line 1077, ../src/druid.scss */
+/* line 1078, ../src/druid.scss */
 .f_circleG {
   position: absolute;
   background-color: #2E2E38;
@@ -1140,7 +1141,7 @@ body .rules-editor .alert {
   animation-direction: linear;
 }
 
-/* line 1094, ../src/druid.scss */
+/* line 1095, ../src/druid.scss */
 #frotateG_01 {
   left: 0;
   top: 52px;
@@ -1148,7 +1149,7 @@ body .rules-editor .alert {
   animation-delay: 0.39s;
 }
 
-/* line 1101, ../src/druid.scss */
+/* line 1102, ../src/druid.scss */
 #frotateG_02 {
   left: 15px;
   top: 15px;
@@ -1156,7 +1157,7 @@ body .rules-editor .alert {
   animation-delay: 0.52s;
 }
 
-/* line 1108, ../src/druid.scss */
+/* line 1109, ../src/druid.scss */
 #frotateG_03 {
   left: 52px;
   top: 0;
@@ -1164,7 +1165,7 @@ body .rules-editor .alert {
   animation-delay: 0.65s;
 }
 
-/* line 1115, ../src/druid.scss */
+/* line 1116, ../src/druid.scss */
 #frotateG_04 {
   right: 15px;
   top: 15px;
@@ -1172,7 +1173,7 @@ body .rules-editor .alert {
   animation-delay: 0.78s;
 }
 
-/* line 1122, ../src/druid.scss */
+/* line 1123, ../src/druid.scss */
 #frotateG_05 {
   right: 0;
   top: 52px;
@@ -1180,7 +1181,7 @@ body .rules-editor .alert {
   animation-delay: 0.91s;
 }
 
-/* line 1129, ../src/druid.scss */
+/* line 1130, ../src/druid.scss */
 #frotateG_06 {
   right: 15px;
   bottom: 15px;
@@ -1188,7 +1189,7 @@ body .rules-editor .alert {
   animation-delay: 1.04s;
 }
 
-/* line 1136, ../src/druid.scss */
+/* line 1137, ../src/druid.scss */
 #frotateG_07 {
   left: 52px;
   bottom: 0;
@@ -1196,7 +1197,7 @@ body .rules-editor .alert {
   animation-delay: 1.17s;
 }
 
-/* line 1143, ../src/druid.scss */
+/* line 1144, ../src/druid.scss */
 #frotateG_08 {
   left: 15px;
   bottom: 15px;

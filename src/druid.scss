@@ -907,14 +907,6 @@ body {
       color: $baseColor;
     }
 
-    #audit-info {
-      textarea, input {
-        &.ng-invalid {
-          border-color: $red;
-          box-shadow: inset 0px 1px 60px 4px rgba(241, 96, 101, .2);
-        }
-      }
-    }
 
     .rule {
       height: 120px;
@@ -981,6 +973,15 @@ body {
     color: $baseColor;
     &:hover {
       color: $green;
+    }
+  }
+}
+
+#audit-info {
+  textarea, input {
+    &.ng-invalid {
+      border-color: $red;
+      box-shadow: inset 0px 1px 60px 4px rgba(241, 96, 101, .2);
     }
   }
 }
