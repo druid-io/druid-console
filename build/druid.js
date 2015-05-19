@@ -11957,32 +11957,37 @@ module.exports = function($scope, $historical, $indexing, $q) {
   $scope.env = $historical.env;
   $scope.indexing = {};
   $indexing.getAllTasks().then(function(tasks) {
-    var d, dataSourceMap, dataSources, i, iTasks, id, j, jTasks;
+    var d, dataSourceMap, dataSources, i, iTasks, id, j, jTasks, n, type;
     $scope.indexing.tasks = tasks;
     console.log({
       tasks: tasks
     });
+    $scope.indexing.taskTypes = (function() {
+      var _ref, _results;
+      _ref = tasks.running.all.reduce((function(types, t) {
+        var _name;
+        types[_name = t.type] || (types[_name] = 1);
+        return types;
+      }), {});
+      _results = [];
+      for (type in _ref) {
+        n = _ref[type];
+        _results.push(type);
+      }
+      return _results;
+    })();
     dataSourceMap = {};
     for (i in tasks) {
       iTasks = tasks[i];
-      console.log({
-        iTasks: iTasks
-      });
       for (j in iTasks) {
         jTasks = iTasks[j];
-        console.log({
-          jTasks: jTasks
-        });
         jTasks.forEach(function(t) {
           var _name;
           return dataSourceMap[_name = t.dataSource] || (dataSourceMap[_name] = 1);
         });
       }
     }
-    console.log({
-      dataSourceMap: dataSourceMap
-    });
-    dataSources = ((function() {
+    dataSources = (function() {
       var _results;
       _results = [];
       for (id in dataSourceMap) {
@@ -11992,8 +11997,15 @@ module.exports = function($scope, $historical, $indexing, $q) {
         });
       }
       return _results;
-    })()).sort(function(a, b) {
-      return a.id - b.id;
+    })();
+    dataSources.sort(function(a, b) {
+      if (a.id < b.id) {
+        return -1;
+      }
+      if (a.id > b.id) {
+        return 1;
+      }
+      return 0;
     });
     $scope.dataSources = dataSources;
     return console.log({
@@ -12018,8 +12030,11 @@ module.exports = function($scope, $historical, $indexing, $q) {
       scaling: scaling
     });
   });
-  return $scope.loadWorkerConfigHistory = function() {
+  $scope.loadWorkerConfigHistory = function() {
     return $indexing.getWorkerConfigHistory();
+  };
+  return $scope.taskUrl = function(id) {
+    return $indexing.proxy("/task/" + id);
   };
 };
 
@@ -12719,9 +12734,12 @@ module.exports = function() {
   return {
     restrict: 'E',
     templateUrl: '/pages/site-nav.html',
-    controller: function($scope, $historical) {
-      return $historical.getCoordinator().then(function(c) {
+    controller: function($scope, $historical, $indexing) {
+      $historical.getCoordinator().then(function(c) {
         return $scope.coordinator = c;
+      });
+      return $indexing.getOverlord().then(function(c) {
+        return $scope.overlord = c;
       });
     }
   };
@@ -13636,6 +13654,10 @@ module.exports = function($q, $http, $hUtils, $window) {
 
 
 },{}],43:[function(require,module,exports){
+var moment;
+
+moment = require('../../bower_components/moment/min/moment.min.js');
+
 module.exports = function() {
   return {
     parseTaskId: function(taskId) {
@@ -13648,35 +13670,49 @@ module.exports = function() {
         id: taskId,
         type: m[1],
         dataSource: m[2],
-        dataTime: m[3],
-        dataDate: new Date(m[3])
+        dataTime: m[3]
       };
     },
     decorateTask: function(task) {
       angular.extend(task, this.parseTaskId(task.id));
+      if (task.dataTime != null) {
+        task.dataDate = new Date(task.dataTime);
+      }
       if (task.createdTime != null) {
         task.createdDate = new Date(task.createdTime);
       }
       if (task.queueInsertionTime != null) {
         task.insertedDate = new Date(task.queueInsertionTime);
       }
+      if (task.dataDate != null) {
+        task.dataMoment = moment.utc(task.dataDate);
+      }
+      if (task.createdDate != null) {
+        task.createdMoment = moment.utc(task.createdDate);
+      }
+      if (task.insertedDate != null) {
+        task.insertedMoment = moment.utc(task.insertedDate);
+      }
       return task;
     },
     processTasks: function(tasks) {
-      return tasks.reduce(((function(_this) {
+      var processedTasks;
+      processedTasks = tasks.reduce(((function(_this) {
         return function(types, task) {
           var _name;
           task = _this.decorateTask(task);
-          if (types[_name = task.type] == null) {
-            types[_name] = [];
-          }
+          types[_name = task.type] || (types[_name] = []);
           types[task.type].push(task);
+          types.all.push(task);
           return types;
         };
       })(this)), {
-        realtime: [],
-        hadoop: []
+        all: []
       });
+      processedTasks.all.sort(function(a, b) {
+        return b.dataDate - a.dataDate;
+      });
+      return processedTasks;
     },
     processAuditItem: function(auditItem) {
       auditItem.payloadParsed = JSON.parse(auditItem.payload);
@@ -13695,7 +13731,7 @@ module.exports = function() {
 };
 
 
-},{}],44:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8}],44:[function(require,module,exports){
 var app;
 
 app = angular.module('druid');
@@ -13728,7 +13764,7 @@ module.exports = function($q, $http, $iUtils, $window) {
   })();
   return {
     env: env,
-    coordinator: void 0,
+    overlord: void 0,
     proxy: function(path) {
       if (this.env) {
         return "/pass/indexer/" + this.env + "/druid/indexer/v1" + path;
@@ -13746,13 +13782,13 @@ module.exports = function($q, $http, $iUtils, $window) {
       });
       return deferred.promise;
     },
-    getIndexer: function() {
+    getOverlord: function() {
       var deferred;
       deferred = $q.defer();
-      $http.get("/indexer/" + this.env).success((function(_this) {
+      $http.get("/overlord/" + this.env).success((function(_this) {
         return function(data) {
-          _this.indexer = "" + data.host + ":" + data.port;
-          return deferred.resolve(_this.indexer);
+          _this.overlord = "" + data.host + ":" + data.port;
+          return deferred.resolve(_this.overlord);
         };
       })(this));
       return deferred.promise;
@@ -13815,6 +13851,11 @@ module.exports = function($q, $http, $iUtils, $window) {
     },
     getCompleteTasks: function() {
       return this.getAndProcess("/completeTasks", $iUtils.processTasks);
+    },
+    getTask: function(id) {
+      return this.getAndProcess("/task/" + id, function(task) {
+        return task;
+      });
     },
     getWorkerConfig: function() {
       return this.getAndProcess("/worker", function(config) {

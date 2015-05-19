@@ -46,16 +46,12 @@ app.config ($stateProvider, $urlRouterProvider) ->
       templateUrl: '/pages/tier.html'
       controller: 'TierCtrl'
     })
-    # .state('historical-node', {
-    #   url: '/historical-nodes/:id'
-    #   templateUrl: '/pages/historical-node.html'
-    #   controller: 'HistoricalNodeCtrl'
-    # })
     .state('indexing-service', {
       url: '/indexing-service'
       templateUrl: '/pages/indexing-service.html'
       controller: 'IndexingServiceCtrl'
     })
+
 
   $urlRouterProvider.otherwise('/')
 

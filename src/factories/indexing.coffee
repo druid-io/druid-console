@@ -14,7 +14,7 @@ module.exports = ($q, $http, $iUtils, $window) ->
 
     env
 
-    coordinator: undefined
+    overlord: undefined
 
     proxy: (path) ->
       if @env
@@ -30,12 +30,12 @@ module.exports = ($q, $http, $iUtils, $window) ->
           deferred.resolve cb.apply($iUtils, cbArgs)
       return deferred.promise
 
-    getIndexer: ->
+    getOverlord: ->
       deferred = $q.defer()
-      $http.get("/indexer/#{@env}")
+      $http.get("/overlord/#{@env}")
         .success (data) =>
-          @indexer = "#{data.host}:#{data.port}"
-          deferred.resolve @indexer
+          @overlord = "#{data.host}:#{data.port}"
+          deferred.resolve @overlord
       return deferred.promise
 
     getWorkers: ->
@@ -80,6 +80,9 @@ module.exports = ($q, $http, $iUtils, $window) ->
 
     getCompleteTasks: ->
       @getAndProcess "/completeTasks", $iUtils.processTasks
+
+    getTask: (id) ->
+      @getAndProcess "/task/#{id}", (task) -> task
 
     getWorkerConfig: () ->
       @getAndProcess "/worker", (config) -> config

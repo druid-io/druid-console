@@ -26,7 +26,7 @@
 
     <div id="data-sources">
       <h2 ng-init="showQuery = false" ng-click="showQuery = !showQuery">
-        tasks running for <span ng-if="dataSources">{{ dataSources.length }} datasources
+        <span ng-if="dataSources">{{ dataSources.length }} datasources with indexing tasks
       </h2>
       <table ng-if="dataSources">
         <thead>
@@ -52,7 +52,8 @@
                 tooltip="{{indexing.dataSources[ds.id].length || 'no'}} realtime tasks"
                 tooltip-trigger="mouseenter"
                 tooltip-placement="right"
-              >{{ ds.id }}<i ng-show="indexing.dataSources[ds.id].length" class="fa fa-bolt realtime"></i></a>
+              >{{ ds.id }}</a>
+              <i class="data-source-task-filter fa fa-filter" ng-click="$parent.$parent.search.id = ds.id"></i>
             </td>
           </tr>
           <tr class="key">
@@ -90,12 +91,12 @@
     </div>
 
     <div id="cluster">
-
       <div id="indexing" ng-show="indexing">
         <h2>
           Indexing Service
           <span ng-show="indexing.slots"> using {{ indexing.slots.used }} / {{ indexing.slots.capacity }} slots ({{ indexing.slots.used / indexing.slots.capacity | percentRound }})</span>
         </h2>
+
         <div id="realtime" ng-show="indexing.tasks.running">
           <h3>
             Realtime tasks:
@@ -107,6 +108,7 @@
             tasks="indexing.tasks.running.realtime"
           ></running-tasks>
         </div>
+
         <div id="scaling" ng-show="indexing.scaling && indexing.workers">
           <h3>
             Scaling Activity - {{ indexing.workers.length }} workers currently provisioned
@@ -124,14 +126,144 @@
           ></scaling-activity>
         </div>
 
-        <div id="hadoop" ng-show="indexing.tasks.running">
-          <h3>
-            Hadoop tasks:
-            {{ indexing.tasks.running.hadoop.length }} running,
-            {{ indexing.tasks.pending.hadoop.length }} pending,
-            {{ indexing.tasks.waiting.hadoop.length }} waiting
+        <h3>
+          <input ng-model="search.id" placeholder="filter all tasks">
+          {{ filteredPending.length + filteredWaiting.length + filteredRunning.length }} incomplete tasks
+          ({{ filteredRunning.length }} running,
+          {{ filteredPending.length }} pending,
+          {{ filteredWaiting.length }} waiting)
+        </h3>
+
+        <div id="pending-tasks" ng-show="filteredPending.length">
+          <h3>{{ filteredPending.length }} pending tasks (waiting to be assigned to a worker)
           </h3>
+          <table class="tasks">
+            <thead>
+              <tr>
+                <td class="time" rowspan="2"></th>
+                <th class="id" colspan="2"></th>
+                <th class="actions" rowspan="2"></th>
+              </tr>
+              <tr>
+                <th class="data-source">
+                </th>
+                <th class="type">
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="task in filteredPending = (indexing.tasks.pending.all | filter:search) ">
+                <td class="id">{{ task.id }}</td>
+                <td class="created-time">
+                  <div class="absolute">{{ task.createdTime }}</div>
+                  <div class="relative">created {{ task.createdMoment.fromNow() }}</div>
+                </td>
+                <td class="inserted-time">
+                  <div class="absolute">{{ task.queueInsertionTime }}</div>
+                  <div class="relative">queue insertion {{ task.insertedMoment.diff(task.createdMoment) }} ms later</div>
+                </td>
+                <td class="actions">
+                  <ul>
+                    <li>
+                      <a href="{{ taskUrl(task.id) }}">payload</a>
+                      |
+                      <a href="{{ taskUrl(task.id) }}/status">status</a>
+                    </li>
+                    <li>
+                      <a href="{{ taskUrl(task.id) }}/log">log</a>
+                      |
+                      <a href="{{ taskUrl(task.id) }}/log?offset=-8192">last 8kB</a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
+        <div id="waiting-tasks" ng-show="filteredWaiting.length">
+          <h3>{{ filteredWaiting.length }} waiting tasks (waiting on locks)
+          </h3>
+          <table class="tasks">
+            <thead>
+              <tr>
+                <th class="id"></th>
+                <th class="created-time"></th>
+                <th class="inserted-time"></th>
+                <th class="actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="task in filteredWaiting = (indexing.tasks.waiting.all | filter:search) ">
+                <td class="id">{{ task.id }}</td>
+                <td class="created-time">
+                  <div class="absolute">{{ task.createdTime }}</div>
+                  <div class="relative">created {{ task.createdMoment.fromNow() }}</div>
+                </td>
+                <td class="inserted-time">
+                  <div class="absolute">{{ task.queueInsertionTime }}</div>
+                  <div class="relative">queue insertion {{ task.insertedMoment.diff(task.createdMoment) }} ms later</div>
+                </td>
+                <td class="actions">
+                  <ul>
+                    <li>
+                      <a href="{{ taskUrl(task.id) }}">payload</a>
+                      |
+                      <a href="{{ taskUrl(task.id) }}/status">status</a>
+                    </li>
+                    <li>
+                      <a href="{{ taskUrl(task.id) }}/log">log</a>
+                      |
+                      <a href="{{ taskUrl(task.id) }}/log?offset=-8192">last 8kB</a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="running-tasks">
+          <h3>{{ filteredRunning.length }} running tasks</h3>
+          <table class="tasks" ng-show="filteredRunning.length">
+            <thead>
+              <tr>
+                <th class="id"></th>
+                <th class="created-time"></th>
+                <th class="inserted-time"></th>
+                <th class="actions"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="task in filteredRunning = (indexing.tasks.running.all | filter:search) ">
+                <td class="id">{{ task.id }}</td>
+                <td class="created-time">
+                  <div class="absolute">{{ task.createdTime }}</div>
+                  <div class="relative">created {{ task.createdMoment.fromNow() }}</div>
+                </td>
+                <td class="inserted-time">
+                  <div class="absolute">{{ task.queueInsertionTime }}</div>
+                  <div class="relative">queue insertion {{ task.insertedMoment.diff(task.createdMoment) }} ms later</div>
+                </td>
+                <td class="actions">
+                  <ul>
+                    <li>
+                      <a href="{{ taskUrl(task.id) }}">payload</a>
+                      |
+                      <a href="{{ taskUrl(task.id) }}/status">status</a>
+                    </li>
+                    <li>
+                      <a href="{{ taskUrl(task.id) }}/log">log</a>
+                      |
+                      <a href="{{ taskUrl(task.id) }}/log?offset=-8192">last 8kB</a>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
 

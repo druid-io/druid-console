@@ -138,9 +138,9 @@ body {
       }
       .nav {
         font-size: 16px;
-        width: 239px;
-        min-width: 239px;
-        max-width: 239px;
+        // width: 239px;
+        // min-width: 239px;
+        // max-width: 239px;
         li a {
           color: $brightGrey;
           padding: 8px 15px;
@@ -505,6 +505,10 @@ body {
       width: 240px;
       min-width: 240px;
       border-right: 1px solid $borderColor;
+      .data-source-task-filter:hover {
+        color: $brightGrey;
+        cursor: pointer;
+      }
     }
     #cluster {
 
@@ -538,6 +542,18 @@ body {
               fill: $baseColor;
             }
           }
+        }
+      }
+      table.tasks {
+        td {
+          padding: 0.5rem;
+          line-height: 1.5;
+        }
+        tr:hover {
+          background: black;
+        }
+        .id, .absolute {
+          color: $grey;
         }
       }
       svg.scaling-activity {

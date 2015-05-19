@@ -6,18 +6,24 @@ module.exports = ($scope, $historical, $indexing, $q) ->
     .then (tasks) ->
       $scope.indexing.tasks = tasks
       console.log {tasks}
+      $scope.indexing.taskTypes = (type for type, n of tasks.running.all.reduce(((types, t) ->
+        types[t.type] ||= 1
+        types
+      ), {}))
 
       dataSourceMap = {}
       for i, iTasks of tasks
-        console.log {iTasks}
         for j, jTasks of iTasks
-          console.log {jTasks}
           jTasks.forEach (t) ->
             dataSourceMap[t.dataSource] ||= 1
 
-      console.log {dataSourceMap}
       dataSources = ({id} for id, d of dataSourceMap)
-        .sort (a, b) -> a.id - b.id
+
+      dataSources.sort (a, b) ->
+        return -1 if a.id < b.id
+        return 1 if a.id > b.id
+        return 0
+
       $scope.dataSources = dataSources
       console.log {dataSources}
 
@@ -35,3 +41,6 @@ module.exports = ($scope, $historical, $indexing, $q) ->
 
   $scope.loadWorkerConfigHistory = ->
     $indexing.getWorkerConfigHistory()
+
+  $scope.taskUrl = (id) ->
+    $indexing.proxy "/task/#{id}"
