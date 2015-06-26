@@ -18,20 +18,20 @@ module.exports = ->
       utilization: tier.utilization
       resilience: tier.resilience
 
-    topMargin = 0
-    [barWidth, barHeight] = [60, 180]
+    [barWidth, barHeight] = [60, 128]
+    nodeRadius = 3
 
     capDiv = d3.select(el[0])
 
     svg = capDiv.append('svg')
       .attr("width", barWidth)
-      .attr("height", barHeight + topMargin)
+      .attr("height", barHeight + nodeRadius * 2)
 
     capacityG = svg.selectAll("g.capacity")
         .data([tierData])
       .enter()
         .append("g").attr('class', 'capacity')
-          .attr('transform', "translate(0,#{topMargin})")
+          .attr('transform', "translate(0,#{nodeRadius})")
 
     capacityG.append('rect').attr('class', 'maxSize')
       .attr("width", barWidth)
@@ -43,7 +43,7 @@ module.exports = ->
       .attr("height", (d) -> barHeight * d.utilization)
 
     nodesG = svg.append('g').attr('class', 'nodes')
-      .attr('transform', "translate(0,#{topMargin})")
+      .attr('transform', "translate(0,#{nodeRadius})")
 
     nodes = nodesG.selectAll("circle.node")
         .data(tier.nodes)
@@ -52,7 +52,7 @@ module.exports = ->
           .attr('transform', (d) ->
             "translate(0,#{barHeight * (1 - d.currSize / d.maxSize)})"
           )
-          .attr('r', 3)
+          .attr('r', nodeRadius)
           .attr('cx', (d) -> barWidth * (0.08 + Math.random() * 0.84 ))
 
     labels = capDiv.selectAll("div.labels")

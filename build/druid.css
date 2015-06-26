@@ -533,8 +533,8 @@ body .cluster-view #data-sources table td:first-child, body .cluster-view #data-
 }
 /* line 456, ../src/druid.scss */
 body .cluster-view #data-sources table td.name, body .data-sources-view #data-sources table td.name {
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.75;
 }
 /* line 459, ../src/druid.scss */
 body .cluster-view #data-sources table td.name > a:after, body .data-sources-view #data-sources table td.name > a:after {
@@ -695,8 +695,8 @@ body .cluster-view #historical .tier tier-capacity g.capacity rect.currSize, bod
 /* line 617, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity {
   padding: 0px 4px;
-  padding-top: 0.5em;
-  padding-bottom: 1em;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   display: flex;
   display: -webkit-flex;
   flex-direction: row;
@@ -705,7 +705,7 @@ body .cluster-view #historical .tier tier-capacity {
 /* line 627, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels {
   width: 168px;
-  height: 180px;
+  height: 128px;
   padding-left: 0.5em;
 }
 /* line 632, ../src/druid.scss */

@@ -454,8 +454,8 @@ body {
           width: 16px;
         }
         td.name {
-          font-size: 16px;
-          line-height: 1.5;
+          font-size: 1rem;
+          line-height: 1.75;
           & > a:after {
             content: "\00a0";
           }
@@ -616,8 +616,8 @@ body {
 
         tier-capacity {
           padding: 0px 4px;
-          padding-top: 0.5em;
-          padding-bottom: 1em;
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
 
           display: flex;
           display: -webkit-flex;
@@ -626,7 +626,7 @@ body {
 
           div.labels {
             width: 168px;
-            height: 180px;
+            height: 128px;
             padding-left: 0.5em;
 
             .value {

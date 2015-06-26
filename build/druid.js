@@ -12755,7 +12755,7 @@ module.exports = function() {
   return {
     restrict: 'E',
     link: function($scope, el) {
-      var barHeight, barWidth, bottomLabels, capDiv, capacityG, currSize, growth, labels, maxSize, minResilience, mmx, nodes, nodesG, percentFormat, resilienceFormat, siBytesFormat, svg, tier, tierData, topLabels, topMargin, _ref;
+      var barHeight, barWidth, bottomLabels, capDiv, capacityG, currSize, growth, labels, maxSize, minResilience, mmx, nodeRadius, nodes, nodesG, percentFormat, resilienceFormat, siBytesFormat, svg, tier, tierData, topLabels, _ref;
       siBytesFormat = function(n) {
         var prefix;
         if (n == null) {
@@ -12774,21 +12774,21 @@ module.exports = function() {
         utilization: tier.utilization,
         resilience: tier.resilience
       };
-      topMargin = 0;
-      _ref = [60, 180], barWidth = _ref[0], barHeight = _ref[1];
+      _ref = [60, 128], barWidth = _ref[0], barHeight = _ref[1];
+      nodeRadius = 3;
       capDiv = d3.select(el[0]);
-      svg = capDiv.append('svg').attr("width", barWidth).attr("height", barHeight + topMargin);
-      capacityG = svg.selectAll("g.capacity").data([tierData]).enter().append("g").attr('class', 'capacity').attr('transform', "translate(0," + topMargin + ")");
+      svg = capDiv.append('svg').attr("width", barWidth).attr("height", barHeight + nodeRadius * 2);
+      capacityG = svg.selectAll("g.capacity").data([tierData]).enter().append("g").attr('class', 'capacity').attr('transform', "translate(0," + nodeRadius + ")");
       capacityG.append('rect').attr('class', 'maxSize').attr("width", barWidth).attr("height", barHeight);
       capacityG.append('rect').attr('class', 'currSize').attr('y', function(d) {
         return barHeight * (1 - d.utilization);
       }).attr("width", barWidth).attr("height", function(d) {
         return barHeight * d.utilization;
       });
-      nodesG = svg.append('g').attr('class', 'nodes').attr('transform', "translate(0," + topMargin + ")");
+      nodesG = svg.append('g').attr('class', 'nodes').attr('transform', "translate(0," + nodeRadius + ")");
       nodes = nodesG.selectAll("circle.node").data(tier.nodes).enter().append("circle").attr('class', 'node').attr('transform', function(d) {
         return "translate(0," + (barHeight * (1 - d.currSize / d.maxSize)) + ")";
-      }).attr('r', 3).attr('cx', function(d) {
+      }).attr('r', nodeRadius).attr('cx', function(d) {
         return barWidth * (0.08 + Math.random() * 0.84);
       });
       labels = capDiv.selectAll("div.labels").data([tierData]).enter().append('div').attr("class", 'labels');

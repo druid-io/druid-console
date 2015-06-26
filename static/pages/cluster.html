@@ -138,13 +138,13 @@
         </h2>
         <div id="realtime" ng-show="indexing.tasks.running">
           <h3>
-            Realtime tasks:
-            {{ indexing.tasks.running.realtime.length }} running,
-            {{ indexing.tasks.pending.realtime.length }} pending,
-            {{ indexing.tasks.waiting.realtime.length }} waiting
+            Indexing tasks:
+            {{ indexing.tasks.running.all.length }} running,
+            {{ indexing.tasks.pending.all.length || 0 }} pending,
+            {{ indexing.tasks.waiting.all.length }} waiting
           </h3>
           <running-tasks
-            tasks="indexing.tasks.running.realtime"
+            tasks="indexing.tasks.running.all"
           ></running-tasks>
         </div>
         <div id="scaling" ng-show="indexing.scaling && indexing.workers">
@@ -156,15 +156,6 @@
             scaling="indexing.scaling"
             workers="indexing.workers"
           ></scaling-activity>
-        </div>
-
-        <div id="hadoop" ng-show="indexing.tasks.running">
-          <h3>
-            Hadoop tasks:
-            {{ indexing.tasks.running.hadoop.length }} running,
-            {{ indexing.tasks.pending.hadoop.length }} pending,
-            {{ indexing.tasks.waiting.hadoop.length }} waiting
-          </h3>
         </div>
       </div>
     </div>
