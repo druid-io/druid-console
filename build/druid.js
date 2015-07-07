@@ -11533,48 +11533,57 @@ void 0===c?d&&"get"in d&&null!==(e=d.get(a,b))?e:(e=n.find.attr(a,b),null==e?voi
 }));
 
 },{"../bower_components/moment/min/moment.min.js":8}],14:[function(require,module,exports){
+var moment;
+
+moment = require('../../bower_components/moment/min/moment.min.js');
+
 module.exports = function($scope, $historical, $indexing, $q) {
   $scope.env = $historical.env;
   $scope.indexing = {};
-  $historical.getNodes().then(function(cluster) {
-    $scope.tiers = cluster.tiers;
-    return $q.all([$historical.getLoadQueue($scope.tiers)]);
-  });
-  $historical.getDataSources().then(function(dataSources) {
-    $scope.dataSources = dataSources;
-    return $historical.getLoadStatus($scope.dataSources);
-  });
-  $indexing.getAllTasks().then(function(tasks) {
-    $scope.indexing.tasks = tasks;
-    return console.log({
-      tasks: tasks
+  $scope.loadedAt = false;
+  $scope.loadAllData = function() {
+    $scope.loadedAt = false;
+    return $q.all([
+      $historical.getNodes().then(function(cluster) {
+        $scope.tiers = cluster.tiers;
+        return $q.all([$historical.getLoadQueue($scope.tiers)]);
+      }), $historical.getDataSources().then(function(dataSources) {
+        $scope.dataSources = dataSources;
+        return $historical.getLoadStatus($scope.dataSources);
+      }), $indexing.getAllTasks().then(function(tasks) {
+        $scope.indexing.tasks = tasks;
+        return console.log({
+          tasks: tasks
+        });
+      }), $indexing.getWorkers().then(function(_arg) {
+        var dataSources, slots, workers;
+        workers = _arg.workers, dataSources = _arg.dataSources, slots = _arg.slots;
+        $scope.indexing.workers = workers;
+        $scope.indexing.dataSources = dataSources;
+        $scope.indexing.slots = slots;
+        return console.log({
+          workers: workers,
+          dataSources: dataSources,
+          slots: slots
+        });
+      }), $indexing.getScaling().then(function(scaling) {
+        $scope.indexing.scaling = scaling;
+        return console.log({
+          scaling: scaling
+        });
+      })
+    ]).then(function() {
+      return $scope.loadedAt = moment.utc();
     });
-  });
-  $indexing.getWorkers().then(function(_arg) {
-    var dataSources, slots, workers;
-    workers = _arg.workers, dataSources = _arg.dataSources, slots = _arg.slots;
-    $scope.indexing.workers = workers;
-    $scope.indexing.dataSources = dataSources;
-    $scope.indexing.slots = slots;
-    return console.log({
-      workers: workers,
-      dataSources: dataSources,
-      slots: slots
-    });
-  });
-  $indexing.getScaling().then(function(scaling) {
-    $scope.indexing.scaling = scaling;
-    return console.log({
-      scaling: scaling
-    });
-  });
-  return $scope.loadConfigHistory = function() {
+  };
+  $scope.loadConfigHistory = function() {
     return $historical.getCoordinatorConfigHistory();
   };
+  return $scope.initialLoad = $scope.loadAllData();
 };
 
 
-},{}],15:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8}],15:[function(require,module,exports){
 var ClusterConfigInstanceCtrl;
 
 module.exports = function($scope, $modal, $historical, $hUtils, $location) {
@@ -12259,6 +12268,68 @@ module.exports = function() {
 
 
 },{}],28:[function(require,module,exports){
+var moment;
+
+moment = require('../../bower_components/moment/min/moment.min.js');
+
+module.exports = [
+  '$timeout', '$interval', function($timeout, $interval) {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        reloadData: '=',
+        loadedAt: '=',
+        initialLoad: '='
+      },
+      template: "   <div class=\"heartbeat\">\n     <div ng-hide=\"loadedAt\"><i class=\"fa fa-circle-o-notch fa-spin\"></i>\nloading...</div>\n     <div ng-show=\"loadedAt\">data loaded {{ loadedAt.fromNow() }} <a ng-click=\"reloadNow()\">refresh now</a>\n</div>\n     <div ng-show=\"heartbeatEnabled && nextReloadMoment\">will reload {{ nextReloadMoment.fromNow() }} <a ng-click=\"toggleHeartbeat()\">disable auto-refresh</button></div>\n     <div ng-hide=\"heartbeatEnabled\"><a ng-click=\"toggleHeartbeat()\">enable auto-refresh</button></div>\n   </span>",
+      link: function(scope, element) {
+        var nextReload, progressInterval, progressUpdateMs, reload, reloadIntervalMs, scheduleNextReload, showHeartbeat;
+        showHeartbeat = true;
+        scope.heartbeatEnabled = true;
+        reloadIntervalMs = 5 * 60 * 1000;
+        progressUpdateMs = 10 * 1000;
+        nextReload = null;
+        scope.propRemaining = 100;
+        scope.nextReloadMoment = false;
+        reload = function() {
+          scope.nextReloadMoment = false;
+          return scope.reloadData().then(function() {
+            if (scope.heartbeatEnabled) {
+              return scheduleNextReload();
+            }
+          });
+        };
+        scheduleNextReload = function() {
+          scope.nextReloadMoment = moment.utc().add(reloadIntervalMs, 'ms');
+          return nextReload = $timeout(reload, reloadIntervalMs);
+        };
+        scope.toggleHeartbeat = function() {
+          if (scope.heartbeatEnabled) {
+            $timeout.cancel(nextReload);
+          } else {
+            scheduleNextReload();
+          }
+          return scope.heartbeatEnabled = !scope.heartbeatEnabled;
+        };
+        scope.reloadNow = function() {
+          $timeout.cancel(nextReload);
+          return reload();
+        };
+        scope.initialLoad.then(scheduleNextReload);
+        progressInterval = $interval(null, progressUpdateMs, true);
+        return element.on('$destroy', function() {
+          console.log("destroyed");
+          $interval.cancel(progressInterval);
+          return $timeout.cancel(nextReload);
+        });
+      }
+    };
+  }
+];
+
+
+},{"../../bower_components/moment/min/moment.min.js":8}],29:[function(require,module,exports){
 var app;
 
 app = angular.module('druid');
@@ -12289,8 +12360,10 @@ app.directive('oneLineRule', require('./oneLineRule.coffee'));
 
 app.directive('auditHistory', require('./auditHistory.coffee'));
 
+app.directive('heartbeat', require('./heartbeat.coffee'));
 
-},{"./auditHistory.coffee":26,"./conciseRule.coffee":27,"./isoDuration.coffee":29,"./isoInterval.coffee":30,"./oneLineRule.coffee":31,"./rulesTimeline.coffee":32,"./runningTasks.coffee":33,"./scalingActivity.coffee":34,"./selectTextOnClick.coffee":35,"./siteNav.coffee":36,"./tierCapacity.coffee":37,"./tierNodes.coffee":38,"./timeline.coffee":39}],29:[function(require,module,exports){
+
+},{"./auditHistory.coffee":26,"./conciseRule.coffee":27,"./heartbeat.coffee":28,"./isoDuration.coffee":30,"./isoInterval.coffee":31,"./oneLineRule.coffee":32,"./rulesTimeline.coffee":33,"./runningTasks.coffee":34,"./scalingActivity.coffee":35,"./selectTextOnClick.coffee":36,"./siteNav.coffee":37,"./tierCapacity.coffee":38,"./tierNodes.coffee":39,"./timeline.coffee":40}],30:[function(require,module,exports){
 var moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -12325,7 +12398,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],30:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],31:[function(require,module,exports){
 var moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -12367,7 +12440,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],31:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../lib/moment-interval.js":13}],32:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12380,7 +12453,7 @@ module.exports = function() {
 };
 
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 var moment, _;
 
 _ = require('../../bower_components/underscore/underscore.js');
@@ -12402,11 +12475,11 @@ module.exports = function($window, $filter, $compile) {
         _ref = [15, 36, 0], ruleTimeHeight = _ref[0], chartHeight = _ref[1], axisHeight = _ref[2];
         svgHeight = ruleTimeHeight + chartHeight + axisHeight;
         replicantHeight = chartHeight / 2;
-        x = d3.time.scale.utc().domain([moment.utc().subtract('months', 18).startOf('day').toDate(), moment.utc().toDate()]).range([chartWidth, 0]).clamp(true);
+        x = d3.time.scale.utc().domain([moment.utc().subtract(18, 'months').startOf('day').toDate(), moment.utc().toDate()]).range([chartWidth, 0]).clamp(true);
         rules.forEach(function(r) {
           return r.width = x(r.momentInterval.start().toDate()) - x(r.momentInterval.end().toDate());
         });
-        lastYear = [moment.utc().subtract('years', 1).startOf('day').toDate(), moment.utc().endOf('day').toDate()];
+        lastYear = [moment.utc().subtract(1, 'years').startOf('day').toDate(), moment.utc().endOf('day').toDate()];
         svg = d3.select($el[0]).append('svg').classed('with-footprint', $scope.dataSource.tiers != null).classed('rules-timeline', true).attr("width", chartWidth).attr("height", svgHeight);
         defs = svg.append('defs');
         randId = "drop-pattern-" + (Math.floor(Math.random() * 1000000) + 1);
@@ -12554,7 +12627,7 @@ module.exports = function($window, $filter, $compile) {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11,"../../lib/moment-interval.js":13}],33:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11,"../../lib/moment-interval.js":13}],34:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12564,60 +12637,82 @@ module.exports = function() {
     },
     template: '<svg class="running-tasks" width="100%" preserveAspectRatio="xMidYMid meet"></svg>',
     link: function(scope, el) {
-      return scope.$watchCollection('[tasks]', function(_arg) {
-        var axisG, axisHeight, chartHeight, color, dataSources, dateAttr, height, markRadius, svg, tasks, tasksG, viewBoxWidth, width, x, xAxis, _ref, _ref1;
-        tasks = _arg[0];
-        if (scope.tasks == null) {
-          return;
-        }
-        tasks = scope.tasks;
-        dataSources = d3.set(tasks.map(function(t) {
-          return t.dataSource;
-        })).values();
-        _ref = [120, 20], chartHeight = _ref[0], axisHeight = _ref[1];
-        viewBoxWidth = 720;
-        markRadius = 4;
-        _ref1 = [200, chartHeight + axisHeight + markRadius], width = _ref1[0], height = _ref1[1];
-        dateAttr = 'createdDate';
+      var axisG, axisHeight, chartHeight, color, dateAttr, height, markRadius, svg, taskIdYMap, tasksG, updateScalesAndAxes, updateTasks, viewBoxWidth, width, x, _ref, _ref1;
+      _ref = [120, 20], chartHeight = _ref[0], axisHeight = _ref[1];
+      viewBoxWidth = 720;
+      markRadius = 4;
+      _ref1 = [200, chartHeight + axisHeight + markRadius], width = _ref1[0], height = _ref1[1];
+      dateAttr = 'createdDate';
+      svg = d3.select(el[0]).attr({
+        viewBox: "0 0 " + viewBoxWidth + " " + height
+      });
+      tasksG = svg.append("g").attr({
+        "class": "tasks"
+      });
+      axisG = svg.append("g").attr({
+        "class": "axis",
+        transform: "translate(0," + (chartHeight + markRadius) + ")"
+      });
+      x = null;
+      color = null;
+      taskIdYMap = {};
+      updateScalesAndAxes = function(tasks, dataSources) {
+        var xAxis;
         x = d3.time.scale.utc().domain(d3.extent(tasks, function(t) {
           return t[dateAttr];
         }).reverse()).range([markRadius, viewBoxWidth - markRadius * 2]);
         color = d3.scale.category20().domain(dataSources);
-        svg = d3.select(el[0]).attr({
-          viewBox: "0 0 " + viewBoxWidth + " " + height
-        });
         xAxis = d3.svg.axis().scale(x).orient("bottom");
-        axisG = svg.append("g").attr({
-          "class": "axis",
-          transform: "translate(0," + (chartHeight + markRadius) + ")"
-        }).call(xAxis);
-        tasksG = svg.append("g").attr({
-          "class": "tasks",
-          transform: "translate(0," + markRadius + ")"
+        return axisG.call(xAxis);
+      };
+      updateTasks = function(tasks) {
+        var tasksSel;
+        tasksSel = tasksG.selectAll("circle.task").data(tasks, function(d) {
+          return d.id;
         });
-        tasks = tasksG.selectAll("circle.task").data(tasks);
-        return tasks.enter().append("circle").attr({
+        tasksSel.enter().append("circle").attr({
           "class": "task",
-          r: markRadius,
-          cx: function(d) {
-            return x(d[dateAttr]);
-          },
-          cy: function() {
-            return Math.random() * chartHeight;
-          },
           fill: function(d) {
             return color(d.dataSource);
           }
         }).append("title").text(function(d) {
           return ("" + d.dataSource + " (" + (d.dataTime.substr(0, 16)) + ")") + ("\n" + d.id);
         });
+        tasksSel.attr({
+          r: markRadius,
+          cx: function(d) {
+            return x(d[dateAttr]);
+          },
+          cy: function(d) {
+            return taskIdYMap[d.id];
+          }
+        });
+        return tasksSel.exit().remove();
+      };
+      return scope.$watchCollection('[tasks]', function(_arg) {
+        var dataSources, newTaskIdYMap, tasks;
+        tasks = _arg[0];
+        if (scope.tasks == null) {
+          return;
+        }
+        tasks = scope.tasks;
+        newTaskIdYMap = {};
+        tasks.forEach(function(t) {
+          return newTaskIdYMap[t.id] = t.id in taskIdYMap ? taskIdYMap[t.id] : markRadius + Math.random() * (chartHeight - 2 * markRadius);
+        });
+        taskIdYMap = newTaskIdYMap;
+        dataSources = d3.set(tasks.map(function(t) {
+          return t.dataSource;
+        })).values();
+        updateScalesAndAxes(tasks, dataSources);
+        return updateTasks(tasks);
       });
     }
   };
 };
 
 
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12628,8 +12723,78 @@ module.exports = function() {
     },
     template: '<svg class="scaling-activity" width="100%" preserveAspectRatio="xMidYMid meet"></svg>',
     link: function(scope, el) {
+      var axisG, axisHeight, chartHeight, eventsG, height, historyArea, historyAreaG, markRadius, svg, updateScalesAndAxes, updateScaling, viewBoxWidth, width, x, y, _ref, _ref1;
+      _ref = [80, 20], chartHeight = _ref[0], axisHeight = _ref[1];
+      viewBoxWidth = 720;
+      markRadius = 1;
+      _ref1 = [200, chartHeight + axisHeight + markRadius], width = _ref1[0], height = _ref1[1];
+      svg = d3.select(el[0]).attr({
+        viewBox: "0 0 " + viewBoxWidth + " " + height
+      });
+      historyAreaG = svg.append("g").attr({
+        transform: "translate(0," + markRadius + ")"
+      });
+      eventsG = svg.append("g").attr({
+        "class": "events"
+      });
+      axisG = svg.append("g").attr({
+        "class": "axis",
+        transform: "translate(0," + (chartHeight + markRadius) + ")"
+      });
+      x = null;
+      y = null;
+      historyArea = d3.svg.area().x(function(d) {
+        return x(d.date);
+      }).y0(chartHeight).y1(function(d) {
+        return y(d.count);
+      }).interpolate('step-after');
+      updateScalesAndAxes = function(scaling, workerHistory) {
+        var xAxis;
+        x = d3.time.scale.utc().domain([
+          new Date(), d3.min(scaling, function(s) {
+            return s.date;
+          })
+        ]).range([markRadius, viewBoxWidth - markRadius * 2]);
+        xAxis = d3.svg.axis().scale(x).orient("bottom");
+        y = d3.scale.linear().domain([
+          0, d3.max(workerHistory, function(d) {
+            return d.count;
+          })
+        ]).range([chartHeight, 0]);
+        return axisG.call(xAxis);
+      };
+      updateScaling = function(scaling, workerHistory) {
+        var eventsSel;
+        historyAreaG.append("path").data([workerHistory]).attr({
+          "class": "history",
+          d: historyArea
+        });
+        eventsSel = eventsG.selectAll("line.event").data(scaling);
+        eventsSel.enter().append("line").attr({
+          "class": function(d) {
+            return "event " + d.event;
+          }
+        }).append("title").text(function(d) {
+          return "" + d.event + " " + d.data.nodeIds.length + " node(s)\n\nat " + d.timestamp;
+        });
+        eventsSel.attr({
+          x1: function(d) {
+            return x(d.date);
+          },
+          x2: function(d) {
+            return x(d.date);
+          },
+          y1: function(d) {
+            return y(d.countBefore);
+          },
+          y2: function(d) {
+            return y(d.countBefore - d.delta);
+          }
+        });
+        return eventsSel.exit().remove();
+      };
       return scope.$watchCollection('[scaling, workers]', function(_arg) {
-        var axisG, axisHeight, chartHeight, eventLines, eventsG, height, historyArea, historyAreaG, markRadius, scaling, svg, viewBoxWidth, width, workerHistory, workers, x, xAxis, y, _ref, _ref1;
+        var scaling, workerHistory, workers;
         scaling = _arg[0], workers = _arg[1];
         if (!((scope.scaling != null) && (scope.workers != null))) {
           return;
@@ -12653,70 +12818,15 @@ module.exports = function() {
             date: new Date
           }
         ]);
-        _ref = [80, 20], chartHeight = _ref[0], axisHeight = _ref[1];
-        viewBoxWidth = 720;
-        markRadius = 1;
-        _ref1 = [200, chartHeight + axisHeight + markRadius], width = _ref1[0], height = _ref1[1];
-        x = d3.time.scale.utc().domain([
-          new Date(), d3.min(scaling, function(s) {
-            return s.date;
-          })
-        ]).range([markRadius, viewBoxWidth - markRadius * 2]);
-        xAxis = d3.svg.axis().scale(x).orient("bottom");
-        y = d3.scale.linear().domain([
-          0, d3.max(workerHistory, function(d) {
-            return d.count;
-          })
-        ]).range([chartHeight, 0]);
-        historyArea = d3.svg.area().x(function(d) {
-          return x(d.date);
-        }).y0(chartHeight).y1(function(d) {
-          return y(d.count);
-        }).interpolate('step-after');
-        svg = d3.select(el[0]).attr({
-          viewBox: "0 0 " + viewBoxWidth + " " + height
-        });
-        axisG = svg.append("g").attr({
-          "class": "axis",
-          transform: "translate(0," + (chartHeight + markRadius) + ")"
-        }).call(xAxis);
-        historyAreaG = svg.append("g").attr({
-          transform: "translate(0," + markRadius + ")"
-        }).datum(workerHistory);
-        historyAreaG.append("path").attr({
-          "class": "history",
-          d: historyArea
-        });
-        eventsG = svg.append("g").attr({
-          "class": "events"
-        });
-        eventLines = eventsG.selectAll("circle.event").data(scaling);
-        return eventLines.enter().append("line").attr({
-          "class": function(d) {
-            return "event " + d.event;
-          },
-          x1: function(d) {
-            return x(d.date);
-          },
-          x2: function(d) {
-            return x(d.date);
-          },
-          y1: function(d) {
-            return y(d.countBefore);
-          },
-          y2: function(d) {
-            return y(d.countBefore - d.delta);
-          }
-        }).append("title").text(function(d) {
-          return "" + d.event + " " + d.data.nodeIds.length + " node(s)\n\nat " + d.timestamp;
-        });
+        updateScalesAndAxes(scaling, workerHistory);
+        return updateScaling(scaling, workerHistory);
       });
     }
   };
 };
 
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'A',
@@ -12729,7 +12839,7 @@ module.exports = function() {
 };
 
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12746,7 +12856,7 @@ module.exports = function() {
 };
 
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 var moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -12836,7 +12946,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8}],38:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8}],39:[function(require,module,exports){
 module.exports = function() {
   return {
     restrict: 'E',
@@ -12880,7 +12990,7 @@ module.exports = function() {
 };
 
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 var moment, _;
 
 _ = require('../../bower_components/underscore/underscore.js');
@@ -12905,7 +13015,7 @@ module.exports = function($window, $filter, $compile) {
         rules.forEach(function(r) {
           return r.width = x(r.momentInterval.start().toDate()) - x(r.momentInterval.end().toDate());
         });
-        lastYear = [moment.utc().subtract('years', 1).startOf('day').toDate(), moment.utc().endOf('day').toDate()];
+        lastYear = [moment.utc().subtract(1, 'years').startOf('day').toDate(), moment.utc().endOf('day').toDate()];
         y = d3.scale.linear().domain([
           0, d3.max(days, function(d) {
             return d.size;
@@ -13018,7 +13128,7 @@ module.exports = function($window, $filter, $compile) {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11}],40:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/underscore/underscore.js":11}],41:[function(require,module,exports){
 var $, app;
 
 $ = require('jquery');
@@ -13079,7 +13189,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 module.exports = app;
 
 
-},{"../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js":1,"../bower_components/angular-local-storage/dist/angular-local-storage.min.js":2,"../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../bower_components/angular/angular.min.js":5,"../bower_components/d3/d3.js":6,"../bower_components/ng-clip/dest/ng-clip.min.js":9,"../bower_components/ng-csv/build/ng-csv.min.js":10,"../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"./controllers":21,"./directives":28,"./factories":44,"./filters":46,"jquery":7}],41:[function(require,module,exports){
+},{"../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js":1,"../bower_components/angular-local-storage/dist/angular-local-storage.min.js":2,"../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../bower_components/angular/angular.min.js":5,"../bower_components/d3/d3.js":6,"../bower_components/ng-clip/dest/ng-clip.min.js":9,"../bower_components/ng-csv/build/ng-csv.min.js":10,"../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"./controllers":21,"./directives":29,"./factories":45,"./filters":47,"jquery":7}],42:[function(require,module,exports){
 var moment, _;
 
 require('../../bower_components/d3/d3.js');
@@ -13477,7 +13587,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../../bower_components/angular/angular.min.js":5,"../../bower_components/d3/d3.js":6,"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/ng-clip/dest/ng-clip.min.js":9,"../../bower_components/ng-csv/build/ng-csv.min.js":10,"../../bower_components/underscore/underscore.js":11,"../../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"../../lib/moment-interval.js":13}],42:[function(require,module,exports){
+},{"../../bower_components/angular-sanitize/angular-sanitize.min.js":3,"../../bower_components/angular-ui-router/release/angular-ui-router.min.js":4,"../../bower_components/angular/angular.min.js":5,"../../bower_components/d3/d3.js":6,"../../bower_components/moment/min/moment.min.js":8,"../../bower_components/ng-clip/dest/ng-clip.min.js":9,"../../bower_components/ng-csv/build/ng-csv.min.js":10,"../../bower_components/underscore/underscore.js":11,"../../bower_components/zeroclipboard/ZeroClipboard.min.js":12,"../../lib/moment-interval.js":13}],43:[function(require,module,exports){
 var __slice = [].slice;
 
 module.exports = function($q, $http, $hUtils, $window) {
@@ -13653,7 +13763,7 @@ module.exports = function($q, $http, $hUtils, $window) {
 };
 
 
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 var moment;
 
 moment = require('../../bower_components/moment/min/moment.min.js');
@@ -13733,7 +13843,7 @@ module.exports = function() {
 };
 
 
-},{"../../bower_components/moment/min/moment.min.js":8}],44:[function(require,module,exports){
+},{"../../bower_components/moment/min/moment.min.js":8}],45:[function(require,module,exports){
 var app;
 
 app = angular.module('druid');
@@ -13747,7 +13857,7 @@ app.factory('$indexing', require('./indexing.coffee'));
 app.factory('$iUtils', require('./iUtils.coffee'));
 
 
-},{"./hUtils.coffee":41,"./historical.coffee":42,"./iUtils.coffee":43,"./indexing.coffee":45}],45:[function(require,module,exports){
+},{"./hUtils.coffee":42,"./historical.coffee":43,"./iUtils.coffee":44,"./indexing.coffee":46}],46:[function(require,module,exports){
 var __slice = [].slice;
 
 module.exports = function($q, $http, $iUtils, $window) {
@@ -13888,7 +13998,7 @@ module.exports = function($q, $http, $iUtils, $window) {
 };
 
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 var app, _;
 
 _ = require('../../bower_components/underscore/underscore.js');
@@ -13993,4 +14103,4 @@ app.filter('isoHour', function() {
 });
 
 
-},{"../../bower_components/underscore/underscore.js":11}]},{},[40])
+},{"../../bower_components/underscore/underscore.js":11}]},{},[41])

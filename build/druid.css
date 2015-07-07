@@ -669,30 +669,31 @@ body .cluster-view #historical .tier {
 /* line 588, ../src/druid.scss */
 body .cluster-view #historical .tier h2 {
   font-size: 24px;
+  min-height: 75px;
 }
-/* line 590, ../src/druid.scss */
+/* line 591, ../src/druid.scss */
 body .cluster-view #historical .tier h2 .queue {
   font-size: 12px;
 }
-/* line 593, ../src/druid.scss */
+/* line 594, ../src/druid.scss */
 body .cluster-view #historical .tier h2 .queue.load .unloaded {
   color: #EEE;
 }
-/* line 596, ../src/druid.scss */
+/* line 597, ../src/druid.scss */
 body .cluster-view #historical .tier h2 .queue.load .bytes {
   color: #f16065;
   font-weight: bold;
 }
-/* line 607, ../src/druid.scss */
+/* line 608, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity g.capacity rect.maxSize, body .cluster-view #historical .tier tr.node rect.maxSize {
   fill: #5ca0d7;
   opacity: 0.75;
 }
-/* line 611, ../src/druid.scss */
+/* line 612, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity g.capacity rect.currSize, body .cluster-view #historical .tier tr.node rect.currSize {
   fill: #f16065;
 }
-/* line 617, ../src/druid.scss */
+/* line 618, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity {
   padding: 0px 4px;
   padding-top: 0.5rem;
@@ -702,281 +703,281 @@ body .cluster-view #historical .tier tier-capacity {
   flex-direction: row;
   -webkit-flex-flow: row nowrap;
 }
-/* line 627, ../src/druid.scss */
+/* line 628, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels {
   width: 168px;
   height: 128px;
   padding-left: 0.5em;
 }
-/* line 632, ../src/druid.scss */
+/* line 633, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .value {
   color: #C8C8C8;
 }
-/* line 635, ../src/druid.scss */
+/* line 636, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .top-labels {
   line-height: 1.25;
 }
-/* line 636, ../src/druid.scss */
+/* line 637, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .top-labels > * {
   margin-bottom: 4px;
 }
-/* line 642, ../src/druid.scss */
+/* line 643, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .bottom-labels {
   position: absolute;
   bottom: 0px;
 }
-/* line 645, ../src/druid.scss */
+/* line 646, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .bottom-labels > * {
   margin-top: 4px;
 }
-/* line 650, ../src/druid.scss */
+/* line 651, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .resilience {
   line-height: 1;
   font-size: 24px;
   font-weight: bold;
   color: #fefefe;
 }
-/* line 656, ../src/druid.scss */
+/* line 657, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .free {
   font-size: 18px;
   font-weight: bold;
 }
-/* line 659, ../src/druid.scss */
+/* line 660, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .free .value {
   color: #fefefe;
 }
-/* line 663, ../src/druid.scss */
+/* line 664, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .size-label {
   font-size: 75%;
 }
-/* line 666, ../src/druid.scss */
+/* line 667, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .maxSize {
   font-size: 18px;
 }
-/* line 671, ../src/druid.scss */
+/* line 672, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .currSize {
   font-size: 16px;
 }
-/* line 673, ../src/druid.scss */
+/* line 674, ../src/druid.scss */
 body .cluster-view #historical .tier tier-capacity div.labels .currSize .percent {
   color: #fefefe;
 }
-/* line 683, ../src/druid.scss */
+/* line 684, ../src/druid.scss */
 body .cluster-view #historical .tier g.nodes .node {
   fill: #ebeb3a;
   opacity: 0.66;
 }
-/* line 690, ../src/druid.scss */
+/* line 691, ../src/druid.scss */
 body .cluster-view #historical .tier div.capacity-history svg {
   margin-top: 1em;
 }
-/* line 691, ../src/druid.scss */
+/* line 692, ../src/druid.scss */
 body .cluster-view #historical .tier div.capacity-history text {
   fill: white;
   opacity: 0.75;
 }
-/* line 695, ../src/druid.scss */
+/* line 696, ../src/druid.scss */
 body .cluster-view #historical .tier div.capacity-history path.maxSize {
   fill: #5ca0d7;
   stroke: none;
   opacity: 0.75;
 }
-/* line 700, ../src/druid.scss */
+/* line 701, ../src/druid.scss */
 body .cluster-view #historical .tier div.capacity-history path.currSize {
   fill: #f16065;
   stroke: none;
 }
-/* line 705, ../src/druid.scss */
+/* line 706, ../src/druid.scss */
 body .cluster-view #historical .tier div.capacity-history .axis line {
   stroke: #22222A;
   opacity: 0.15;
   shape-rendering: crispEdges;
 }
-/* line 710, ../src/druid.scss */
+/* line 711, ../src/druid.scss */
 body .cluster-view #historical .tier div.capacity-history .axis text {
   font-size: 7px;
 }
-/* line 714, ../src/druid.scss */
+/* line 715, ../src/druid.scss */
 body .cluster-view #historical .tier div.capacity-history text.label {
   font-size: 16px;
   font-weight: bold;
   text-anchor: middle;
 }
-/* line 719, ../src/druid.scss */
+/* line 720, ../src/druid.scss */
 body .cluster-view #historical .tier div.capacity-history a.dash-link {
   cursor: pointer;
 }
-/* line 723, ../src/druid.scss */
+/* line 724, ../src/druid.scss */
 body .cluster-view #historical .tier div.capacity-history rect.delta.positive {
   fill: #3cb349;
 }
-/* line 726, ../src/druid.scss */
+/* line 727, ../src/druid.scss */
 body .cluster-view #historical .tier div.capacity-history rect.delta.negative {
   fill: #f16065;
 }
-/* line 732, ../src/druid.scss */
+/* line 733, ../src/druid.scss */
 body .cluster-view #historical .tier div.growth {
   line-height: 1.3;
 }
-/* line 734, ../src/druid.scss */
+/* line 735, ../src/druid.scss */
 body .cluster-view #historical .tier div.growth span.value {
   color: #C8C8C8;
 }
-/* line 739, ../src/druid.scss */
+/* line 740, ../src/druid.scss */
 body .cluster-view #historical .tier .node-toggle {
   padding-bottom: 0.5em;
 }
-/* line 741, ../src/druid.scss */
+/* line 742, ../src/druid.scss */
 body .cluster-view #historical .tier .node-toggle:hover {
   color: #fefefe;
 }
-/* line 745, ../src/druid.scss */
+/* line 746, ../src/druid.scss */
 body .cluster-view #historical .tier tier-nodes table {
   margin-left: 4px;
 }
-/* line 748, ../src/druid.scss */
+/* line 749, ../src/druid.scss */
 body .cluster-view #historical .tier tier-nodes table tr.node text {
   fill: white;
   alignment-baseline: central;
 }
-/* line 752, ../src/druid.scss */
+/* line 753, ../src/druid.scss */
 body .cluster-view #historical .tier tier-nodes table tr.node td.host {
   padding-left: 0.25em;
 }
-/* line 763, ../src/druid.scss */
+/* line 764, ../src/druid.scss */
 body .data-sources-view #data-sources {
   width: 100%;
 }
-/* line 765, ../src/druid.scss */
+/* line 766, ../src/druid.scss */
 body .data-sources-view #data-sources > table {
   width: 100%;
 }
-/* line 769, ../src/druid.scss */
+/* line 770, ../src/druid.scss */
 body .data-sources-view #data-sources > table td:first-child, body .data-sources-view #data-sources > table th:first-child {
   width: 16px;
 }
-/* line 772, ../src/druid.scss */
+/* line 773, ../src/druid.scss */
 body .data-sources-view #data-sources > table td:nth-child(2), body .data-sources-view #data-sources > table th:nth-child(2) {
   width: 224px;
 }
-/* line 777, ../src/druid.scss */
+/* line 778, ../src/druid.scss */
 body .data-sources-view #data-sources > table tbody tr:hover {
   background: #2E2E38;
 }
-/* line 781, ../src/druid.scss */
+/* line 782, ../src/druid.scss */
 body .data-sources-view #data-sources > table td.footprint {
   padding: 4px 6px;
 }
-/* line 786, ../src/druid.scss */
+/* line 787, ../src/druid.scss */
 body .data-sources-view .disabled-data-sources {
   padding: 0px 8px;
 }
-/* line 788, ../src/druid.scss */
+/* line 789, ../src/druid.scss */
 body .data-sources-view .disabled-data-sources li {
   font-size: 16px;
   line-height: 1.75;
 }
-/* line 798, ../src/druid.scss */
+/* line 799, ../src/druid.scss */
 body svg.rules-timeline ._default_tier rect, body svg.timeline ._default_tier rect {
   fill: #5ca0d7;
 }
-/* line 803, ../src/druid.scss */
+/* line 804, ../src/druid.scss */
 body svg.rules-timeline .hot rect, body svg.timeline .hot rect {
   fill: #f16065;
 }
-/* line 808, ../src/druid.scss */
+/* line 809, ../src/druid.scss */
 body svg.rules-timeline .days rect, body svg.timeline .days rect {
   fill: #33a680;
 }
-/* line 810, ../src/druid.scss */
+/* line 811, ../src/druid.scss */
 body svg.rules-timeline .days rect:hover, body svg.timeline .days rect:hover {
   stroke-width: 2px;
   stroke: #c6c631;
 }
-/* line 817, ../src/druid.scss */
+/* line 818, ../src/druid.scss */
 body svg.rules-timeline text, body svg.timeline text {
   text-anchor: end;
 }
-/* line 823, ../src/druid.scss */
+/* line 824, ../src/druid.scss */
 body svg.rules-timeline.with-footprint .load rect, body svg.rules-timeline.with-footprint .drop rect, body svg.timeline.with-footprint .load rect, body svg.timeline.with-footprint .drop rect {
   opacity: 0.33;
 }
-/* line 830, ../src/druid.scss */
+/* line 831, ../src/druid.scss */
 body svg.rules-timeline .rules text, body svg.timeline .rules text {
   opacity: 0.75;
   fill: #eee;
 }
-/* line 836, ../src/druid.scss */
+/* line 837, ../src/druid.scss */
 body svg.rules-timeline .axis, body svg.timeline .axis {
   shape-rendering: crispEdges;
 }
-/* line 840, ../src/druid.scss */
+/* line 841, ../src/druid.scss */
 body svg.rules-timeline .x.axis text, body svg.timeline .x.axis text {
   font-size: 11px;
   fill: #858597;
 }
-/* line 844, ../src/druid.scss */
+/* line 845, ../src/druid.scss */
 body svg.rules-timeline .x.axis line, body svg.timeline .x.axis line {
   stroke: #e69545;
   opacity: 0.5;
 }
-/* line 849, ../src/druid.scss */
+/* line 850, ../src/druid.scss */
 body svg.rules-timeline .x.axis .minor, body svg.timeline .x.axis .minor {
   stroke-opacity: .5;
 }
-/* line 852, ../src/druid.scss */
+/* line 853, ../src/druid.scss */
 body svg.rules-timeline .x.axis path, body svg.timeline .x.axis path {
   display: none;
 }
-/* line 859, ../src/druid.scss */
+/* line 860, ../src/druid.scss */
 body svg.timeline .rules rect {
   opacity: 0.33;
 }
-/* line 909, ../src/druid.scss */
+/* line 910, ../src/druid.scss */
 body .rules-editor {
   flex-direction: column;
   -webkit-flex-flow: column nowrap;
 }
-/* line 913, ../src/druid.scss */
+/* line 914, ../src/druid.scss */
 body .rules-editor h1 {
   font-size: 18px;
 }
-/* line 917, ../src/druid.scss */
+/* line 918, ../src/druid.scss */
 body .rules-editor a, body .rules-editor a:link, body .rules-editor a:visited {
   text-decoration: none;
   color: black;
 }
-/* line 921, ../src/druid.scss */
+/* line 922, ../src/druid.scss */
 body .rules-editor a:hover {
   text-decoration: underline;
   color: #858597;
 }
-/* line 928, ../src/druid.scss */
+/* line 929, ../src/druid.scss */
 body .rules-editor #audit-info textarea.ng-invalid, body .rules-editor #audit-info input.ng-invalid {
   border-color: #f16065;
   box-shadow: inset 0px 1px 60px 4px rgba(241, 96, 101, 0.2);
 }
-/* line 935, ../src/druid.scss */
+/* line 936, ../src/druid.scss */
 body .rules-editor .rule {
   height: 120px;
   margin-bottom: 10px;
 }
-/* line 939, ../src/druid.scss */
+/* line 940, ../src/druid.scss */
 body .rules-editor .rule:not(:first-child) {
   border-top: 1px solid #858597;
   padding-top: 8px;
   height: 129px;
 }
-/* line 944, ../src/druid.scss */
+/* line 945, ../src/druid.scss */
 body .rules-editor .rule .summary {
   font-size: 16px;
   margin-bottom: 10px;
 }
-/* line 947, ../src/druid.scss */
+/* line 948, ../src/druid.scss */
 body .rules-editor .rule .summary .rule {
   color: #fefefe;
 }
-/* line 951, ../src/druid.scss */
+/* line 952, ../src/druid.scss */
 body .rules-editor .rule .edit {
   display: flex;
   display: -webkit-flex;
@@ -984,69 +985,69 @@ body .rules-editor .rule .edit {
   flex-direction: row;
   justify-content: flex-start;
 }
-/* line 957, ../src/druid.scss */
+/* line 958, ../src/druid.scss */
 body .rules-editor .rule .edit > * {
   flex: initial;
   -webkit-flex: initial;
   margin-right: 1em;
 }
-/* line 961, ../src/druid.scss */
+/* line 962, ../src/druid.scss */
 body .rules-editor .rule .edit > *:last-child {
   margin-right: 0px;
 }
-/* line 965, ../src/druid.scss */
+/* line 966, ../src/druid.scss */
 body .rules-editor .rule .edit .interval-period {
   width: 200px;
 }
-/* line 967, ../src/druid.scss */
+/* line 968, ../src/druid.scss */
 body .rules-editor .rule .edit .interval-period input {
   margin-bottom: 10px;
 }
-/* line 970, ../src/druid.scss */
+/* line 971, ../src/druid.scss */
 body .rules-editor .rule .edit .interval-period .alert {
   margin-bottom: 0;
 }
-/* line 974, ../src/druid.scss */
+/* line 975, ../src/druid.scss */
 body .rules-editor .rule .edit .replicants {
   width: 160px;
 }
-/* line 976, ../src/druid.scss */
+/* line 977, ../src/druid.scss */
 body .rules-editor .rule .edit .replicants .replicant {
   white-space: nowrap;
   margin-bottom: 5px;
 }
-/* line 979, ../src/druid.scss */
+/* line 980, ../src/druid.scss */
 body .rules-editor .rule .edit .replicants .replicant input[type=number] {
   width: 2.5em;
 }
-/* line 982, ../src/druid.scss */
+/* line 983, ../src/druid.scss */
 body .rules-editor .rule .edit .replicants .replicant button {
   vertical-align: baseline;
 }
-/* line 989, ../src/druid.scss */
+/* line 990, ../src/druid.scss */
 body .rules-editor .alert {
   padding: 10px 12px;
 }
 
-/* line 996, ../src/druid.scss */
+/* line 997, ../src/druid.scss */
 .rule-editor-link a {
   color: #858597;
 }
-/* line 998, ../src/druid.scss */
+/* line 999, ../src/druid.scss */
 .rule-editor-link a:hover {
   color: #3cb349;
 }
 
-/* line 1005, ../src/druid.scss */
+/* line 1006, ../src/druid.scss */
 .audit-history i {
   color: #858597;
 }
-/* line 1007, ../src/druid.scss */
+/* line 1008, ../src/druid.scss */
 .audit-history i:hover {
   color: #3cb349;
 }
 
-/* line 1013, ../src/druid.scss */
+/* line 1014, ../src/druid.scss */
 .history-overlay {
   position: fixed;
   top: 0;
@@ -1057,7 +1058,7 @@ body .rules-editor .alert {
   background-color: rgba(0, 0, 0, 0.8);
   margin: 0;
 }
-/* line 1023, ../src/druid.scss */
+/* line 1024, ../src/druid.scss */
 .history-overlay .history {
   background-color: #22222A;
   margin: 10rem auto;
@@ -1067,21 +1068,21 @@ body .rules-editor .alert {
   height: 100%;
   overflow-y: scroll;
 }
-/* line 1032, ../src/druid.scss */
+/* line 1033, ../src/druid.scss */
 .history-overlay .history h1 {
   font-size: 1.6rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-/* line 1037, ../src/druid.scss */
+/* line 1038, ../src/druid.scss */
 .history-overlay .history .audit-item {
   margin-bottom: 1.5rem;
 }
-/* line 1039, ../src/druid.scss */
+/* line 1040, ../src/druid.scss */
 .history-overlay .history .audit-item > * {
   padding: 0px 8px;
 }
-/* line 1042, ../src/druid.scss */
+/* line 1043, ../src/druid.scss */
 .history-overlay .history .audit-item h2 {
   font-size: 1.2rem;
   padding-top: 0.5rem;
@@ -1091,44 +1092,72 @@ body .rules-editor .alert {
   max-width: 100%;
   color: #C8C8C8;
 }
-/* line 1051, ../src/druid.scss */
+/* line 1052, ../src/druid.scss */
 .history-overlay .history .audit-item .by {
   padding-top: 0.5rem;
 }
-/* line 1054, ../src/druid.scss */
+/* line 1055, ../src/druid.scss */
 .history-overlay .history .audit-item .author {
   color: #fefefe;
 }
-/* line 1057, ../src/druid.scss */
+/* line 1058, ../src/druid.scss */
 .history-overlay .history .audit-item .comment {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-/* line 1060, ../src/druid.scss */
+/* line 1061, ../src/druid.scss */
 .history-overlay .history .audit-item .comment .comment-label {
   font-size: 10px;
 }
-/* line 1063, ../src/druid.scss */
+/* line 1064, ../src/druid.scss */
 .history-overlay .history .audit-item .comment .comment-value {
   color: #fefefe;
 }
-/* line 1068, ../src/druid.scss */
+/* line 1069, ../src/druid.scss */
 .history-overlay .history .no-history, .history-overlay .history .loading {
   padding: 1rem 8px;
   font-size: 1.4rem;
   text-align: center;
 }
-/* line 1073, ../src/druid.scss */
+/* line 1074, ../src/druid.scss */
 .history-overlay .history .no-history {
   color: #f16065;
 }
-/* line 1077, ../src/druid.scss */
+/* line 1078, ../src/druid.scss */
 .history-overlay .history .loading i {
   font-size: 10rem;
   color: #c6c631;
 }
 
 /* line 1085, ../src/druid.scss */
+.heartbeat {
+  color: #d8d8dd;
+  line-height: 1.3;
+  border-left: 1px solid #1B1A20;
+  padding: 0px 4px;
+}
+/* line 1090, ../src/druid.scss */
+.heartbeat a {
+  /* unvisited link */
+  color: #858597;
+  /* visited link */
+  /* mouse over link */
+  /* selected link */
+}
+/* line 1092, ../src/druid.scss */
+.heartbeat a:visited {
+  color: #858597;
+}
+/* line 1093, ../src/druid.scss */
+.heartbeat a:hover {
+  color: #3cb349;
+}
+/* line 1094, ../src/druid.scss */
+.heartbeat a:active {
+  color: #3cb349;
+}
+
+/* line 1098, ../src/druid.scss */
 #floatingCirclesG {
   position: relative;
   width: 128px;
@@ -1137,7 +1166,7 @@ body .rules-editor .alert {
   transform: scale(0.6);
 }
 
-/* line 1093, ../src/druid.scss */
+/* line 1106, ../src/druid.scss */
 .f_circleG {
   position: absolute;
   background-color: #2E2E38;
@@ -1155,7 +1184,7 @@ body .rules-editor .alert {
   animation-direction: linear;
 }
 
-/* line 1110, ../src/druid.scss */
+/* line 1123, ../src/druid.scss */
 #frotateG_01 {
   left: 0;
   top: 52px;
@@ -1163,7 +1192,7 @@ body .rules-editor .alert {
   animation-delay: 0.39s;
 }
 
-/* line 1117, ../src/druid.scss */
+/* line 1130, ../src/druid.scss */
 #frotateG_02 {
   left: 15px;
   top: 15px;
@@ -1171,7 +1200,7 @@ body .rules-editor .alert {
   animation-delay: 0.52s;
 }
 
-/* line 1124, ../src/druid.scss */
+/* line 1137, ../src/druid.scss */
 #frotateG_03 {
   left: 52px;
   top: 0;
@@ -1179,7 +1208,7 @@ body .rules-editor .alert {
   animation-delay: 0.65s;
 }
 
-/* line 1131, ../src/druid.scss */
+/* line 1144, ../src/druid.scss */
 #frotateG_04 {
   right: 15px;
   top: 15px;
@@ -1187,7 +1216,7 @@ body .rules-editor .alert {
   animation-delay: 0.78s;
 }
 
-/* line 1138, ../src/druid.scss */
+/* line 1151, ../src/druid.scss */
 #frotateG_05 {
   right: 0;
   top: 52px;
@@ -1195,7 +1224,7 @@ body .rules-editor .alert {
   animation-delay: 0.91s;
 }
 
-/* line 1145, ../src/druid.scss */
+/* line 1158, ../src/druid.scss */
 #frotateG_06 {
   right: 15px;
   bottom: 15px;
@@ -1203,7 +1232,7 @@ body .rules-editor .alert {
   animation-delay: 1.04s;
 }
 
-/* line 1152, ../src/druid.scss */
+/* line 1165, ../src/druid.scss */
 #frotateG_07 {
   left: 52px;
   bottom: 0;
@@ -1211,7 +1240,7 @@ body .rules-editor .alert {
   animation-delay: 1.17s;
 }
 
-/* line 1159, ../src/druid.scss */
+/* line 1172, ../src/druid.scss */
 #frotateG_08 {
   left: 15px;
   bottom: 15px;
