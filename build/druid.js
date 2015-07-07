@@ -12284,7 +12284,7 @@ module.exports = [
       },
       template: "   <div class=\"heartbeat\">\n     <div ng-hide=\"loadedAt\"><i class=\"fa fa-circle-o-notch fa-spin\"></i>\nloading...</div>\n     <div ng-show=\"loadedAt\">data loaded {{ loadedAt.fromNow() }} <a ng-click=\"reloadNow()\">refresh now</a>\n</div>\n     <div ng-show=\"heartbeatEnabled && nextReloadMoment\">will reload {{ nextReloadMoment.fromNow() }} <a ng-click=\"disableHeartbeat()\">disable auto-refresh</button></div>\n     <div ng-hide=\"heartbeatEnabled\"><a ng-click=\"enableHeartbeat()\">enable auto-refresh</button></div>\n   </span>",
       link: function(scope, element) {
-        var disableHeartbeat, disableHeartbeatAfterMs, disableHeartbeatTimeout, nextReload, progressInterval, progressUpdateMs, reload, reloadIntervalMs, scheduleNextReload;
+        var disableHeartbeatAfterMs, disableHeartbeatTimeout, nextReload, progressInterval, progressUpdateMs, reload, reloadIntervalMs, scheduleNextReload;
         scope.heartbeatEnabled = true;
         reloadIntervalMs = 5 * 60 * 1000;
         progressUpdateMs = 10 * 1000;
@@ -12312,7 +12312,7 @@ module.exports = [
           }
           return scope.heartbeatEnabled = true;
         };
-        disableHeartbeat = function() {
+        scope.disableHeartbeat = function() {
           scope.heartbeatEnabled = false;
           scope.nextReloadMoment = false;
           return $timeout.cancel(nextReload);

@@ -45,7 +45,7 @@ module.exports = ['$timeout', '$interval', ($timeout, $interval) ->
         scheduleNextReload()
       scope.heartbeatEnabled = true
 
-    disableHeartbeat = ->
+    scope.disableHeartbeat = ->
       scope.heartbeatEnabled = false
       scope.nextReloadMoment = false
       $timeout.cancel(nextReload)
