@@ -5,7 +5,6 @@ module.exports = ->
     m = taskId.match /^((hadoop_convert_segment)|index_(hadoop|realtime))_(.+)_(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/
     type = m[3]
     type ||= m[2]
-    console.log {type, m}
     throw Error("Can't parse #{taskId}") unless m
     {
       id: taskId
