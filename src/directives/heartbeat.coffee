@@ -62,6 +62,6 @@ module.exports = ['$timeout', '$interval', ($timeout, $interval) ->
       console.log "destroyed"
       $interval.cancel(progressInterval)
       $timeout.cancel(nextReload)
-      $timeout.cancel(disableAutoUpdateTimeout)
+      $timeout.cancel(disableHeartbeatTimeout)
 
 ]

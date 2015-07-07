@@ -12327,7 +12327,7 @@ module.exports = [
           console.log("destroyed");
           $interval.cancel(progressInterval);
           $timeout.cancel(nextReload);
-          return $timeout.cancel(disableAutoUpdateTimeout);
+          return $timeout.cancel(disableHeartbeatTimeout);
         });
       }
     };
