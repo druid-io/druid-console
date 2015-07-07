@@ -15,7 +15,7 @@ module.exports = ($window, $filter, $compile) ->
 
       x = d3.time.scale.utc()
         .domain([
-          moment.utc().subtract('months', 18).startOf('day').toDate(),
+          moment.utc().subtract(18, 'months').startOf('day').toDate(),
           moment.utc().toDate()
         ])
         .range([chartWidth, 0])
@@ -25,7 +25,7 @@ module.exports = ($window, $filter, $compile) ->
         r.width = x(r.momentInterval.start().toDate()) - x(r.momentInterval.end().toDate())
 
       lastYear = [
-        moment.utc().subtract('years', 1).startOf('day').toDate(),
+        moment.utc().subtract(1, 'years').startOf('day').toDate(),
         moment.utc().endOf('day').toDate()
       ]
 
