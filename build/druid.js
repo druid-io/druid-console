@@ -12282,16 +12282,17 @@ module.exports = [
         loadedAt: '=',
         initialLoad: '='
       },
-      template: "   <div class=\"heartbeat\">\n     <div ng-hide=\"loadedAt\"><i class=\"fa fa-circle-o-notch fa-spin\"></i>\nloading...</div>\n     <div ng-show=\"loadedAt\">data loaded {{ loadedAt.fromNow() }} <a ng-click=\"reloadNow()\">refresh now</a>\n</div>\n     <div ng-show=\"heartbeatEnabled && nextReloadMoment\">will reload {{ nextReloadMoment.fromNow() }} <a ng-click=\"toggleHeartbeat()\">disable auto-refresh</button></div>\n     <div ng-hide=\"heartbeatEnabled\"><a ng-click=\"toggleHeartbeat()\">enable auto-refresh</button></div>\n   </span>",
+      template: "   <div class=\"heartbeat\">\n     <div ng-hide=\"loadedAt\"><i class=\"fa fa-circle-o-notch fa-spin\"></i>\nloading...</div>\n     <div ng-show=\"loadedAt\">data loaded {{ loadedAt.fromNow() }} <a ng-click=\"reloadNow()\">refresh now</a>\n</div>\n     <div ng-show=\"heartbeatEnabled && nextReloadMoment\">will reload {{ nextReloadMoment.fromNow() }} <a ng-click=\"disableHeartbeat()\">disable auto-refresh</button></div>\n     <div ng-hide=\"heartbeatEnabled\"><a ng-click=\"enableHeartbeat()\">enable auto-refresh</button></div>\n   </span>",
       link: function(scope, element) {
-        var nextReload, progressInterval, progressUpdateMs, reload, reloadIntervalMs, scheduleNextReload, showHeartbeat;
-        showHeartbeat = true;
+        var disableHeartbeat, disableHeartbeatAfterMs, disableHeartbeatTimeout, nextReload, progressInterval, progressUpdateMs, reload, reloadIntervalMs, scheduleNextReload;
         scope.heartbeatEnabled = true;
         reloadIntervalMs = 5 * 60 * 1000;
         progressUpdateMs = 10 * 1000;
         nextReload = null;
         scope.propRemaining = 100;
         scope.nextReloadMoment = false;
+        disableHeartbeatAfterMs = 2 * 60 * 60 * 1000;
+        disableHeartbeatTimeout = null;
         reload = function() {
           scope.nextReloadMoment = false;
           return scope.reloadData().then(function() {
@@ -12302,15 +12303,19 @@ module.exports = [
         };
         scheduleNextReload = function() {
           scope.nextReloadMoment = moment.utc().add(reloadIntervalMs, 'ms');
-          return nextReload = $timeout(reload, reloadIntervalMs);
+          nextReload = $timeout(reload, reloadIntervalMs);
+          return disableHeartbeatTimeout || (disableHeartbeatTimeout = $timeout(disableHeartbeat, disableHeartbeatAfterMs));
         };
-        scope.toggleHeartbeat = function() {
-          if (scope.heartbeatEnabled) {
-            $timeout.cancel(nextReload);
-          } else {
+        scope.enableHeartbeat = function() {
+          if (!(scope.nextReloadMoment && nextReload)) {
             scheduleNextReload();
           }
-          return scope.heartbeatEnabled = !scope.heartbeatEnabled;
+          return scope.heartbeatEnabled = true;
+        };
+        disableHeartbeat = function() {
+          scope.heartbeatEnabled = false;
+          scope.nextReloadMoment = false;
+          return $timeout.cancel(nextReload);
         };
         scope.reloadNow = function() {
           $timeout.cancel(nextReload);
@@ -12321,7 +12326,8 @@ module.exports = [
         return element.on('$destroy', function() {
           console.log("destroyed");
           $interval.cancel(progressInterval);
-          return $timeout.cancel(nextReload);
+          $timeout.cancel(nextReload);
+          return $timeout.cancel(disableAutoUpdateTimeout);
         });
       }
     };

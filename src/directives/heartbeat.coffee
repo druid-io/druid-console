@@ -14,19 +14,20 @@ module.exports = ['$timeout', '$interval', ($timeout, $interval) ->
  loading...</div>
       <div ng-show="loadedAt">data loaded {{ loadedAt.fromNow() }} <a ng-click="reloadNow()">refresh now</a>
 </div>
-      <div ng-show="heartbeatEnabled && nextReloadMoment">will reload {{ nextReloadMoment.fromNow() }} <a ng-click="toggleHeartbeat()">disable auto-refresh</button></div>
-      <div ng-hide="heartbeatEnabled"><a ng-click="toggleHeartbeat()">enable auto-refresh</button></div>
+      <div ng-show="heartbeatEnabled && nextReloadMoment">will reload {{ nextReloadMoment.fromNow() }} <a ng-click="disableHeartbeat()">disable auto-refresh</button></div>
+      <div ng-hide="heartbeatEnabled"><a ng-click="enableHeartbeat()">enable auto-refresh</button></div>
     </span>
   """
 
   link: (scope, element) ->
-    showHeartbeat = true
     scope.heartbeatEnabled = true
     reloadIntervalMs = 5 * 60 * 1000
     progressUpdateMs = 10 * 1000
     nextReload = null
     scope.propRemaining = 100
     scope.nextReloadMoment = false
+    disableHeartbeatAfterMs = 2 * 60 * 60 * 1000
+    disableHeartbeatTimeout = null
 
     reload = ->
       scope.nextReloadMoment = false
@@ -37,14 +38,17 @@ module.exports = ['$timeout', '$interval', ($timeout, $interval) ->
     scheduleNextReload = ->
       scope.nextReloadMoment = moment.utc().add(reloadIntervalMs, 'ms')
       nextReload = $timeout(reload, reloadIntervalMs)
+      disableHeartbeatTimeout ||= $timeout(disableHeartbeat, disableHeartbeatAfterMs)
 
-    scope.toggleHeartbeat = ->
-      if scope.heartbeatEnabled
-        $timeout.cancel(nextReload)
-      else
+    scope.enableHeartbeat = ->
+      unless scope.nextReloadMoment && nextReload
         scheduleNextReload()
+      scope.heartbeatEnabled = true
 
-      scope.heartbeatEnabled = ! scope.heartbeatEnabled
+    disableHeartbeat = ->
+      scope.heartbeatEnabled = false
+      scope.nextReloadMoment = false
+      $timeout.cancel(nextReload)
 
     scope.reloadNow = ->
       $timeout.cancel(nextReload)
@@ -58,5 +62,6 @@ module.exports = ['$timeout', '$interval', ($timeout, $interval) ->
       console.log "destroyed"
       $interval.cancel(progressInterval)
       $timeout.cancel(nextReload)
+      $timeout.cancel(disableAutoUpdateTimeout)
 
 ]
