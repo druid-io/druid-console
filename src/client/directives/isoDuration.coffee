@@ -1,5 +1,5 @@
-moment = require '../../bower_components/moment/min/moment.min.js'
-require '../../lib/moment-interval.js'
+moment = require '../../../bower_components/moment/min/moment.min.js'
+require '../../../lib/moment-interval.js'
 
 module.exports = ->
   require: 'ngModel'

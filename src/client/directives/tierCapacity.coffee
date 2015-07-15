@@ -1,4 +1,4 @@
-moment = require '../../bower_components/moment/min/moment.min.js'
+moment = require '../../../bower_components/moment/min/moment.min.js'
 
 module.exports = ->
   restrict: 'E'
@@ -64,12 +64,6 @@ module.exports = ->
     topLabels = labels.append('div').attr('class', 'top-labels')
     topLabels.append('div').attr('class', 'resilience')
       .text((d) -> "n + #{resilienceFormat(d.resilience)}" )
-
-    minResilience = 2
-    mmx = true
-    if mmx and tier.resilience >= minResilience and tier.timeToResilience?
-      topLabels.append('div').attr('class', 'time-to-critical')
-        .text((d) => "#{tier.timeToResilience.humanize()} until n + #{r-1}")
 
     topLabels.append('div').attr('class', 'free')
       .html((d) -> "<span class=\"value\">#{siBytesFormat(d.maxSize - d.currSize)}</span> free")

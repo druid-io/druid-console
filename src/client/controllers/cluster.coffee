@@ -1,4 +1,4 @@
-moment = require '../../bower_components/moment/min/moment.min.js'
+moment = require '../../../bower_components/moment/min/moment.min.js'
 
 module.exports = ($scope, $historical, $indexing, $q) ->
   $scope.env = $historical.env

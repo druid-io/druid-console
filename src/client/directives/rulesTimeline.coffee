@@ -1,6 +1,6 @@
-_ = require '../../bower_components/underscore/underscore.js'
-moment = require '../../bower_components/moment/min/moment.min.js'
-require '../../lib/moment-interval.js'
+_ = require '../../../bower_components/underscore/underscore.js'
+moment = require '../../../bower_components/moment/min/moment.min.js'
+require '../../../lib/moment-interval.js'
 
 module.exports = ($window, $filter, $compile) ->
   restrict: 'A'
