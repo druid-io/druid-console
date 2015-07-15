@@ -38,7 +38,7 @@ module.exports = ['$timeout', '$interval', ($timeout, $interval) ->
     scheduleNextReload = ->
       scope.nextReloadMoment = moment.utc().add(reloadIntervalMs, 'ms')
       nextReload = $timeout(reload, reloadIntervalMs)
-      disableHeartbeatTimeout ||= $timeout(disableHeartbeat, disableHeartbeatAfterMs)
+      disableHeartbeatTimeout ||= $timeout(scope.disableHeartbeat, disableHeartbeatAfterMs)
 
     scope.enableHeartbeat = ->
       unless scope.nextReloadMoment && nextReload

@@ -12304,7 +12304,7 @@ module.exports = [
         scheduleNextReload = function() {
           scope.nextReloadMoment = moment.utc().add(reloadIntervalMs, 'ms');
           nextReload = $timeout(reload, reloadIntervalMs);
-          return disableHeartbeatTimeout || (disableHeartbeatTimeout = $timeout(disableHeartbeat, disableHeartbeatAfterMs));
+          return disableHeartbeatTimeout || (disableHeartbeatTimeout = $timeout(scope.disableHeartbeat, disableHeartbeatAfterMs));
         };
         scope.enableHeartbeat = function() {
           if (!(scope.nextReloadMoment && nextReload)) {
