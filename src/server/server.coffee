@@ -5,7 +5,7 @@ url = require 'url'
 httpProxy = require 'http-proxy'
 dns = require 'dns'
 
-zookeeperLocator = require '../lib/zookeeperLocator'
+zookeeperLocator = require '../../lib/zookeeperLocator'
 
 settings = require './settings'
 
@@ -22,7 +22,7 @@ proxy = new httpProxy.createProxyServer({})
 proxy.on 'error', (e) ->
   console.log "proxy error: ", e
 
-rootPath = path.normalize(path.join(__dirname, '/../console') )
+rootPath = path.normalize(path.join(__dirname, '/../../') )
 
 app.use(express.logger('dev'))
 
