@@ -1,4 +1,4 @@
 #!/bin/bash
 ROOT_DIR=`pwd`
 export PATH="$ROOT_DIR/node/current/bin:$ROOT_DIR/node_modules/.bin:$PATH"
-nodemon --watch ./src ./src/server.coffee
+nodemon --watch ./src ./src/server/server.coffee

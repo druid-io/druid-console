@@ -7,15 +7,18 @@ dns = require 'dns'
 
 zookeeperLocator = require '../../lib/zookeeperLocator'
 
-settings = require './settings'
+zookeeperSettings = {
+  hostname: process.env.ZK_HOSTNAME
+  serviceDiscPath: process.env.ZK_SERVICE_DISC_PATH
+}
 
 app = express()
 
 zkManager = null
-dns.resolve4 settings.zookeeper.hostname, (err, addresses) ->
+dns.resolve4 zookeeperSettings.hostname, (err, addresses) ->
   throw err if err
-  console.log "#{settings.zookeeper.hostname} resolved to #{addresses.length} ZK node IP addresses: #{addresses.join(', ')}"
-  zkManager = zookeeperLocator { servers: addresses.join(',') + settings.zookeeper.serviceDiscPath }
+  console.log "#{zookeeperSettings.hostname} resolved to #{addresses.length} ZK node IP addresses: #{addresses.join(', ')}"
+  zkManager = zookeeperLocator { servers: addresses.join(',') + zookeeperSettings.serviceDiscPath }
 
 proxy = new httpProxy.createProxyServer({})
 
