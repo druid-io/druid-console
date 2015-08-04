@@ -21,8 +21,16 @@
       </span>
       Rule{{ dataSource.rules.length == 1 ? '' : 's' }}
       <span ng-controller="RuleEditorCtrl" ng-show="dataSource.hasOwnProperty('rules')">
-        <button class="btn btn-default btn-xs" ng-click="open()"><span class="fa fa-pencil"></span> edit rules</button>
+        <button class="btn btn-default btn-xs" ng-click="open()">
+        <span class="fa fa-pencil"></span> edit rules</button>
       </span>
+
+      <audit-history
+        load-history="loadRulesHistory"
+        id="{{ dataSource.id }}"
+        label="history"
+        button="true"
+      ></audit-history>
 
       <div class="footprint">
         <div ng-repeat="(tier, tierData) in dataSource.tiers">
@@ -33,56 +41,16 @@
       </div>
     </h2>
 
-    <div class="rule" ng-repeat="rule in dataSource.rules">
-      <div>
-        <span class="type">
-          <span ng-class="rule.direction">{{ rule.direction }}</span>{{ rule.type.substr(4) }}
-        </span>
-        <span class="default" ng-if="rule.default">(default)</span>
-      </div>
+    <div class="set-rules">
+      <concise-rule
+        rule="rule"
+        ng-repeat="rule in dataSource.rules"
+      ></concise-rule>
 
-      <div class="period" ng-if="rule.period">
-        <span class="value">{{ rule.period }}</span>
-        <span class="human">({{ rule.momentInterval.period().humanize() }})</span>
-      </div>
-
-      <div class="interval" ng-if="rule.interval">
-        <span class="value">{{ rule.interval }}</span>
-        <span class="human">({{ rule.momentInterval.period().humanize() }})</span>
-      </div>
-
-      <div class="replicants">
-        <div class="replicant" ng-repeat="(tier, n) in rule.tieredReplicants">
-          <span class="value">{{ n }}</span> in
-          <span class="tier" ng-class="tier">{{ tier | tierName}}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="rule" ng-repeat="rule in defaultRules">
-      <div>
-        <span class="type">
-          <span ng-class="rule.direction">{{ rule.direction }}</span>{{ rule.type.substr(4) }}
-        </span>
-        <span class="default" ng-if="rule.default">(default rule)</span>
-      </div>
-
-      <div class="period" ng-if="rule.period">
-        <span class="value">{{ rule.period }}</span>
-        <span class="human">({{ rule.momentInterval.period().humanize() }})</span>
-      </div>
-
-      <div class="interval" ng-if="rule.interval">
-        <span class="value">{{ rule.interval }}</span>
-        <span class="human">({{ rule.momentInterval.period().humanize() }})</span>
-      </div>
-
-      <div class="replicants">
-        <div class="replicant" ng-repeat="(tier, n) in rule.tieredReplicants">
-          <span class="value">{{ n }}</span> in
-          <span class="tier" ng-class="tier">{{ tier | tierName}}</span>
-        </div>
-      </div>
+      <concise-rule
+        rule="rule"
+        ng-repeat="rule in defaultRules"
+      ></concise-rule>
     </div>
   </div>
 
@@ -90,14 +58,15 @@
     <h2>
       Timeline (unreplicated)
       <div>
-        <div ng-if="unreplicatedSegmentSize" class="summary">
+        <div ng-if="dataSource.segments.size" class="summary">
           <div>
-            {{ unreplicatedSegmentSize | bytes }}
+            <span class="size">{{ dataSource.segments.size | bytes }}</span>
             over {{ dataSource.segments.interval.period().humanize() }}
           </div>
           <div>
             {{ dataSource.segments.interval.start().format("MMM Do YYYY") }}
-            to {{ dataSource.segments.interval.end().format("MMM Do YYYY") }}
+            to
+            {{ dataSource.segments.interval.end().format("MMM Do YYYY") }}
           </div>
         </div>
         <div class="download" ng-if="days">

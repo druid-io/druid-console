@@ -25,6 +25,4 @@ if [ "$1" != "stop" ]; then
   compass watch --sass-dir src/client --css-dir build &
 
   watchify -t coffeeify --extension=".coffee" src/client/druid.coffee -o build/druid.js -v &
-  # browserify -t coffeeify --extension=".coffee" src/client/druid.coffee  > bundle.js
-  # coffee --compile --watch --bare --output build src/client* &
 fi

@@ -25,13 +25,40 @@ $pink: #eb6ca9;
 $white: #fefefe;
 $brightGrey: #d8d8dd;
 $grey: #C8C8C8;
+$darkGrey: #424253;
 
 $brightYellow: #ebeb3a;
 
 $baseColor: #858597;
 $backgroundBlack: #22222A;
 $borderColor: #1B1A20;
+$headerBackground: #2E2E38;
 
+
+.tier-0 {
+  color: $lime;
+}
+.tier-1 {
+  color: $turq;
+}
+.tier-2 {
+  color: $indigo;
+}
+.tier-3 {
+  color: $purple;
+}
+.tier-4 {
+  color: $fuschia;
+}
+.tier-5 {
+  color: $orange;
+}
+.tier-6 {
+  color: $blue;
+}
+.tier-7 {
+  color: $red;
+}
 
 
 html {
@@ -111,9 +138,9 @@ body {
       }
       .nav {
         font-size: 16px;
-        width: 239px;
-        min-width: 239px;
-        max-width: 239px;
+        // width: 239px;
+        // min-width: 239px;
+        // max-width: 239px;
         li a {
           color: $brightGrey;
           padding: 8px 15px;
@@ -172,7 +199,7 @@ body {
 
     h1, h2 {
       color: $baseColor;
-      background: #2E2E38;
+      background: $headerBackground;
       line-height: 1.5;
       border-bottom: 1px solid $borderColor;
       padding: 0px 8px;
@@ -221,6 +248,8 @@ body {
       }
 
     }
+
+
     .timeline {
       height: 150px;
 
@@ -233,14 +262,23 @@ body {
         width: 100%;
       }
     }
-
+    .footprint .size,
+    .summary .size {
+      color: $brightGrey;
+    }
     .rules {
-      height: 75px;
-
-      .rule {
+      min-height: 75px;
+      & > * {
+        padding-bottom: 0.5rem;
+      }
+      .set-rules {
+        display: flex;
+      }
+      .concise-rule {
         padding: 4px 8px;
         .default {
           color: $orange;
+          opacity: 0.8;
         }
         .type {
           .load {
@@ -312,6 +350,12 @@ body {
               }
               td {
                 padding: 2px 4px;
+                &.interval-start {
+                  color: $brightGrey;
+                  .sep {
+                    color: $darkGrey;
+                  }
+                }
               }
               &:nth-child(3n) {
                 border-bottom: 1px solid #3c3c47;
@@ -325,7 +369,7 @@ body {
         -webkit-flex: 1;
         font-size: 14px;
         .segment, .loading, .info {
-          background: #2E2E38;
+          background: $headerBackground;
           border: 1px solid $borderColor;
           border-radius: 15px;
           padding: 8px;
@@ -410,20 +454,10 @@ body {
           width: 16px;
         }
         td.name {
-          font-size: 16px;
-          line-height: 1.5;
+          font-size: 1rem;
+          line-height: 1.75;
           & > a:after {
             content: "\00a0";
-          }
-
-          .rule-editor-link {
-            font-size: 85%;
-            a {
-              color: $grey;
-              &:hover {
-                color: $white;
-              }
-            }
           }
         }
         td.rules {
@@ -451,6 +485,12 @@ body {
             color: $red;
           }
         }
+        td.name {
+          i.realtime {
+            padding-left: 0.5em;
+            color: $yellow;
+          }
+        }
       }
       tr.key {
         td {
@@ -463,11 +503,80 @@ body {
   .cluster-view {
     #data-sources {
       width: 240px;
+      min-width: 240px;
       border-right: 1px solid $borderColor;
+      .data-source-task-filter:hover {
+        color: $brightGrey;
+        cursor: pointer;
+      }
+    }
+    #cluster {
+
+    }
+    #indexing {
+      vertical-align: top;
+
+      h2 {
+        font-size: 24px;
+        padding-top: 0.5em;
+        padding-bottom: 0.25em;
+      }
+      h3 {
+        font-size: 18px;
+        padding: 0.25em 8px 0.5em;
+      }
+      svg.running-tasks, svg.scaling-activity {
+        circle.task {
+          fill-opacity: 0.5;
+        }
+        .axis {
+          path.domain {
+            fill: none;
+            stroke: $baseColor;
+          }
+          .tick {
+            line {
+              stroke: $baseColor;
+            }
+            text {
+              fill: $baseColor;
+            }
+          }
+        }
+      }
+      table.tasks {
+        td {
+          padding: 0.5rem;
+          line-height: 1.5;
+        }
+        tr:hover {
+          background: black;
+        }
+        .id, .absolute {
+          color: $grey;
+        }
+      }
+      svg.scaling-activity {
+        path.history {
+          fill: $headerBackground;
+        }
+        line.event {
+          stroke-width: 3px;
+          stroke-linecap: round;
+          &:hover {
+            stroke-width: 6px;
+          }
+          &.PROVISION {
+            stroke: $blue;
+          }
+          &.TERMINATE {
+            stroke: $red;
+          }
+        }
+      }
     }
 
-
-    #tiers {
+    #historical {
       vertical-align: top;
 
       .tier {
@@ -478,10 +587,13 @@ body {
 
         h2 {
           font-size: 24px;
+          min-height: 75px;
           .queue {
             font-size: 12px;
             &.load {
-              color: #EEE;
+              .unloaded {
+                color: #EEE;
+              }
               .bytes {
                 color: $red;
                 font-weight: bold;
@@ -505,8 +617,8 @@ body {
 
         tier-capacity {
           padding: 0px 4px;
-          padding-top: 0.5em;
-          padding-bottom: 1em;
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
 
           display: flex;
           display: -webkit-flex;
@@ -515,7 +627,7 @@ body {
 
           div.labels {
             width: 168px;
-            height: 180px;
+            height: 128px;
             padding-left: 0.5em;
 
             .value {
@@ -525,6 +637,7 @@ body {
               & > * {
                 margin-bottom: 4px;
               }
+              line-height: 1.25;
             }
 
             .bottom-labels {
@@ -548,6 +661,9 @@ body {
                 color: $white;
               }
             }
+            .size-label {
+              font-size: 75%;
+            }
             .maxSize {
               font-size: 18px;
               // font-weight: bold;
@@ -555,6 +671,9 @@ body {
             }
             .currSize {
               font-size: 16px;
+              .percent {
+                color: $white;
+              }
               // font-weight: bold;
               // color: $white;
             }
@@ -618,6 +737,12 @@ body {
           }
         }
 
+        .node-toggle {
+          padding-bottom: 0.5em;
+          &:hover {
+            color: $white;
+          }
+        }
         tier-nodes table {
           margin-left: 4px;
           tr.node {
@@ -651,7 +776,7 @@ body {
         }
 
         tbody tr:hover {
-          background: #2E2E38;
+          background: $headerBackground;
         }
 
         td.footprint {
@@ -789,6 +914,17 @@ body {
     h1 {
       font-size: 18px;
     }
+
+    a, a:link, a:visited {
+      text-decoration:none;
+      color: black;
+    }
+    a:hover {
+      text-decoration: underline;
+      color: $baseColor;
+    }
+
+
     .rule {
       height: 120px;
       margin-bottom: 10px;
@@ -849,6 +985,117 @@ body {
   }
 }
 
+.rule-editor-link {
+  a {
+    color: $baseColor;
+    &:hover {
+      color: $green;
+    }
+  }
+}
+
+#audit-info {
+  textarea, input {
+    &.ng-invalid {
+      border-color: $red;
+      box-shadow: inset 0px 1px 60px 4px rgba(241, 96, 101, .2);
+    }
+  }
+}
+
+.audit-history {
+  i {
+    color: $baseColor;
+    &:hover {
+      color: $green;
+    }
+  }
+}
+
+.history-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1001;
+  background-color: rgba(0,0,0,0.8);
+  margin: 0;
+
+  .history {
+    background-color: $backgroundBlack;
+    margin: 10rem auto;
+    padding-bottom: 0.5rem;
+    width: 60%;
+    font-size: 1rem;
+    height: 100%;
+    overflow-y: scroll;
+
+    h1 {
+      font-size: 1.6rem;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+    .audit-item {
+      margin-bottom: 1.5rem;
+      & > * {
+        padding: 0px 8px;
+      }
+      h2 {
+        font-size: 1.2rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.25rem;
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        color: $grey;
+      }
+      .by {
+        padding-top: 0.5rem;
+      }
+      .author {
+        color: $white;
+      }
+      .comment {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        .comment-label {
+          font-size: 10px;
+        }
+        .comment-value {
+          color: $white;
+        }
+      }
+    }
+    .no-history, .loading {
+      padding: 1rem 8px;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+    .no-history {
+      color: $red;
+    }
+    .loading {
+      i {
+        font-size: 10rem;
+        color: $yellow;
+      }
+    }
+  }
+}
+.heartbeat {
+  color: $brightGrey;
+  line-height: 1.3;
+  border-left: 1px solid $borderColor;
+  padding: 0px 4px;
+  a { /* unvisited link */
+    color: $baseColor;
+    &:visited { color:$baseColor; } /* visited link */
+    &:hover { color: $green; } /* mouse over link */
+    &:active { color: $green; } /* selected link */
+  }
+}
+
 #floatingCirclesG{
 position:relative;
 width:128px;
@@ -859,7 +1106,7 @@ transform:scale(0.6);
 
 .f_circleG{
 position:absolute;
-background-color:#2E2E38;
+background-color:$headerBackground;
 height:23px;
 width:23px;
 -webkit-border-radius:12px;
@@ -935,7 +1182,7 @@ animation-delay:1.3s;
 background-color:$baseColor}
 
 100%{
-background-color:#2E2E38}
+background-color:$headerBackground}
 
 }
 
@@ -944,6 +1191,6 @@ background-color:#2E2E38}
 background-color:$baseColor}
 
 100%{
-background-color:#2E2E38}
+background-color:$headerBackground}
 
 }
