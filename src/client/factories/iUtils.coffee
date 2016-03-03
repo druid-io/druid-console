@@ -2,7 +2,7 @@ moment = require '../../../bower_components/moment/min/moment.min.js'
 
 module.exports = ->
   parseTaskId: (taskId) ->
-    m = taskId.match /^((hadoop_convert_segment)|index_(hadoop|realtime)|(archive))_(.+)_(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/
+    m = taskId.match /^((hadoop_convert_segment)|index_(hadoop|realtime|spark)|(archive))_(.+)_(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/
     type = m[3]
     type ||= m[2]
     throw Error("Can't parse #{taskId}") unless m
