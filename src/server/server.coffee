@@ -38,7 +38,8 @@ app.all '/pass/coordinator/:cluster*', (req, res) ->
       res.send(500, { error: "can't find #{druidZk}, #{err}" })
       return
 
-    console.log "Proxying to druid coordinator at http://#{loc.host}:#{loc.port}#{req.url}"
+
+    console.log "Proxying to druid coordinator at #{getHttpHostAndPort(loc)}#{req.url}"
 
     doOnCoordinator loc, res, (coordHostPort) =>
       target = if coordHostPort.indexOf("http") < 0 then "http://#{coordHostPort}" else coordHostPort
@@ -55,8 +56,9 @@ app.all '/pass/indexer/:cluster*', (req, res) ->
       res.send(500, { error: "can't find #{druidZk}, #{err}" })
       return
 
-    console.log "Proxying to indexer at http://#{loc.host}:#{loc.port}#{req.url}"
-    proxy.web req, res, {target: "http://#{loc.host}:#{loc.port}"}
+    target = getHttpHostAndPort(loc)
+    console.log "Proxying to indexer at #{target}#{req.url}"
+    proxy.web req, res, {target}
     return
   return
 
@@ -69,8 +71,9 @@ app.get '/pass/bard/:cluster*', (req, res) ->
       res.send(500, { error: "can't find #{bardZk} - #{err}" })
       return
 
-    console.log "Proxying to bard at http://#{loc.host}:#{loc.port}#{req.url}"
-    proxy.web req, res, {target: "http://#{loc.host}:#{loc.port}"}
+    target = getHttpHostAndPort(loc)
+    console.log "Proxying to bard at #{target}#{req.url}"
+    proxy.web req, res, {target}
     return
   return
 
@@ -91,6 +94,10 @@ app.use('/css', express.static(path.join(rootPath, 'bower_components/bootstrap/d
 
 app.disable('x-powered-by')
 
+getHttpHostAndPort = (loc) ->
+  targetHost = if loc.host.indexOf("http") < 0 then "http://#{loc.host}" else loc.host
+  return "#{targetHost}:#{loc.port}"
+
 handleError = (res, statusCode, msg, err) ->
   console.log 'ERROR', msg, err
   res.send(statusCode, { msg: msg, error: err })
@@ -104,7 +111,7 @@ respondWithResult = (res) -> (err, result) ->
 
 doOnCoordinator = (location, res, cb) ->
   request({
-    url: "http://#{location.host}:#{location.port}/druid/coordinator/v1/leader"
+    url: "#{getHttpHostAndPort(location)}/druid/coordinator/v1/leader"
   }, (error, response, coordHostPort) =>
     return handleError(res, 500, 'finding coordinator', error) if error or response.statusCode != 200
     cb(coordHostPort)
