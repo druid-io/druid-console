@@ -11,7 +11,7 @@
     }
   ],
   "engines": {
-      "node": "v0.10.40"
+    "node": "v8.9.4"
   },
   "repository": {
     "type": "git",
@@ -19,36 +19,36 @@
   },
   "readmeFilename": "README.md",
   "dependencies": {
-    "bower": "~1.4.1",
     "async": "^0.9.0",
-    "coffee-script": "~1.7.1",
+    "bower": "~1.8.2",
+    "coffeescript": "~2.1.1",
     "express": "~3.5.1",
     "http-proxy": "~1.11.1",
-    "locators": "^0.2.3",
-    "node-zookeeper-client": "~0.2.1",
+    "locators": "~2.0.2",
+    "node-zookeeper-client": "~0.2.2",
     "nodemon": "~1.0.17",
     "request": "~2.34.0"
   },
   "devDependencies": {
-    "browserify": "~4.1.9",
+    "browserify": "~15.1.0",
+    "browserify-shim": "~3.8.14",
+    "coffeeify": "~3.0.1",
+    "deep-diff": "~0.3.8",
     "gulp": "~3.6.0",
-    "node-sass": "~3.2.0",
-    "gulp-sass": "~2.0.4",
     "gulp-concat": "~2.2.0",
+    "gulp-sass": "~2.0.4",
+    "jasmine-core": "^2.8.0",
+    "karma": "~1.7.1",
+    "karma-browserify": "~5.1.3",
+    "karma-chrome-launcher": "~2.2.0",
+    "karma-coffee-preprocessor": "~1.0.1",
+    "karma-coverage": "~1.1.1",
+    "karma-jasmine": "~1.1.1",
+    "karma-requirejs": "~1.1.0",
+    "node-sass": "~4.7.2",
+    "requirejs": "~2.3.5",
     "vinyl-source-stream": "~0.1.1",
-    "coffeeify": "~0.6.0",
-    "browserify": "~4.1.9",
-    "watchify": "~0.10.2",
-    "browserify-shim": "~3.5.0",
-    "deep-diff": "~0.1.7",
-    "karma": "~0.12.5",
-    "karma-browserify": "^4.1.2",
-    "karma-chrome-launcher": "~0.1.3",
-    "karma-coffee-preprocessor": "~0.2.1",
-    "karma-coverage": "^0.2.7",
-    "karma-jasmine": "~0.1.5",
-    "karma-requirejs": "~0.2.1",
-    "requirejs": "~2.1.11"
+    "watchify": "~3.9.0"
   },
   "browserify": {
     "transform": [
@@ -59,6 +59,7 @@
     "jquery": "./bower_components/jQuery/dist/jquery.min.js"
   },
   "browserify-shim": {
-    "jquery": "$"
+    "jquery": "$",
+    "d3": "d3"
   }
 }

@@ -1,4 +1,4 @@
-hUtilsFactory = require '../../../src/factories/hUtils.coffee'
+hUtilsFactory = require '../../../src/client/factories/hUtils.coffee'
 
 describe '$hUtils', () ->
   $hUtils = undefined

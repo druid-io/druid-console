@@ -1,5 +1,6 @@
 _ = require '../../../bower_components/underscore/underscore.js'
 moment = require '../../../bower_components/moment/min/moment.min.js'
+d3 = require '../../../bower_components/d3/d3.js'
 
 module.exports = ($window, $filter, $compile) ->
   restrict: 'A'

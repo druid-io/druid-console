@@ -1,3 +1,5 @@
+d3 = require '../../../bower_components/d3/d3.js'
+
 module.exports = ->
   restrict: 'E'
   replace: true
