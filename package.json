@@ -59,7 +59,6 @@
     "jquery": "./bower_components/jQuery/dist/jquery.min.js"
   },
   "browserify-shim": {
-    "jquery": "$",
-    "d3": "d3"
+    "jquery": "$"
   }
 }
