@@ -4,21 +4,28 @@ request = require 'request'
 url = require 'url'
 httpProxy = require 'http-proxy'
 dns = require 'dns'
-
-zookeeperLocator = require '../../lib/zookeeperLocator'
-
-zookeeperSettings = {
-  hostname: process.env.ZK_HOSTNAME
-  serviceDiscPath: process.env.ZK_SERVICE_DISC_PATH
-}
+{ SimpleLocator, ZookeeperLocator } = require 'locators'
 
 app = express()
 
-zkManager = null
-dns.resolve4 zookeeperSettings.hostname, (err, addresses) ->
+zkHostname = process.env.ZK_HOSTNAME
+zkDiscovery = null
+
+getZkDruidCoordinator = (req) -> "druid:#{req.params.cluster}:master"
+getZkDruidIndexer = (req) -> "druid:#{req.params.cluster}:indexer"
+getZkDruidBard = (req) -> "druid:#{req.params.cluster}:bard"
+
+getDruidLocator = (druidZkLocation) ->
+  zkDiscovery(druidZkLocation)()
+
+dns.resolve4 zkHostname, (err, addresses) ->
   throw err if err
-  console.log "#{zookeeperSettings.hostname} resolved to #{addresses.length} ZK node IP addresses: #{addresses.join(', ')}"
-  zkManager = zookeeperLocator { servers: addresses.join(',') + zookeeperSettings.serviceDiscPath }
+  console.log "#{zkHostname} resolved to #{addresses.length} ZK node IP addresses: #{addresses.join(', ')}"
+  zkLocator = SimpleLocator.getLocatorFactory()(zkHostname)
+  zkDiscovery = ZookeeperLocator.getLocatorFactory({
+    serverLocator: zkLocator,
+    path: process.env.ZK_SERVICE_DISC_PATH
+  })
 
 proxy = new httpProxy.createProxyServer({})
 
@@ -31,52 +38,41 @@ app.use(express.logger('dev'))
 
 app.all '/pass/coordinator/:cluster*', (req, res) ->
   req.url = req.url.replace(/\/pass\/coordinator\/[^\/]+\//, '/')
-  druidZk = "druid:#{req.params.cluster}:master"
-  zkManager(druidZk) (err, loc) ->
-    if err
-      console.log "can't find #{druidZk}", err
-      res.send(500, { error: "can't find #{druidZk}, #{err}" })
-      return
-
-
+  zkDruidCoordinator = getZkDruidCoordinator(req)
+  getDruidLocator(zkDruidCoordinator).then((loc) =>
     console.log "Proxying to druid coordinator at #{getHttpHostAndPort(loc)}#{req.url}"
 
     doOnCoordinator loc, res, (coordHostPort) =>
       target = if coordHostPort.indexOf("http") < 0 then "http://#{coordHostPort}" else coordHostPort
       proxy.web req, res, {target}
-    return
-  return
+  ).catch((err) ->
+    console.log "can't find #{zkDruidCoordinator}", err
+    res.send(500, { error: "can't find #{zkDruidCoordinator}, #{err}" })
+  )
 
 app.all '/pass/indexer/:cluster*', (req, res) ->
   req.url = req.url.replace(/\/pass\/indexer\/[^\/]+\//, '/')
-  druidZk = "druid:#{req.params.cluster}:indexer"
-  zkManager(druidZk) (err, loc) ->
-    if err
-      console.log "can't find #{druidZk}", err
-      res.send(500, { error: "can't find #{druidZk}, #{err}" })
-      return
-
+  zkDruidIndexer = getZkDruidIndexer(req)
+  getDruidLocator(zkDruidIndexer).then((loc) ->
     target = getHttpHostAndPort(loc)
     console.log "Proxying to indexer at #{target}#{req.url}"
     proxy.web req, res, {target}
-    return
-  return
+  ).catch((err) ->
+    console.log "can't find #{zkDruidIndexer}", err
+    res.send(500, { error: "can't find #{zkDruidIndexer}, #{err}" })
+  )
 
 app.get '/pass/bard/:cluster*', (req, res) ->
   req.url = req.url.replace(/\/pass\/bard\/[^\/]+\//, '/')
-  bardZk = "druid:#{req.params.cluster}:bard"
-  zkManager(bardZk) (err, loc) ->
-    if err
-      console.log "can't find #{bardZk}", err
-      res.send(500, { error: "can't find #{bardZk} - #{err}" })
-      return
-
+  zkDruidBard = getZkDruidBard(req)
+  getDruidLocator(zkDruidBard).then((loc) ->
     target = getHttpHostAndPort(loc)
     console.log "Proxying to bard at #{target}#{req.url}"
     proxy.web req, res, {target}
-    return
-  return
-
+  ).catch((err) ->
+    console.log "can't find #{zkDruidBard}", err
+    res.send(500, { error: "can't find #{zkDruidBard} - #{err}" })
+  )
 
 app.use(express.cookieParser())
 app.use(express.bodyParser())
@@ -124,25 +120,22 @@ app.get '/console*', (req, res) ->
   res.sendfile(path.join(rootPath, 'static/console.html'))
 
 app.get '/coordinator/:cluster', (req, res) ->
-  druidZk = "druid:#{req.params.cluster}:master"
-  zkManager(druidZk) (err, loc) ->
-    if err
-      console.log "can't find #{druidZk}", err
-      res.send(500, { error: "can't find #{druidZk}, #{err}" })
-      return
+  zkDruidCoordinator = getZkDruidCoordinator(req)
+  getDruidLocator(zkDruidCoordinator).then((loc) ->
     res.send loc
-  return
+  ).catch((err) ->
+    console.log "can't find #{zkDruidCoordinator}", err
+    res.send(500, { error: "can't find #{zkDruidCoordinator}, #{err}" })
+  )
 
 app.get '/overlord/:cluster', (req, res) ->
-  druidZk = "druid:#{req.params.cluster}:indexer"
-  zkManager(druidZk) (err, loc) ->
-    if err
-      console.log "can't find #{druidZk}", err
-      res.send(500, { error: "can't find #{druidZk}, #{err}" })
-      return
+  zkDruidIndexer = getZkDruidIndexer(req)
+  getDruidLocator(zkDruidIndexer).then((loc) ->
     res.send loc
-  return
-
+  ).catch((err) ->
+    console.log "can't find #{zkDruidIndexer}", err
+    res.send(500, { error: "can't find #{zkDruidIndexer}, #{err}" })
+  )
 
 port = if /^\d+$/.test process.argv[2] then parseInt(process.argv[2]) else 8080
 
