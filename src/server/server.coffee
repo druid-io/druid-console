@@ -28,12 +28,14 @@ handleError = (res, statusCode, msg, err) ->
   console.log('ERROR', msg, err)
   res.status(statusCode).send({ msg: msg, error: err })
 
-respondWithResult = (res) -> (err, result) ->
-  if err
-    res.status(500).json(err)
+respondWithResult =
+  (res) ->
+    (err, result) ->
+      if err
+        res.status(500).json(err)
+        return
+      res.status(200).json(result)
     return
-  res.status(200).json(result)
-  return
 
 doOnCoordinator = (location, res, cb) ->
   request({
@@ -44,7 +46,7 @@ doOnCoordinator = (location, res, cb) ->
   )
 
 # initialization
-console.log('Initializing druid-console-server...')
+console.log('Initializing druid-console server...')
 
 oneDay = 86400000
 oneYear = oneDay * 365
@@ -54,10 +56,11 @@ zkDiscovery = null
 
 proxy = new httpProxy.createProxyServer({})
 
-proxy.on 'error', (e) ->
+proxy.on('error', (e) ->
   console.log("proxy error: ", e)
+)
 
-rootPath = path.normalize(path.join(__dirname, '/../../') )
+rootPath = path.normalize(path.join(__dirname, '/../../'))
 
 app = express()
 
@@ -69,9 +72,10 @@ app.all('/pass/coordinator/:cluster*', (req, res) ->
   getDruidLocator(zkDruidCoordinator).then((loc) =>
     console.log("Proxying to druid coordinator at #{getHttpHostAndPort(loc)}#{req.url}")
 
-    doOnCoordinator loc, res, (coordHostPort) =>
+    doOnCoordinator(loc, res, (coordHostPort) =>
       target = if coordHostPort.indexOf("http") < 0 then "http://#{coordHostPort}" else coordHostPort
-      proxy.web req, res, {target}
+      proxy.web(req, res, {target})
+    )
   ).catch((err) ->
     console.log("can't find #{zkDruidCoordinator}", err)
     res.send(500, { error: "can't find #{zkDruidCoordinator}, #{err}" })
@@ -84,7 +88,7 @@ app.all('/pass/indexer/:cluster*', (req, res) ->
   getDruidLocator(zkDruidIndexer).then((loc) ->
     target = getHttpHostAndPort(loc)
     console.log("Proxying to indexer at #{target}#{req.url}")
-    proxy.web req, res, {target}
+    proxy.web(req, res, {target})
   ).catch((err) ->
     console.log("can't find #{zkDruidIndexer}", err)
     res.send(500, { error: "can't find #{zkDruidIndexer}, #{err}" })
@@ -97,7 +101,7 @@ app.get('/pass/bard/:cluster*', (req, res) ->
   getDruidLocator(zkDruidBard).then((loc) ->
     target = getHttpHostAndPort(loc)
     console.log("Proxying to bard at #{target}#{req.url}")
-    proxy.web req, res, {target}
+    proxy.web(req, res, {target})
   ).catch((err) ->
     console.log("can't find #{zkDruidBard}", err)
     res.send(500, { error: "can't find #{zkDruidBard} - #{err}" })
@@ -121,7 +125,6 @@ app.use('/css', express.static(path.join(rootPath, 'bower_components/font-awesom
 app.use('/css', express.static(path.join(rootPath, 'bower_components/bootstrap/dist/css')))
 
 app.disable('x-powered-by')
-
 
 app.get('/console*', (req, res) ->
   res.sendfile(path.join(rootPath, 'static/console.html'))
