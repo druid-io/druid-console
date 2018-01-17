@@ -112,11 +112,11 @@ app.get('/', (req, res) ->
   res.redirect(302, '/console/prod/#/')
 )
 
-app.use('/', cookieParser())
-app.use('/', bodyParser.raw())
-app.use('/', methodOverride())
-app.use('/', compression())
-app.use('/', express.json())
+app.use(cookieParser())
+app.use(bodyParser.raw())
+app.use(methodOverride())
+app.use(compression())
+app.use(express.json())
 
 app.use(express.static(path.join(rootPath, 'static'), { maxAge: oneYear }))
 app.use(express.static(path.join(rootPath, 'build')))
