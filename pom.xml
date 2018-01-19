@@ -147,6 +147,21 @@
                 <goal>gulp</goal>
               </goals>
             </execution>
+
+            <execution>
+              <id>unit tests</id>
+              <goals>
+                <goal>karma</goal>
+              </goals>
+              <!-- optional: the default plase is "test". Some developers
+              choose to run karma in the "integration-test" phase. -->
+              <phase>test</phase>
+
+              <configuration>
+                <!-- optional: the default is "karma.conf.js" in your working directory -->
+                <karmaConfPath>test/karma.conf.js</karmaConfPath>
+              </configuration>
+            </execution>
           </executions>
         </plugin>
       </plugins>

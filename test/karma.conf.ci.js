@@ -45,7 +45,13 @@
       exclude: [],
       // test results reporter to use
       // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-      reporters: ['progress', 'coverage'],
+      reporters: ['progress', 'coverage', 'junit'],
+      junitReporter: {
+        outputDir: 'test/output/junit',
+        outputFile: 'karma.xml',
+        suite: '',
+        useBrowserName: false
+      },
       // web server port
       port: 8080,
       // enable / disable colors in the output (reporters and logs)
@@ -54,7 +60,7 @@
       // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
       logLevel: config.LOG_INFO,
       // enable / disable watching file and executing tests whenever any file changes
-      autoWatch: true,
+      autoWatch: false,
       // Start these browsers, currently available:
       // - Chrome
       // - ChromeCanary
