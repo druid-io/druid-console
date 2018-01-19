@@ -153,13 +153,9 @@
               <goals>
                 <goal>karma</goal>
               </goals>
-              <!-- optional: the default plase is "test". Some developers
-              choose to run karma in the "integration-test" phase. -->
               <phase>test</phase>
-
               <configuration>
-                <!-- optional: the default is "karma.conf.js" in your working directory -->
-                <karmaConfPath>test/karma.conf.js</karmaConfPath>
+                <karmaConfPath>test/karma.conf.ci.js</karmaConfPath>
               </configuration>
             </execution>
           </executions>
