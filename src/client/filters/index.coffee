@@ -1,4 +1,5 @@
 _ = require '../../../bower_components/underscore/underscore.js'
+d3 = require '../../../bower_components/d3/d3.js'
 
 app = angular.module 'druid'
 

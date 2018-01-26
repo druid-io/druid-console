@@ -1,5 +1,10 @@
-@import url(//fonts.googleapis.com/css?family=Roboto:400,700,400italic,500);
-/* line 5, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* Eric Meyer's CSS Reset
+   http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+   This is a Sass partial
+*/
+@import url("//fonts.googleapis.com/css?family=Roboto:400,700,400italic,500");
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -16,95 +21,80 @@ time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
-  font: inherit;
   font-size: 100%;
+  font: inherit;
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+
 q:before, q:after, blockquote:before, blockquote:after {
-  content: "";
+  content: '';
   content: none;
 }
 
-/* line 32, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../../../usr/local/lib/ruby/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/reset/_utilities.scss */
+/* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
 
-/* line 38, ../src/client/druid.scss */
 .tier-0 {
   color: #82bf41;
 }
 
-/* line 41, ../src/client/druid.scss */
 .tier-1 {
   color: #36bebd;
 }
 
-/* line 44, ../src/client/druid.scss */
 .tier-2 {
   color: #757bbb;
 }
 
-/* line 47, ../src/client/druid.scss */
 .tier-3 {
   color: #8968ad;
 }
 
-/* line 50, ../src/client/druid.scss */
 .tier-4 {
   color: #b25fa5;
 }
 
-/* line 53, ../src/client/druid.scss */
 .tier-5 {
   color: #e69545;
 }
 
-/* line 56, ../src/client/druid.scss */
 .tier-6 {
   color: #5ca0d7;
 }
 
-/* line 59, ../src/client/druid.scss */
 .tier-7 {
   color: #f16065;
 }
 
-/* line 64, ../src/client/druid.scss */
 html {
   font-family: Roboto,Helvetica,Arial,freesans,clean,sans-serif;
   width: 100%;
@@ -113,24 +103,23 @@ html {
   cursor: default;
   background: #22222A;
 }
-/* line 73, ../src/client/druid.scss */
+
 html a, html a:link, html a:visited {
   text-decoration: none;
   color: #d8d8dd;
 }
-/* line 77, ../src/client/druid.scss */
+
 html a:hover {
   color: #fff;
   text-decoration: underline;
 }
 
-/* line 83, ../src/client/druid.scss */
 body {
   color: #858597;
   background: #22222A;
   height: 100%;
 }
-/* line 88, ../src/client/druid.scss */
+
 body header {
   min-height: 40px;
   max-height: 40px;
@@ -146,11 +135,11 @@ body header {
   -webkit-justify-content: flex-start;
   align-items: baseline;
 }
-/* line 104, ../src/client/druid.scss */
+
 body header > * {
   align-self: flex-start;
 }
-/* line 107, ../src/client/druid.scss */
+
 body header h1 {
   padding-left: 8px;
   min-width: 239px;
@@ -161,23 +150,23 @@ body header h1 {
   color: #858597;
   border-bottom: none;
 }
-/* line 116, ../src/client/druid.scss */
+
 body header h1 span.data-source-name {
   color: #fefefe;
 }
-/* line 119, ../src/client/druid.scss */
+
 body header h1 a:link, body header h1 a:visited {
   color: #fefefe;
 }
-/* line 122, ../src/client/druid.scss */
+
 body header h1 a:hover {
   color: #8968ad;
 }
-/* line 125, ../src/client/druid.scss */
+
 body header h1 .summary {
   font-size: 14px;
 }
-/* line 130, ../src/client/druid.scss */
+
 body header site-nav {
   align-items: baseline;
   display: flex;
@@ -185,40 +174,40 @@ body header site-nav {
   flex-direction: row;
   -webkit-flex-flow: row nowrap;
 }
-/* line 136, ../src/client/druid.scss */
+
 body header site-nav > * {
   align-self: flex-start;
 }
-/* line 139, ../src/client/druid.scss */
+
 body header site-nav .nav {
   font-size: 16px;
 }
-/* line 144, ../src/client/druid.scss */
+
 body header site-nav .nav li a {
   color: #d8d8dd;
   padding: 8px 15px;
 }
-/* line 147, ../src/client/druid.scss */
+
 body header site-nav .nav li a:hover {
   color: #fefefe;
   background: #858597;
 }
-/* line 153, ../src/client/druid.scss */
+
 body header site-nav .nav li.active a {
   background: #3f6e94;
 }
-/* line 155, ../src/client/druid.scss */
+
 body header site-nav .nav li.active a:hover {
   background: #3f6e94;
   color: #22222A;
 }
-/* line 162, ../src/client/druid.scss */
+
 body header site-nav div.og-console-links {
   line-height: 1.3;
   border-left: 1px solid #1B1A20;
   padding: 0px 4px;
 }
-/* line 166, ../src/client/druid.scss */
+
 body header site-nav div.og-console-links a {
   /* unvisited link */
   color: #9a7795;
@@ -226,38 +215,38 @@ body header site-nav div.og-console-links a {
   /* mouse over link */
   /* selected link */
 }
-/* line 168, ../src/client/druid.scss */
+
 body header site-nav div.og-console-links a:visited {
   color: #9a7795;
 }
-/* line 169, ../src/client/druid.scss */
+
 body header site-nav div.og-console-links a:hover {
   color: #b25fa5;
 }
-/* line 170, ../src/client/druid.scss */
+
 body header site-nav div.og-console-links a:active {
   color: #b25fa5;
 }
-/* line 176, ../src/client/druid.scss */
+
 body .primary-view .breadcrumb {
   font-size: 18px;
   padding: 8px;
   margin: 0px;
   background: #1B1A20;
 }
-/* line 181, ../src/client/druid.scss */
+
 body .primary-view .breadcrumb > li + li:before {
   color: #d8d8dd;
 }
-/* line 184, ../src/client/druid.scss */
+
 body .primary-view .breadcrumb a, body .primary-view .breadcrumb a:visited {
   color: #858597;
 }
-/* line 187, ../src/client/druid.scss */
+
 body .primary-view .breadcrumb > .active {
   color: #fefefe;
 }
-/* line 192, ../src/client/druid.scss */
+
 body .cluster-view, body .data-sources-view, body .data-source-view {
   display: flex;
   display: -webkit-flex;
@@ -266,7 +255,7 @@ body .cluster-view, body .data-sources-view, body .data-source-view {
   flex-direction: column;
   -webkit-flex-flow: column nowrap;
 }
-/* line 200, ../src/client/druid.scss */
+
 body .cluster-view h1, body .cluster-view h2, body .data-sources-view h1, body .data-sources-view h2, body .data-source-view h1, body .data-source-view h2 {
   color: #858597;
   background: #2E2E38;
@@ -274,7 +263,7 @@ body .cluster-view h1, body .cluster-view h2, body .data-sources-view h1, body .
   border-bottom: 1px solid #1B1A20;
   padding: 0px 8px;
 }
-/* line 208, ../src/client/druid.scss */
+
 body .cluster-view #middle, body .data-sources-view #middle, body .data-source-view #middle {
   flex: 1;
   -webkit-flex: 1;
@@ -286,15 +275,15 @@ body .cluster-view #middle, body .data-sources-view #middle, body .data-source-v
   -webkit-flex-flow: row nowrap;
   border-top: 1px solid #1B1A20;
 }
-/* line 221, ../src/client/druid.scss */
+
 body .tier.hot {
   color: #f16065;
 }
-/* line 224, ../src/client/druid.scss */
+
 body .tier._default_tier {
   color: #5ca0d7;
 }
-/* line 229, ../src/client/druid.scss */
+
 body .data-source-view .rules, body .data-source-view .timeline {
   border-top: 1px solid #1B1A20;
   display: flex;
@@ -302,7 +291,7 @@ body .data-source-view .rules, body .data-source-view .timeline {
   justify-content: flex-start;
   -webkit-justify-content: flex-start;
 }
-/* line 237, ../src/client/druid.scss */
+
 body .data-source-view .rules h2, body .data-source-view .timeline h2 {
   font-size: 18px;
   border-bottom: none;
@@ -311,62 +300,62 @@ body .data-source-view .rules h2, body .data-source-view .timeline h2 {
   max-width: 240px;
   width: 240px;
 }
-/* line 244, ../src/client/druid.scss */
+
 body .data-source-view .rules h2 > div, body .data-source-view .timeline h2 > div {
   margin-left: 1em;
   font-size: 14px;
 }
-/* line 253, ../src/client/druid.scss */
+
 body .data-source-view .timeline {
   height: 150px;
 }
-/* line 257, ../src/client/druid.scss */
+
 body .data-source-view .timeline h2 .download {
   margin-top: 8px;
 }
-/* line 261, ../src/client/druid.scss */
+
 body .data-source-view .timeline > div {
   width: 100%;
 }
-/* line 265, ../src/client/druid.scss */
+
 body .data-source-view .footprint .size,
 body .data-source-view .summary .size {
   color: #d8d8dd;
 }
-/* line 269, ../src/client/druid.scss */
+
 body .data-source-view .rules {
   min-height: 75px;
 }
-/* line 271, ../src/client/druid.scss */
+
 body .data-source-view .rules > * {
   padding-bottom: 0.5rem;
 }
-/* line 274, ../src/client/druid.scss */
+
 body .data-source-view .rules .set-rules {
   display: flex;
 }
-/* line 277, ../src/client/druid.scss */
+
 body .data-source-view .rules .concise-rule {
   padding: 4px 8px;
 }
-/* line 279, ../src/client/druid.scss */
+
 body .data-source-view .rules .concise-rule .default {
   color: #e69545;
   opacity: 0.8;
 }
-/* line 284, ../src/client/druid.scss */
+
 body .data-source-view .rules .concise-rule .type .load {
   color: #5ca0d7;
 }
-/* line 287, ../src/client/druid.scss */
+
 body .data-source-view .rules .concise-rule .type .drop {
   color: #f16065;
 }
-/* line 291, ../src/client/druid.scss */
+
 body .data-source-view .rules .concise-rule .period, body .data-source-view .rules .concise-rule .interval {
   color: #fefefe;
 }
-/* line 297, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments {
   flex: 1;
   -webkit-flex: 1;
@@ -376,12 +365,12 @@ body .data-source-view #intervals-segments {
   flex-direction: row;
   -webkit-flex-flow: row nowrap;
 }
-/* line 306, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments h2 {
   padding-top: 1em;
   padding-bottom: 0.5em;
 }
-/* line 311, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .dynamic-list {
   bottom: 0;
   left: 0;
@@ -390,11 +379,11 @@ body .data-source-view #intervals-segments .dynamic-list {
   right: 0;
   top: 0;
 }
-/* line 319, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .time-sep {
   color: rgba(133, 133, 151, 0.3);
 }
-/* line 323, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master {
   flex: 1;
   -webkit-flex: 1;
@@ -405,54 +394,54 @@ body .data-source-view #intervals-segments .intervals-master {
   position: relative;
   font-size: 14px;
 }
-/* line 333, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master input {
   width: 8em;
 }
-/* line 336, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master table {
   margin-left: 16px;
 }
-/* line 338, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master table .count, body .data-source-view #intervals-segments .intervals-master table .size {
   text-align: right;
 }
-/* line 341, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master table td, body .data-source-view #intervals-segments .intervals-master table th {
   padding: 2px 4px;
 }
-/* line 344, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master table tbody {
   line-height: 1.3;
 }
-/* line 347, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master table tbody tr:hover {
   color: #d8d8dd;
   background: #1B1A20;
 }
-/* line 351, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master table tbody tr td {
   padding: 2px 4px;
 }
-/* line 353, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master table tbody tr td.interval-start {
   color: #d8d8dd;
 }
-/* line 355, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master table tbody tr td.interval-start .sep {
   color: #424253;
 }
-/* line 360, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-master table tbody tr:nth-child(3n) {
   border-bottom: 1px solid #3c3c47;
 }
-/* line 367, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail {
   flex: 1;
   -webkit-flex: 1;
   font-size: 14px;
 }
-/* line 371, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .segment, body .data-source-view #intervals-segments .intervals-detail .loading, body .data-source-view #intervals-segments .intervals-detail .info {
   background: #2E2E38;
   border: 1px solid #1B1A20;
@@ -462,38 +451,38 @@ body .data-source-view #intervals-segments .intervals-detail .segment, body .dat
   max-width: 600px;
   font-size: 13px;
 }
-/* line 380, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .segment {
   display: flex;
   display: -webkit-flex;
   flex-direction: column;
   -webkit-flex-flow: column nowrap;
 }
-/* line 386, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .segment .segment-id {
   text-align: center;
 }
-/* line 388, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .segment .segment-id a:link, body .data-source-view #intervals-segments .intervals-detail .segment .segment-id a:visited {
   color: #2a6496;
 }
-/* line 391, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .segment .segment-id a:hover {
   color: #428bca;
 }
-/* line 399, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .segment .s3 i {
   color: #e47911;
 }
-/* line 404, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .segment .summary {
   font-size: 16px;
 }
-/* line 408, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .segment .summary :nth-child(3), body .data-source-view #intervals-segments .intervals-detail .segment .specifics :nth-child(3) {
   text-align: right;
 }
-/* line 412, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .segment > * {
   width: 100%;
   flex: 1;
@@ -504,12 +493,12 @@ body .data-source-view #intervals-segments .intervals-detail .segment > * {
   flex-direction: row;
   -webkit-flex-flow: row nowrap;
 }
-/* line 423, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .segment > * > * {
   flex: 1;
   -webkit-flex: 1;
 }
-/* line 429, ../src/client/druid.scss */
+
 body .data-source-view #intervals-segments .intervals-detail .loading {
   display: flex;
   display: -webkit-flex;
@@ -518,182 +507,182 @@ body .data-source-view #intervals-segments .intervals-detail .loading {
   justify-content: flex-start;
   -webkit-justify-content: flex-start;
 }
-/* line 447, ../src/client/druid.scss */
+
 body .cluster-view #data-sources h2, body .data-sources-view #data-sources h2 {
   font-size: 24px;
 }
-/* line 450, ../src/client/druid.scss */
+
 body .cluster-view #data-sources table, body .data-sources-view #data-sources table {
   border-collapse: inherit;
   padding: 0px 8px;
 }
-/* line 453, ../src/client/druid.scss */
+
 body .cluster-view #data-sources table td:first-child, body .cluster-view #data-sources table th:first-child, body .data-sources-view #data-sources table td:first-child, body .data-sources-view #data-sources table th:first-child {
   width: 16px;
 }
-/* line 456, ../src/client/druid.scss */
+
 body .cluster-view #data-sources table td.name, body .data-sources-view #data-sources table td.name {
   font-size: 1rem;
   line-height: 1.75;
 }
-/* line 459, ../src/client/druid.scss */
+
 body .cluster-view #data-sources table td.name > a:after, body .data-sources-view #data-sources table td.name > a:after {
   content: "\00a0";
 }
-/* line 463, ../src/client/druid.scss */
+
 body .cluster-view #data-sources table td.rules, body .data-sources-view #data-sources table td.rules {
   width: 240px;
 }
-/* line 467, ../src/client/druid.scss */
+
 body .cluster-view #data-sources tr.data-source, body .data-sources-view #data-sources tr.data-source {
   line-height: 1.3;
 }
-/* line 470, ../src/client/druid.scss */
+
 body .cluster-view #data-sources tr.data-source.unhappy .name, body .data-sources-view #data-sources tr.data-source.unhappy .name {
   font-weight: bold;
   color: #EEE;
 }
-/* line 474, ../src/client/druid.scss */
+
 body .cluster-view #data-sources tr.data-source .load-status, body .cluster-view #data-sources tr.data-source .replication, body .data-sources-view #data-sources tr.data-source .load-status, body .data-sources-view #data-sources tr.data-source .replication {
   padding-right: 0.2em;
 }
-/* line 478, ../src/client/druid.scss */
+
 body .cluster-view #data-sources tr.data-source .load-status.loaded, body .data-sources-view #data-sources tr.data-source .load-status.loaded {
   color: #5ca0d7;
 }
-/* line 481, ../src/client/druid.scss */
+
 body .cluster-view #data-sources tr.data-source .load-status.one-percent, body .data-sources-view #data-sources tr.data-source .load-status.one-percent {
   color: #c6c631;
 }
-/* line 484, ../src/client/druid.scss */
+
 body .cluster-view #data-sources tr.data-source .load-status.unloaded, body .data-sources-view #data-sources tr.data-source .load-status.unloaded {
   color: #f16065;
 }
-/* line 489, ../src/client/druid.scss */
+
 body .cluster-view #data-sources tr.data-source td.name i.realtime, body .data-sources-view #data-sources tr.data-source td.name i.realtime {
   padding-left: 0.5em;
   color: #c6c631;
 }
-/* line 496, ../src/client/druid.scss */
+
 body .cluster-view #data-sources tr.key td, body .data-sources-view #data-sources tr.key td {
   padding-top: 1em;
 }
-/* line 504, ../src/client/druid.scss */
+
 body .cluster-view #data-sources {
   width: 240px;
   min-width: 240px;
   border-right: 1px solid #1B1A20;
 }
-/* line 508, ../src/client/druid.scss */
+
 body .cluster-view #data-sources .data-source-task-filter:hover {
   color: #d8d8dd;
   cursor: pointer;
 }
-/* line 516, ../src/client/druid.scss */
+
 body .cluster-view #indexing {
   vertical-align: top;
 }
-/* line 519, ../src/client/druid.scss */
+
 body .cluster-view #indexing h2 {
   font-size: 24px;
   padding-top: 0.5em;
   padding-bottom: 0.25em;
 }
-/* line 524, ../src/client/druid.scss */
+
 body .cluster-view #indexing h3 {
   font-size: 18px;
   padding: 0.25em 8px 0.5em;
 }
-/* line 529, ../src/client/druid.scss */
+
 body .cluster-view #indexing svg.running-tasks circle.task, body .cluster-view #indexing svg.scaling-activity circle.task {
   fill-opacity: 0.5;
 }
-/* line 533, ../src/client/druid.scss */
+
 body .cluster-view #indexing svg.running-tasks .axis path.domain, body .cluster-view #indexing svg.scaling-activity .axis path.domain {
   fill: none;
   stroke: #858597;
 }
-/* line 538, ../src/client/druid.scss */
+
 body .cluster-view #indexing svg.running-tasks .axis .tick line, body .cluster-view #indexing svg.scaling-activity .axis .tick line {
   stroke: #858597;
 }
-/* line 541, ../src/client/druid.scss */
+
 body .cluster-view #indexing svg.running-tasks .axis .tick text, body .cluster-view #indexing svg.scaling-activity .axis .tick text {
   fill: #858597;
 }
-/* line 548, ../src/client/druid.scss */
+
 body .cluster-view #indexing table.tasks td {
   padding: 0.5rem;
   line-height: 1.5;
 }
-/* line 552, ../src/client/druid.scss */
+
 body .cluster-view #indexing table.tasks tr:hover {
   background: black;
 }
-/* line 555, ../src/client/druid.scss */
+
 body .cluster-view #indexing table.tasks .id, body .cluster-view #indexing table.tasks .absolute {
   color: #C8C8C8;
 }
-/* line 560, ../src/client/druid.scss */
+
 body .cluster-view #indexing svg.scaling-activity path.history {
   fill: #2E2E38;
 }
-/* line 563, ../src/client/druid.scss */
+
 body .cluster-view #indexing svg.scaling-activity line.event {
   stroke-width: 3px;
   stroke-linecap: round;
 }
-/* line 566, ../src/client/druid.scss */
+
 body .cluster-view #indexing svg.scaling-activity line.event:hover {
   stroke-width: 6px;
 }
-/* line 569, ../src/client/druid.scss */
+
 body .cluster-view #indexing svg.scaling-activity line.event.PROVISION {
   stroke: #5ca0d7;
 }
-/* line 572, ../src/client/druid.scss */
+
 body .cluster-view #indexing svg.scaling-activity line.event.TERMINATE {
   stroke: #f16065;
 }
-/* line 579, ../src/client/druid.scss */
+
 body .cluster-view #historical {
   vertical-align: top;
 }
-/* line 582, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier {
   width: 240px;
   display: inline-block;
   vertical-align: top;
   border-right: 1px solid #1B1A20;
 }
-/* line 588, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier h2 {
   font-size: 24px;
   min-height: 75px;
 }
-/* line 591, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier h2 .queue {
   font-size: 12px;
 }
-/* line 594, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier h2 .queue.load .unloaded {
   color: #EEE;
 }
-/* line 597, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier h2 .queue.load .bytes {
   color: #f16065;
   font-weight: bold;
 }
-/* line 608, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity g.capacity rect.maxSize, body .cluster-view #historical .tier tr.node rect.maxSize {
   fill: #5ca0d7;
   opacity: 0.75;
 }
-/* line 612, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity g.capacity rect.currSize, body .cluster-view #historical .tier tr.node rect.currSize {
   fill: #f16065;
 }
-/* line 618, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity {
   padding: 0px 4px;
   padding-top: 0.5rem;
@@ -703,276 +692,274 @@ body .cluster-view #historical .tier tier-capacity {
   flex-direction: row;
   -webkit-flex-flow: row nowrap;
 }
-/* line 628, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels {
   width: 168px;
   height: 128px;
   padding-left: 0.5em;
 }
-/* line 633, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .value {
   color: #C8C8C8;
 }
-/* line 636, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .top-labels {
   line-height: 1.25;
 }
-/* line 637, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .top-labels > * {
   margin-bottom: 4px;
 }
-/* line 643, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .bottom-labels {
   position: absolute;
   bottom: 0px;
 }
-/* line 646, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .bottom-labels > * {
   margin-top: 4px;
 }
-/* line 651, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .resilience {
   line-height: 1;
   font-size: 24px;
   font-weight: bold;
   color: #fefefe;
 }
-/* line 657, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .free {
   font-size: 18px;
   font-weight: bold;
 }
-/* line 660, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .free .value {
   color: #fefefe;
 }
-/* line 664, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .size-label {
   font-size: 75%;
 }
-/* line 667, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .maxSize {
   font-size: 18px;
 }
-/* line 672, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .currSize {
   font-size: 16px;
 }
-/* line 674, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-capacity div.labels .currSize .percent {
   color: #fefefe;
 }
-/* line 684, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier g.nodes .node {
   fill: #ebeb3a;
   opacity: 0.66;
 }
-/* line 691, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.capacity-history svg {
   margin-top: 1em;
 }
-/* line 692, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.capacity-history text {
   fill: white;
   opacity: 0.75;
 }
-/* line 696, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.capacity-history path.maxSize {
   fill: #5ca0d7;
   stroke: none;
   opacity: 0.75;
 }
-/* line 701, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.capacity-history path.currSize {
   fill: #f16065;
   stroke: none;
 }
-/* line 706, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.capacity-history .axis line {
   stroke: #22222A;
   opacity: 0.15;
   shape-rendering: crispEdges;
 }
-/* line 711, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.capacity-history .axis text {
   font-size: 7px;
 }
-/* line 715, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.capacity-history text.label {
   font-size: 16px;
   font-weight: bold;
   text-anchor: middle;
 }
-/* line 720, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.capacity-history a.dash-link {
   cursor: pointer;
 }
-/* line 724, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.capacity-history rect.delta.positive {
   fill: #3cb349;
 }
-/* line 727, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.capacity-history rect.delta.negative {
   fill: #f16065;
 }
-/* line 733, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.growth {
   line-height: 1.3;
 }
-/* line 735, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier div.growth span.value {
   color: #C8C8C8;
 }
-/* line 740, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier .node-toggle {
   padding-bottom: 0.5em;
 }
-/* line 742, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier .node-toggle:hover {
   color: #fefefe;
 }
-/* line 746, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-nodes table {
   margin-left: 4px;
 }
-/* line 749, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-nodes table tr.node text {
   fill: white;
   alignment-baseline: central;
 }
-/* line 753, ../src/client/druid.scss */
+
 body .cluster-view #historical .tier tier-nodes table tr.node td.host {
   padding-left: 0.25em;
 }
-/* line 764, ../src/client/druid.scss */
+
 body .data-sources-view #data-sources {
   width: 100%;
 }
-/* line 766, ../src/client/druid.scss */
+
 body .data-sources-view #data-sources > table {
   width: 100%;
 }
-/* line 770, ../src/client/druid.scss */
+
 body .data-sources-view #data-sources > table td:first-child, body .data-sources-view #data-sources > table th:first-child {
   width: 16px;
 }
-/* line 773, ../src/client/druid.scss */
+
 body .data-sources-view #data-sources > table td:nth-child(2), body .data-sources-view #data-sources > table th:nth-child(2) {
   width: 224px;
 }
-/* line 778, ../src/client/druid.scss */
+
 body .data-sources-view #data-sources > table tbody tr:hover {
   background: #2E2E38;
 }
-/* line 782, ../src/client/druid.scss */
+
 body .data-sources-view #data-sources > table td.footprint {
   padding: 4px 6px;
 }
-/* line 787, ../src/client/druid.scss */
+
 body .data-sources-view .disabled-data-sources {
   padding: 0px 8px;
 }
-/* line 789, ../src/client/druid.scss */
+
 body .data-sources-view .disabled-data-sources li {
   font-size: 16px;
   line-height: 1.75;
 }
-/* line 799, ../src/client/druid.scss */
+
 body svg.rules-timeline ._default_tier rect, body svg.timeline ._default_tier rect {
   fill: #5ca0d7;
 }
-/* line 804, ../src/client/druid.scss */
+
 body svg.rules-timeline .hot rect, body svg.timeline .hot rect {
   fill: #f16065;
 }
-/* line 809, ../src/client/druid.scss */
+
 body svg.rules-timeline .days rect, body svg.timeline .days rect {
   fill: #33a680;
 }
-/* line 811, ../src/client/druid.scss */
+
 body svg.rules-timeline .days rect:hover, body svg.timeline .days rect:hover {
   stroke-width: 2px;
   stroke: #c6c631;
 }
-/* line 818, ../src/client/druid.scss */
+
 body svg.rules-timeline text, body svg.timeline text {
   text-anchor: end;
 }
-/* line 824, ../src/client/druid.scss */
+
 body svg.rules-timeline.with-footprint .load rect, body svg.rules-timeline.with-footprint .drop rect, body svg.timeline.with-footprint .load rect, body svg.timeline.with-footprint .drop rect {
   opacity: 0.33;
 }
-/* line 831, ../src/client/druid.scss */
+
 body svg.rules-timeline .rules text, body svg.timeline .rules text {
   opacity: 0.75;
   fill: #eee;
 }
-/* line 837, ../src/client/druid.scss */
+
 body svg.rules-timeline .axis, body svg.timeline .axis {
   shape-rendering: crispEdges;
 }
-/* line 841, ../src/client/druid.scss */
+
 body svg.rules-timeline .x.axis text, body svg.timeline .x.axis text {
   font-size: 11px;
   fill: #858597;
 }
-/* line 845, ../src/client/druid.scss */
+
 body svg.rules-timeline .x.axis line, body svg.timeline .x.axis line {
   stroke: #e69545;
   opacity: 0.5;
 }
-/* line 850, ../src/client/druid.scss */
+
 body svg.rules-timeline .x.axis .minor, body svg.timeline .x.axis .minor {
   stroke-opacity: .5;
 }
-/* line 853, ../src/client/druid.scss */
+
 body svg.rules-timeline .x.axis path, body svg.timeline .x.axis path {
   display: none;
 }
-/* line 860, ../src/client/druid.scss */
+
 body svg.timeline .rules rect {
   opacity: 0.33;
 }
-/* line 910, ../src/client/druid.scss */
+
 body .rules-editor {
   flex-direction: column;
   -webkit-flex-flow: column nowrap;
 }
-/* line 914, ../src/client/druid.scss */
+
 body .rules-editor h1 {
   font-size: 18px;
 }
-/* line 918, ../src/client/druid.scss */
+
 body .rules-editor a, body .rules-editor a:link, body .rules-editor a:visited {
   text-decoration: none;
   color: black;
 }
-/* line 922, ../src/client/druid.scss */
+
 body .rules-editor a:hover {
   text-decoration: underline;
   color: #858597;
 }
-/* line 928, ../src/client/druid.scss */
+
 body .rules-editor .rule {
-  height: 120px;
   margin-bottom: 10px;
 }
-/* line 932, ../src/client/druid.scss */
+
 body .rules-editor .rule:not(:first-child) {
   border-top: 1px solid #858597;
   padding-top: 8px;
-  height: 129px;
 }
-/* line 937, ../src/client/druid.scss */
+
 body .rules-editor .rule .summary {
   font-size: 16px;
   margin-bottom: 10px;
 }
-/* line 940, ../src/client/druid.scss */
+
 body .rules-editor .rule .summary .rule {
   color: #fefefe;
 }
-/* line 944, ../src/client/druid.scss */
+
 body .rules-editor .rule .edit {
   display: flex;
   display: -webkit-flex;
@@ -980,75 +967,71 @@ body .rules-editor .rule .edit {
   flex-direction: row;
   justify-content: flex-start;
 }
-/* line 950, ../src/client/druid.scss */
+
 body .rules-editor .rule .edit > * {
   flex: initial;
   -webkit-flex: initial;
   margin-right: 1em;
 }
-/* line 954, ../src/client/druid.scss */
+
 body .rules-editor .rule .edit > *:last-child {
   margin-right: 0px;
 }
-/* line 958, ../src/client/druid.scss */
+
 body .rules-editor .rule .edit .interval-period {
   width: 200px;
 }
-/* line 960, ../src/client/druid.scss */
+
 body .rules-editor .rule .edit .interval-period input {
   margin-bottom: 10px;
 }
-/* line 963, ../src/client/druid.scss */
+
 body .rules-editor .rule .edit .interval-period .alert {
   margin-bottom: 0;
 }
-/* line 967, ../src/client/druid.scss */
+
 body .rules-editor .rule .edit .replicants {
   width: 160px;
 }
-/* line 969, ../src/client/druid.scss */
+
 body .rules-editor .rule .edit .replicants .replicant {
   white-space: nowrap;
   margin-bottom: 5px;
 }
-/* line 972, ../src/client/druid.scss */
+
 body .rules-editor .rule .edit .replicants .replicant input[type=number] {
   width: 2.5em;
 }
-/* line 975, ../src/client/druid.scss */
+
 body .rules-editor .rule .edit .replicants .replicant button {
   vertical-align: baseline;
 }
-/* line 982, ../src/client/druid.scss */
+
 body .rules-editor .alert {
   padding: 10px 12px;
 }
 
-/* line 989, ../src/client/druid.scss */
 .rule-editor-link a {
   color: #858597;
 }
-/* line 991, ../src/client/druid.scss */
+
 .rule-editor-link a:hover {
   color: #3cb349;
 }
 
-/* line 999, ../src/client/druid.scss */
 #audit-info textarea.ng-invalid, #audit-info input.ng-invalid {
   border-color: #f16065;
   box-shadow: inset 0px 1px 60px 4px rgba(241, 96, 101, 0.2);
 }
 
-/* line 1007, ../src/client/druid.scss */
 .audit-history i {
   color: #858597;
 }
-/* line 1009, ../src/client/druid.scss */
+
 .audit-history i:hover {
   color: #3cb349;
 }
 
-/* line 1015, ../src/client/druid.scss */
 .history-overlay {
   position: fixed;
   top: 0;
@@ -1059,7 +1042,7 @@ body .rules-editor .alert {
   background-color: rgba(0, 0, 0, 0.8);
   margin: 0;
 }
-/* line 1025, ../src/client/druid.scss */
+
 .history-overlay .history {
   background-color: #22222A;
   margin: 10rem auto;
@@ -1069,21 +1052,21 @@ body .rules-editor .alert {
   height: 100%;
   overflow-y: scroll;
 }
-/* line 1034, ../src/client/druid.scss */
+
 .history-overlay .history h1 {
   font-size: 1.6rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-/* line 1039, ../src/client/druid.scss */
+
 .history-overlay .history .audit-item {
   margin-bottom: 1.5rem;
 }
-/* line 1041, ../src/client/druid.scss */
+
 .history-overlay .history .audit-item > * {
   padding: 0px 8px;
 }
-/* line 1044, ../src/client/druid.scss */
+
 .history-overlay .history .audit-item h2 {
   font-size: 1.2rem;
   padding-top: 0.5rem;
@@ -1093,51 +1076,50 @@ body .rules-editor .alert {
   max-width: 100%;
   color: #C8C8C8;
 }
-/* line 1053, ../src/client/druid.scss */
+
 .history-overlay .history .audit-item .by {
   padding-top: 0.5rem;
 }
-/* line 1056, ../src/client/druid.scss */
+
 .history-overlay .history .audit-item .author {
   color: #fefefe;
 }
-/* line 1059, ../src/client/druid.scss */
+
 .history-overlay .history .audit-item .comment {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }
-/* line 1062, ../src/client/druid.scss */
+
 .history-overlay .history .audit-item .comment .comment-label {
   font-size: 10px;
 }
-/* line 1065, ../src/client/druid.scss */
+
 .history-overlay .history .audit-item .comment .comment-value {
   color: #fefefe;
 }
-/* line 1070, ../src/client/druid.scss */
+
 .history-overlay .history .no-history, .history-overlay .history .loading {
   padding: 1rem 8px;
   font-size: 1.4rem;
   text-align: center;
 }
-/* line 1075, ../src/client/druid.scss */
+
 .history-overlay .history .no-history {
   color: #f16065;
 }
-/* line 1079, ../src/client/druid.scss */
+
 .history-overlay .history .loading i {
   font-size: 10rem;
   color: #c6c631;
 }
 
-/* line 1086, ../src/client/druid.scss */
 .heartbeat {
   color: #d8d8dd;
   line-height: 1.3;
   border-left: 1px solid #1B1A20;
   padding: 0px 4px;
 }
-/* line 1091, ../src/client/druid.scss */
+
 .heartbeat a {
   /* unvisited link */
   color: #858597;
@@ -1145,20 +1127,19 @@ body .rules-editor .alert {
   /* mouse over link */
   /* selected link */
 }
-/* line 1093, ../src/client/druid.scss */
+
 .heartbeat a:visited {
   color: #858597;
 }
-/* line 1094, ../src/client/druid.scss */
+
 .heartbeat a:hover {
   color: #3cb349;
 }
-/* line 1095, ../src/client/druid.scss */
+
 .heartbeat a:active {
   color: #3cb349;
 }
 
-/* line 1099, ../src/client/druid.scss */
 #floatingCirclesG {
   position: relative;
   width: 128px;
@@ -1167,7 +1148,6 @@ body .rules-editor .alert {
   transform: scale(0.6);
 }
 
-/* line 1107, ../src/client/druid.scss */
 .f_circleG {
   position: absolute;
   background-color: #2E2E38;
@@ -1185,7 +1165,6 @@ body .rules-editor .alert {
   animation-direction: linear;
 }
 
-/* line 1124, ../src/client/druid.scss */
 #frotateG_01 {
   left: 0;
   top: 52px;
@@ -1193,7 +1172,6 @@ body .rules-editor .alert {
   animation-delay: 0.39s;
 }
 
-/* line 1131, ../src/client/druid.scss */
 #frotateG_02 {
   left: 15px;
   top: 15px;
@@ -1201,7 +1179,6 @@ body .rules-editor .alert {
   animation-delay: 0.52s;
 }
 
-/* line 1138, ../src/client/druid.scss */
 #frotateG_03 {
   left: 52px;
   top: 0;
@@ -1209,7 +1186,6 @@ body .rules-editor .alert {
   animation-delay: 0.65s;
 }
 
-/* line 1145, ../src/client/druid.scss */
 #frotateG_04 {
   right: 15px;
   top: 15px;
@@ -1217,7 +1193,6 @@ body .rules-editor .alert {
   animation-delay: 0.78s;
 }
 
-/* line 1152, ../src/client/druid.scss */
 #frotateG_05 {
   right: 0;
   top: 52px;
@@ -1225,7 +1200,6 @@ body .rules-editor .alert {
   animation-delay: 0.91s;
 }
 
-/* line 1159, ../src/client/druid.scss */
 #frotateG_06 {
   right: 15px;
   bottom: 15px;
@@ -1233,7 +1207,6 @@ body .rules-editor .alert {
   animation-delay: 1.04s;
 }
 
-/* line 1166, ../src/client/druid.scss */
 #frotateG_07 {
   left: 52px;
   bottom: 0;
@@ -1241,7 +1214,6 @@ body .rules-editor .alert {
   animation-delay: 1.17s;
 }
 
-/* line 1173, ../src/client/druid.scss */
 #frotateG_08 {
   left: 15px;
   bottom: 15px;
@@ -1257,6 +1229,7 @@ body .rules-editor .alert {
     background-color: #2E2E38;
   }
 }
+
 @keyframes f_fadeG {
   0% {
     background-color: #858597;

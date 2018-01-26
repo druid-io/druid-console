@@ -1,4 +1,5 @@
-require '../../../bower_components/d3/d3.js'
+d3 = require '../../../bower_components/d3/d3.js'
+
 require '../../../bower_components/zeroclipboard/ZeroClipboard.min.js'
 
 require '../../../bower_components/angular/angular.min.js'

@@ -1,4 +1,4 @@
-clusterController = require '../../../src/controllers/cluster.coffee'
+clusterController = require '../../../src/client/controllers/cluster.coffee'
 
 describe 'ClusterCtrl', () ->
   scope = undefined

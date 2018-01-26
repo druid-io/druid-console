@@ -1,3 +1,5 @@
+d3 = require '../../../bower_components/d3/d3.js'
+
 module.exports = ($scope, $historical, $stateParams, $q) ->
   $scope.env = $historical.env
   $scope.dataSource = {id: $stateParams.id}

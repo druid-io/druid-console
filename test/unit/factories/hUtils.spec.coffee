@@ -1,4 +1,4 @@
-hUtilsFactory = require '../../../src/factories/hUtils.coffee'
+hUtilsFactory = require '../../../src/client/factories/hUtils.coffee'
 
 describe '$hUtils', () ->
   $hUtils = undefined
@@ -85,7 +85,7 @@ describe '$hUtils', () ->
             maxSize: 3100000000000
             currSize: 169483893680
             utilization: 169483893680 / 3100000000000
-            resilience: 1
+            resilience: 1.890655552464516
           }
           {
             tier: "_default_tier"
@@ -106,7 +106,7 @@ describe '$hUtils', () ->
             maxSize: 1550000000000
             currSize: 700461427524
             utilization: 0.45191059840258063
-            resilience: 0
+            resilience:  0.5480894015974194
           }
         ]
       }
@@ -314,13 +314,13 @@ describe '$hUtils', () ->
 
       expect($hUtils.resilience(tier)).toEqual(2)
       tier.currSize = 80.1
-      expect($hUtils.resilience(tier)).toEqual(1)
+      expect($hUtils.resilience(tier)).toEqual(1.9900000000000002)
       tier.currSize = 89.9
-      expect($hUtils.resilience(tier)).toEqual(1)
+      expect($hUtils.resilience(tier)).toEqual(1.0099999999999998)
       tier.currSize = 90.1
-      expect($hUtils.resilience(tier)).toEqual(0)
+      expect($hUtils.resilience(tier)).toEqual(0.9900000000000002)
       tier.currSize = 1
-      expect($hUtils.resilience(tier)).toEqual(9)
+      expect($hUtils.resilience(tier)).toEqual(9.9)
 
   describe 'processDataSourceIntervals', () ->
     it 'should turn the object of intervals into a sorted list', () ->

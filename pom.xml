@@ -116,8 +116,8 @@
                 <goal>install-node-and-npm</goal>
               </goals>
               <configuration>
-                <nodeVersion>v0.10.40</nodeVersion>
-                <npmVersion>2.12.1</npmVersion>
+                <nodeVersion>v8.9.4</nodeVersion>
+                <npmVersion>5.6.0</npmVersion>
               </configuration>
             </execution>
 
@@ -146,6 +146,17 @@
               <goals>
                 <goal>gulp</goal>
               </goals>
+            </execution>
+
+            <execution>
+              <id>unit tests</id>
+              <goals>
+                <goal>karma</goal>
+              </goals>
+              <phase>test</phase>
+              <configuration>
+                <karmaConfPath>test/karma.conf.ci.js</karmaConfPath>
+              </configuration>
             </execution>
           </executions>
         </plugin>
