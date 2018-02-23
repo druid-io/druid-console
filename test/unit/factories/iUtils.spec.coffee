@@ -56,6 +56,11 @@ describe '$iUtils', () ->
         dataTime: $taskTimestamp
       })
 
-    it 'should throw an error if taskId does not match expected pattern', () ->
-      expect(() -> $iUtils.parseTaskId('index_kafka_twitter_1675e770de9a423_hfdhgjko'))
-        .toThrow(new TypeError("Cannot read property '3' of null"))
+    it 'should not throw an error if taskId does not match expected pattern', () ->
+      task = $iUtils.parseTaskId('index_kafka_twitter_1675e770de9a423_hfdhgjko')
+      expect(task).toEqual({
+        id: 'index_kafka_twitter_1675e770de9a423_hfdhgjko'
+        type: 'other'
+        dataSource: undefined
+        dataTime: undefined
+      })
