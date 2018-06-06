@@ -73,14 +73,14 @@
           <div class="btn-group">
             <button ng-csv="getDaily"
               filename="{{ dataSource.id }}-daily-unrepl.csv"
-              csv-header="['date', 'bytes', 'shard count', 'start', 'end']"
+              csv-header="['date', 'bytes', 'segment count', 'start', 'end']"
               lazy-load="true"
               type="button" class="btn btn-default"
               title="download daily summary (unreplicated)"
             >daily <i class="fa fa-cloud-download"></i></button>
             <button ng-csv="getMonthly"
               filename="{{ dataSource.id }}-monthly-unrepl.csv"
-              csv-header="['month', 'bytes', 'shard count', 'start', 'end']"
+              csv-header="['month', 'bytes', 'segment count', 'start', 'end']"
               lazy-load="true"
               type="button" class="btn btn-default"
               title="download monthly summary (unreplicated)"
@@ -111,7 +111,7 @@
 
         <div class="dynamic-list" ng-if="intervals">
           <h2>
-            <span class="badge">{{ dataSummary.count | number }}</span> shards in
+            <span class="badge">{{ dataSummary.count | number }}</span> segments in
             <span class="badge">{{ intervals.length | number }}</span> intervals
           </h2>
           <table class="intervals">
@@ -142,13 +142,13 @@
              Interval Detail
           </h2>
           <div class="info" ng-if="intervals">
-            <div>Click on an interval in the list to see all shards for that interval.</div>
+            <div>Click on an interval in the list to see all segments for that interval.</div>
           </div>
         </div>
         <div class="interval-selected" ng-if="selectedInterval">
 
           <h2>
-            {{ selectedInterval.count | number}} shard{{ selectedInterval.count > 1 ? 's' : '' }} ({{ selectedInterval.size | bytes }}) for
+            {{ selectedInterval.count | number}} segment{{ selectedInterval.count > 1 ? 's' : '' }} ({{ selectedInterval.size | bytes }}) for
             <span class="interval-start">
               {{ selectedInterval.interval.substring(0,10) }}<span class="sep">T</span>{{ selectedInterval.interval.substring(11,13) }}
             </span>
@@ -164,7 +164,7 @@
               <div id="floatingCirclesG">
                 <div class="f_circleG" ng-repeat="i in [1,2,3,4,5,6,7,8]" id="frotateG_0{{i}}"></div>
               </div>
-              <div>Loading shards for {{ selectedInterval.interval }}</div>
+              <div>Loading segments for {{ selectedInterval.interval }}</div>
             </div>
 
             <div class="segment" ng-repeat="(i, seg) in selectedSegments">
@@ -182,24 +182,24 @@
                 <div class="size">{{ seg.size | bytes }}</div>
 
                 <div ng-switch on="seg.shardSpec.type">
-                  <div ng-switch-when="none">unsharded</div>
+                  <div ng-switch-when="none">not partitioned</div>
                   <div ng-switch-when="hashed">
-                    shard {{ seg.shardSpec.partitionNum }}
+                    partition {{ seg.shardSpec.partitionNum }}
                     ({{ seg.shardSpec.partitionNum + 1 }} of {{ seg.shardSpec.partitions }}, {{ seg.shardSpec.type }})
                   </div>
                   <div ng-switch-when="numbered">
-                    shard {{ seg.shardSpec.partitionNum }}
+                    partition {{ seg.shardSpec.partitionNum }}
                     ({{ seg.shardSpec.partitionNum + 1 }} of {{ seg.shardSpec.partitions }}, {{ seg.shardSpec.type }})
                   </div>
                   <div ng-switch-when="linear">
-                    shard {{ seg.shardSpec.partitionNum }}
+                    partition {{ seg.shardSpec.partitionNum }}
                     ({{ seg.shardSpec.partitionNum + 1 }} of {{ Object.keys(selectedSegments).length }}, {{ seg.shardSpec.type }})
                   </div>
                   <div ng-switch-when="single" ng-init="showShardRange = false"  ng-click="showShardRange = !showShardRange">
-                    shard {{ seg.shardSpec.partitionNum }} ({{ seg.shardSpec.partitionNum +1 }} of {{ Object.keys(selectedSegments).length }} on {{ seg.shardSpec.dimension }})
+                    partition {{ seg.shardSpec.partitionNum }} ({{ seg.shardSpec.partitionNum +1 }} of {{ Object.keys(selectedSegments).length }} on {{ seg.shardSpec.dimension }})
                     <div class="value" ng-show="showShardRange">({{ seg.shardSpec.start == null ? 'null' : seg.shardSpec.start }} to {{ seg.shardSpec.end == null ? 'null' : seg.shardSpec.end }})</div>
                   </div>
-                  <div ng-switch-default>shard {{ seg.shardSpec.partitionNum }} ({{ seg.shardSpec.type }})</div>
+                  <div ng-switch-default>partition {{ seg.shardSpec.partitionNum }} ({{ seg.shardSpec.type }})</div>
                 </div>
                 <div class="load-spec" ng-switch on="seg.loadSpec.type">
                   <div ng-switch-when="s3_zip" class="s3" clip-copy="s3Path(seg)">
