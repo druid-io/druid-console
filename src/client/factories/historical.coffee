@@ -51,6 +51,9 @@ module.exports = ($q, $http, $hUtils, $window) ->
         )
       ).then(() =>
         $hUtils.processDataSources(merged)
+      ).catch(() =>
+        if merged.length > 0
+          $hUtils.processDataSources(merged)
       )
 
 

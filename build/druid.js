@@ -13355,7 +13355,7 @@ module.exports = function() {
       var ds, j, len;
       for (j = 0, len = dataSources.length; j < len; j++) {
         ds = dataSources[j];
-        ds.loadStatus = loadStatuses[ds.id];
+        ds.loadStatus = loadStatuses[ds.id] ? loadStatuses[ds.id] : '100';
       }
       return dataSources;
     },
@@ -13690,6 +13690,10 @@ module.exports = function($q, $http, $hUtils, $window) {
         });
       }).then(() => {
         return $hUtils.processDataSources(merged);
+      }).catch(() => {
+        if (merged.length > 0) {
+          return $hUtils.processDataSources(merged);
+        }
       });
     },
     getAllDataSources: function() {
