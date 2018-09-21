@@ -42,7 +42,17 @@ module.exports = ($q, $http, $hUtils, $window) ->
       @getAndProcess "/servers?simple", $hUtils.processServerTiers
 
     getDataSources: ->
-      @getAndProcess "/metadata/datasources", $hUtils.processDataSources
+      merged = []
+      @getAndProcess("/metadata/datasources", (metaDatasources) ->
+        merged = merged.concat(metaDatasources);
+      ).then(() =>
+        @getAndProcess("/datasources", (liveDatasources) ->
+          merged = merged.concat(liveDatasources.filter((d) -> merged.indexOf(d) < 0))
+        )
+      ).then(() =>
+        $hUtils.processDataSources(merged)
+      )
+
 
     getAllDataSources: ->
       @getAndProcess "/metadata/datasources?includeDisabled", (dataSources) -> dataSources
