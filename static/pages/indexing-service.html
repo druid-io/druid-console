@@ -39,12 +39,12 @@
           <tr class="data-source" ng-repeat="ds in dataSources | filter:query">
             <td>
               <div ng-if="ds.hasOwnProperty('loadStatus')"
-                class="load-status {{ ds.loadStatus >= 100 ? 'loaded' : (ds.loadStatus >= 99 ? 'one-percent' : 'unloaded')}}"
-                tooltip="{{ ds.id }}: {{ 1 - ds.loadStatus/100.0 | percentRound }} to load until available"
-                tooltip-trigger="mouseenter"
-                tooltip-placement="right"
+                   class="load-status {{ ds.loadStatus < 0 ? 'indexing' : (ds.loadStatus >= 100 ? 'loaded' : (ds.loadStatus >= 99 ? 'one-percent' : 'unloaded'))}}"
+                   tooltip="{{ ds.id }}: {{ ds.loadStatus < 0 ? ' actively indexing realtime segments' : (1 - ds.loadStatus/100.0 | percentRound) + ' to load until available' }}"
+                   tooltip-trigger="mouseenter"
+                   tooltip-placement="right"
               >
-                <i class="fa {{ ds.loadStatus >= 100 ? 'fa-circle-o' : (ds.loadStatus > 99 ? 'fa-dot-circle-o' : 'fa-circle')}}"></i>
+                <i class="fa {{ ds.loadStatus >= 100 || ds.loadStatus < 0 ? 'fa-circle-o' : (ds.loadStatus > 99 ? 'fa-dot-circle-o' : 'fa-circle')}}"></i>
               </div>
             </td>
             <td class="name">
