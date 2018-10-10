@@ -13355,7 +13355,7 @@ module.exports = function() {
       var ds, j, len;
       for (j = 0, len = dataSources.length; j < len; j++) {
         ds = dataSources[j];
-        ds.loadStatus = loadStatuses[ds.id] ? loadStatuses[ds.id] : -1;
+        ds.loadStatus = loadStatuses[ds.id] != null ? loadStatuses[ds.id] : -1;
       }
       return dataSources;
     },
