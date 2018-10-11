@@ -178,6 +178,20 @@ describe '$hUtils', () ->
       diff = DeepDiff(computed, expected)
       console.log JSON.stringify(diff) if diff?
 
+    it 'should set loadstatus to -1 for datasources that are not yet persisted', () ->
+      fakeLoadStatuses = {oculus:88.0, mmx_metrics:100.0}
+      dataSources = [{id: "mmx_metrics"}, {id: "oculus"}, {id: "realtime"}]
+      expected = [
+        {id: "mmx_metrics", loadStatus: 100.0}
+        {id: "oculus", loadStatus: 88.0}
+        {id: "realtime", loadStatus: -1}
+      ]
+      computed = $hUtils.processLoadStatus(fakeLoadStatuses, dataSources)
+      expect(computed).toEqual(expected)
+
+      diff = DeepDiff(computed, expected)
+      console.log JSON.stringify(diff) if diff?
+
   describe 'processLoadQueue', () ->
     it 'should assign the load queue to the correct nodes', () ->
       fakeLoadQueue =

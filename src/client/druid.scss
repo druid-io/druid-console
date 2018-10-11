@@ -484,6 +484,9 @@ body {
           &.unloaded {
             color: $red;
           }
+          &.indexing {
+            color: $green;
+          }
         }
         td.name {
           i.realtime {

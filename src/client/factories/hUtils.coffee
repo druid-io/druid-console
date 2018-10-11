@@ -70,7 +70,7 @@ module.exports = ->
 
   processLoadStatus: (loadStatuses, dataSources) ->
     for ds in dataSources
-      ds.loadStatus = loadStatuses[ds.id]
+      ds.loadStatus = if loadStatuses[ds.id]? then loadStatuses[ds.id] else -1
     return dataSources
 
   processLoadQueue: (nodes, tiers) ->

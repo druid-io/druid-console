@@ -559,6 +559,10 @@ body .cluster-view #data-sources tr.data-source .load-status.unloaded, body .dat
   color: #f16065;
 }
 
+body .cluster-view #data-sources tr.data-source .load-status.indexing, body .data-sources-view #data-sources tr.data-source .load-status.indexing {
+  color: #3cb349;
+}
+
 body .cluster-view #data-sources tr.data-source td.name i.realtime, body .data-sources-view #data-sources tr.data-source td.name i.realtime {
   padding-left: 0.5em;
   color: #c6c631;
