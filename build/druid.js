@@ -13817,16 +13817,11 @@ moment = require('../../../bower_components/moment/min/moment.min.js');
 module.exports = function() {
   return {
     parseTaskId: function(taskId) {
-      var m, type;
-      m = taskId.match(/^((hadoop_convert_segment)|index_(hadoop|realtime|spark)|(archive))_(.+)_(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/);
-      type = m[3];
-      type || (type = m[2]);
-      if (!m) {
-        throw Error(`Can't parse ${taskId}`);
-      }
+      var m;
+      m = taskId.match(/^(?:(hadoop_convert_segment)|index_(hadoop|realtime|spark)|(archive))_(.+)_(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z)/) || [];
       return {
         id: taskId,
-        type,
+        type: m[3] || m[2] || m[1] || 'other',
         dataSource: m[4],
         dataTime: m[5]
       };
