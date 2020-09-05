@@ -28,7 +28,7 @@
     "compression": "^1.7.1",
     "cookie-parser": "^1.4.3",
     "express": "~4.16.2",
-    "http-proxy": "~1.16.2",
+    "http-proxy": "~1.18.1",
     "locators": "~2.0.2",
     "method-override": "^2.3.10",
     "morgan": "^1.9.0",
