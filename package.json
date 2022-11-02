@@ -41,7 +41,7 @@
     "browserify-shim": "~3.8.14",
     "coffeeify": "~3.0.1",
     "deep-diff": "~0.3.8",
-    "gulp": "~3.9.1",
+    "gulp": "~4.0.2",
     "gulp-concat": "~2.6.1",
     "gulp-sass": "~3.1.0",
     "jasmine-core": "^2.8.0",
